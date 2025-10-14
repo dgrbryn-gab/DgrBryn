@@ -36,4 +36,21 @@ class StoreProductRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * Find all products with available inventory (stockQuantity > 0 and isAvailable = true).
+     *
+     * @return StoreProduct[]
+     */
+    public function findAllWithInventory(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.stockQuantity > :stock')
+            ->andWhere('p.isAvailable = :available')
+            ->setParameter('stock', 0)
+            ->setParameter('available', true)
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
