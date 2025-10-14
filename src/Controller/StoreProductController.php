@@ -20,16 +20,20 @@ class StoreProductController extends AbstractController
         $categoryId = $request->query->get('category');
         if ($categoryId) {
             $storeProducts = $storeProductRepository->findBy(['category' => $categoryId]);
+            $selectedCategory = $categoryId;
         } else {
-            $storeProducts = $storeProductRepository->findAll();
+            $storeProducts = $storeProductRepository->findAllWithInventory();
+            $selectedCategory = null;
         }
 
         return $this->render('store_product/index.html.twig', [
             'store_products' => $storeProducts,
             'categories' => $categories,
+            'selected_category' => $selectedCategory,
         ]);
     }
 
+    // Other actions (new, show, edit, delete) remain unchanged
     #[Route('/store/product/new', name: 'app_store_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, StoreProductRepository $storeProductRepository): Response
     {
