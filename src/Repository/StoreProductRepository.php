@@ -8,11 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<StoreProduct>
- *
- * @method StoreProduct|null find($id, $lockMode = null, $lockVersion = null)
- * @method StoreProduct|null findOneBy(array $criteria, array $orderBy = null)
- * @method StoreProduct[]    findAll()
- * @method StoreProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class StoreProductRepository extends ServiceEntityRepository
 {
@@ -24,6 +19,7 @@ class StoreProductRepository extends ServiceEntityRepository
     public function save(StoreProduct $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
@@ -32,24 +28,30 @@ class StoreProductRepository extends ServiceEntityRepository
     public function remove(StoreProduct $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
     }
 
     /**
-     * Find all products with available inventory (stockQuantity > 0 and isAvailable = true).
-     *
-     * @return StoreProduct[]
+     * Placeholder method — returns all products for now.
+     * Later, when an Inventory entity exists, this can be updated to join that table.
      */
-    public function findAllWithInventory(): array
+    public function findAllWithInventory()
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.stockQuantity > :stock')
-            ->andWhere('p.isAvailable = :available')
-            ->setParameter('stock', 0)
-            ->setParameter('available', true)
-            ->orderBy('p.name', 'ASC')
+        return $this->findAll();
+    }
+
+    /**
+     * Temporary replacement for findByCategoryWithInventory
+     * Filters products by category only (no inventory logic yet)
+     */
+    public function findByCategoryWithInventory($categoryId)
+    {
+        return $this->createQueryBuilder('sp')
+            ->andWhere('sp.category = :cat')
+            ->setParameter('cat', $categoryId)
             ->getQuery()
             ->getResult();
     }

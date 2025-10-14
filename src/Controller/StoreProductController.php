@@ -18,11 +18,14 @@ class StoreProductController extends AbstractController
     {
         $categories = $categoryRepository->findAll();
         $categoryId = $request->query->get('category');
+
         if ($categoryId) {
+            // Filter products by category
             $storeProducts = $storeProductRepository->findBy(['category' => $categoryId]);
             $selectedCategory = $categoryId;
         } else {
-            $storeProducts = $storeProductRepository->findAllWithInventory();
+            // Show all products (no inventory logic)
+            $storeProducts = $storeProductRepository->findAll();
             $selectedCategory = null;
         }
 
@@ -33,7 +36,6 @@ class StoreProductController extends AbstractController
         ]);
     }
 
-    // Other actions (new, show, edit, delete) remain unchanged
     #[Route('/store/product/new', name: 'app_store_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, StoreProductRepository $storeProductRepository): Response
     {
@@ -43,7 +45,9 @@ class StoreProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $storeProductRepository->save($storeProduct, true);
-            return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
+
+            // Redirect to customer-facing product list
+            return $this->redirectToRoute('app_store_product_index');
         }
 
         return $this->render('store_product/new.html.twig', [
@@ -68,7 +72,7 @@ class StoreProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $storeProductRepository->save($storeProduct, true);
-            return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_store_product_index');
         }
 
         return $this->render('store_product/edit.html.twig', [
@@ -80,10 +84,10 @@ class StoreProductController extends AbstractController
     #[Route('/store/product/{id}', name: 'app_store_product_delete', methods: ['POST'])]
     public function delete(Request $request, StoreProduct $storeProduct, StoreProductRepository $storeProductRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$storeProduct->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $storeProduct->getId(), $request->request->get('_token'))) {
             $storeProductRepository->remove($storeProduct, true);
         }
 
-        return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_store_product_index');
     }
 }
