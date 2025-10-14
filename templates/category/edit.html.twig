@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Category | CORK Admin{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-amber-50 via-rose-50 to-amber-100 py-16 px-6">
+    <div class="max-w-2xl mx-auto bg-white/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl">
+        <h1 class="text-4xl font-extrabold text-yellow-900 mb-8 text-center">Edit Category</h1>
+
+        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+            <div>
+                {{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-semibold text-yellow-900 mb-2'}}) }}
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div>
+                {{ form_label(form.description, null, {'label_attr': {'class': 'block text-sm font-semibold text-yellow-900 mb-2'}}) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="flex justify-center gap-4 mt-8">
+                <button type="submit"
+                        class="px-6 py-3 rounded-xl shadow font-semibold transition-all duration-300 border"
+                        style="background-color: #7F1734; color: #F8EAD8; border-color: #EFCFB4;"
+                        onmouseover="this.style.backgroundColor='#9E2B47'"
+                        onmouseout="this.style.backgroundColor='#7F1734'">
+                    Update
+                </button>
+                <a href="{{ path('app_category_index') }}"
+                   class="px-6 py-3 rounded-xl shadow font-semibold transition-all duration-300 border border-amber-200 text-yellow-900 bg-amber-50 hover:bg-amber-100">
+                    Back
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

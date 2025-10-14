@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About CORK{% endblock %}
+
+{% block body %}
+<section class="about-page max-w-5xl mx-auto px-4 py-8 bg-transparent text-gray-700">
+    <div class="about-header text-center mb-12">
+        <h1 class="text-3xl md:text-4xl font-bold text-red-900 mb-2">About CORK</h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">We are passionate about fine wines and exceptional taste experiences, bringing you the best from vineyards around the world.</p>
+    </div>
+
+    <div class="about-content flex flex-wrap justify-center gap-8">
+        <div class="about-text flex-1 min-w-[300px] max-w-[600px]">
+            <h2 class="text-2xl text-gray-900 mb-4">Our Story</h2>
+            <p class="text-base text-gray-600 text-justify leading-loose mb-6">Founded with a love for the art of winemaking, CORK is dedicated to curating the finest wines from renowned regions and hidden gems alike. Our journey began with a simple mission: to share the joy of exceptional wines with enthusiasts and connoisseurs.</p>
+            <p class="text-base text-gray-600 text-justify leading-loose mb-6">Every bottle in our collection is carefully selected for its quality, character, and story. From the rolling hills of Bordeaux to the sun-kissed valleys of Tuscany, we partner with passionate winemakers who share our commitment to excellence.</p>
+            <a href="{{ path('app_wine') }}" 
+        class="inline-block font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 mt-8"
+        style="background-color: #7F1734; color: #F8EAD8;"
+        onmouseover="this.style.backgroundColor='#9E2B47'"
+        onmouseout="this.style.backgroundColor='#7F1734'">
+            Explore Our Wines
+    </a>
+        </div>
+        <div class="about-image flex-1 min-w-[300px] max-w-[500px] h-[400px] flex items-center justify-center rounded-lg shadow-md">
+            <img src="{{ asset('assets/images/cork_logo.png') }}" alt="CORK Logo" class="w-full h-full object-contain rounded-lg hover:scale-110 transition-transform duration-300">
+        </div>
+    </div>
+
+    <div class="values-section mt-12 text-center">
+        <h2 class="text-3xl text-red-900 mb-8">Our Values</h2>
+        <div class="values-grid flex flex-row space-x-8 overflow-x-auto">
+            <div class="value-card bg-white p-6 rounded-lg shadow-md hover:-translate-y-1 transition-transform duration-300 min-w-[250px]">
+                <h3 class="text-xl text-gray-900 mb-3">Quality</h3>
+                <p class="text-base text-gray-600 leading-relaxed text-justify">We handpick wines that meet the highest standards of craftsmanship and taste, ensuring every sip is unforgettable. Our rigorous selection process involves tasting sessions with expert sommeliers, evaluating each wine for its complexity, balance, and authenticity. We prioritize small-batch producers who pour their expertise into every bottle, delivering unparalleled quality to our customers.</p>
+            </div>
+            <div class="value-card bg-white p-6 rounded-lg shadow-md hover:-translate-y-1 transition-transform duration-300 min-w-[250px]">
+                <h3 class="text-xl text-gray-900 mb-3">Passion</h3>
+                <p class="text-base text-gray-600 leading-relaxed text-justify">Our love for wine drives us to explore new regions, varietals, and stories to share with our community. We travel the globe to discover unique wines, forging relationships with winemakers who share our enthusiasm. This passion fuels our commitment to educating our customers through tastings, events, and storytelling, creating a vibrant community of wine lovers.</p>
+            </div>
+            <div class="value-card bg-white p-6 rounded-lg shadow-md hover:-translate-y-1 transition-transform duration-300 min-w-[250px]">
+                <h3 class="text-xl text-gray-900 mb-3">Sustainability</h3>
+                <p class="text-base text-gray-600 leading-relaxed text-justify">We support winemakers who prioritize eco-friendly practices, preserving the land for future generations. From organic and biodynamic farming to water conservation and renewable energy, we champion vineyards that align with our vision of a sustainable future. By choosing sustainable wines, we help protect the environment while delivering exceptional flavors to your glass.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @media (max-width: 768px) {
+        .about-header h1 {
+            font-size: 2rem;
+        }
+
+        .about-content {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .about-image {
+            height: 300px;
+        }
+
+        .values-grid {
+            flex-direction: row;
+            overflow-x: auto;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Cart - CORK{% endblock %}
+
+{% block body %}
+    <main class="w-full min-h-screen pt-16 pb-20 z-10" style="background-color: #f7f1e9;">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Your Cart</h1>
+            {% if cart is not empty %}
+                <!-- Cart Items Table -->
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-5 gap-4 p-4 bg-gray-50 font-medium text-gray-700 hidden md:grid">
+                        <div>Image</div>
+                        <div class="col-span-2">Item</div>
+                        <div>Quantity</div>
+                        <div>Subtotal</div>
+                    </div>
+                    {% for item in cart %}
+                        <div class="grid grid-cols-5 gap-4 p-4 border-b border-gray-200 items-center">
+                            <div>
+                                <picture>
+                                    <source srcset="{{ item.image|default(asset('assets/images/wine_images/placeholder.webp')) }}" type="image/webp">
+                                    <img src="{{ item.image|replace({'.webp': '.jpg'})|default(asset('assets/images/wine_images/placeholder.jpg')) }}" 
+                                         alt="{{ item.name }}" 
+                                         class="w-24 h-24 object-cover rounded"
+                                         loading="lazy">
+                                </picture>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-lg font-medium text-gray-800">{{ item.name }}</span>
+                                <p class="text-sm text-gray-500">Price: ${{ item.price|number_format(2) }}</p>
+                                <!-- Debug: Display image path -->
+                                <p class="text-xs text-gray-400">Image path: {{ item.image|default('N/A') }}</p>
+                            </div>
+                            <div>
+                                <span class="text-lg text-gray-600">{{ item.quantity }}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-lg font-medium text-gray-800">${{ (item.price * item.quantity)|number_format(2) }}</span>
+                                <form action="{{ path('app_cart_remove', {'id': item.id}) }}" method="post" class="inline">
+                                    <button type="submit" 
+                                            class="text-red-500 hover:text-red-700 text-sm font-medium flex items-center">
+                                        <i class="fas fa-trash mr-1"></i>Remove
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Cart Summary and Buttons -->
+                <div class="mt-8 flex flex-col sm:flex-row sm:justify-between items-center bg-white p-6 rounded-lg shadow-md z-20">
+                    <div class="mb-6 sm:mb-0">
+                        <p class="text-lg font-medium text-gray-800">
+                            Total: 
+                            <span class="text-2xl">${{ cart|reduce((total, item) => total + (item.price * item.quantity), 0)|number_format(2) }}</span>
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="{{ path('app_wine') }}" 
+                           class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-yellow-600 transition-colors duration-300 text-center shadow-md z-20">
+                            Continue Shopping
+                        </a>
+                        <a href="{{ path('app_cart_clear') }}" 
+                           class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-yellow-600 transition-colors duration-300 text-center shadow-md z-20">
+                            Clear Cart
+                        </a>
+                        <a href="{{ path('app_checkout') }}" 
+                           class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-yellow-600 transition-colors duration-300 text-center shadow-md z-20">
+                            Proceed to Checkout
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Empty Cart State -->
+                <div class="text-center py-12 bg-white rounded-lg shadow-md z-20">
+                    <p class="text-lg text-gray-600 mb-6">Your cart is empty.</p>
+                    <a href="{{ path('app_wine') }}" 
+                       class="inline-block bg-yellow-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-yellow-600 transition-colors duration-300 shadow-md z-20">
+                        Continue Shopping
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

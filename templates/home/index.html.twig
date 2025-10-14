@@ -1,7 +1,99 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to CORK{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
+<section class="hero bg-[#7B1E3A] text-white min-h-screen flex items-center justify-center" style="background-color: #7B1E3A;">
+    <div class="overflow-hidden relative">
+        <img src="{{ asset('assets/images/cork_logo.png') }}" alt="CORK Logo" class="w-full h-70 object-contain transition-transform duration-300 hover:scale-110" style="position: relative; z-index: 1;">
+    </div>
+</section>
 
-<h1> Welcome Pogi </h1>
+<section class="featured-wines py-16 bg-gray text-center">
+    <h2 class="text-3xl font-bold mb-4 text-gray-900">Explore Our Featured Wines</h2>
+    <p class="text-lg mb-8 max-w-xl mx-auto text-gray-600">Discover our handpicked selection of premium wines from renowned vineyards.</p>
+    <div class="wine-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300" style="background-color: #7B1E3A;">
+            <div class="overflow-hidden">
+                <img src="{{ asset('assets/images/wine_images/wine5.jpg') }}" alt="Marques de Riscal Arienzo Crianza" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
+            </div>
+            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Marques de Riscal Arienzo Crianza</h3>
+            <p class="text-white text-sm px-4 pb-4">Tempranillo (90%), with Graciano and Mazuelo Structured and elegant with red fruit, vanilla, and spice notes. Aged in oak for a smooth, balanced finish with fine tannins.</p>
+        </div>
+        <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300" style="background-color: #7B1E3A;">
+            <div class="overflow-hidden">
+                <img src="{{ asset('assets/images/wine_images/wine2.jpg') }}" alt="Estampa Reserva Malbec Syrah 2021" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
+            </div>
+            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Estampa Reserva Malbec Syrah 2021</h3>
+            <p class="text-white text-sm px-4 pb-4">Malbec and Syrah Rich and robust with aromas of blackberry, plum, and spice. Velvety tannins and a touch of oak create a balanced, lingering finish.</p>
+        </div>
+        <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300" style="background-color: #7B1E3A;">
+            <div class="overflow-hidden">
+                <img src="{{ asset('assets/images/wine_images/wine3.jpg') }}" alt="Rothbury Estate Shiraz Cabernet" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
+            </div>
+            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Rothbury Estate Shiraz Cabernet</h3>
+            <p class="text-white text-sm px-4 pb-4">Shiraz (Syrah) and Cabernet Sauvignon Bold and juicy with flavors of black cherry, cassis, and pepper. A harmonious blend with smooth tannins and a vibrant finish.</p>
+        </div>
+    </div>
+</section>
 
+<section class="about-teaser py-16 bg-gradient-to-br from-gray-900 to-gray-800 text-white text-center">
+    <h2 class="text-3xl font-bold mb-4">Our Story</h2>
+    <p class="text-lg mb-8 max-w-xl mx-auto opacity-90">At CORK, we’re passionate about bringing the finest wines to your table. Our journey began with a love for craftsmanship and a commitment to quality.</p>
+    <a href="{{ path('app_about') }}" class="inline-block bg-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-amber-700 hover:scale-105 hover:shadow-xl transition-all duration-300" style="background-color: #D97706; color: #ffffff;">Learn More</a>
+</section>
+
+<section class="testimonials py-16 bg-white text-center">
+    <h2 class="text-3xl font-bold mb-4 text-gray-900">What Our Customers Say</h2>
+    <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div class="testimonial-card bg-gray-100 rounded-lg p-8 shadow-md hover:bg-gray-200 hover:border-2 hover:border-amber-500 transition-all duration-300">
+            <p class="text-base text-gray-600 italic mb-4">"CORK’s selection is unmatched! The wines are exceptional, and the service is top-notch."</p>
+            <cite class="text-sm text-gray-900 font-semibold">— Sarah M.</cite>
+        </div>
+        <div class="testimonial-card bg-gray-100 rounded-lg p-8 shadow-md hover:bg-gray-200 hover:border-2 hover:border-amber-500 transition-all duration-300">
+            <p class="text-base text-gray-600 italic mb-4">"I found my favorite Pinot Noir here. The quality is outstanding, and delivery was fast."</p>
+            <cite class="text-sm text-gray-900 font-semibold">— James T.</cite>
+        </div>
+    </div>
+</section>
+
+<section class="seasonal-picks py-16 bg-amber-50 text-center">
+    <h2 class="text-3xl font-bold mb-4 text-gray-900">Our Seasonal Picks</h2>
+    <p class="text-lg mb-8 max-w-xl mx-auto text-gray-600">Enjoy our curated selection of wines perfect for the fall season, from robust reds to festive sparklings.</p>
+    <div class="wine-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300" style="background-color: #7B1E3A;">
+            <div class="overflow-hidden">
+                <img src="{{ asset('assets/images/wine_images/wine12.jpg') }}" alt="Jacob's Creek Double Barrel Shiraz" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
+            </div>
+            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Jacob's Creek Double Barrel Shiraz</h3>
+            <p class="text-white text-sm px-4 pb-4">Shiraz Rich and complex with blackberry, dark chocolate, and oak notes. Double-barreled aging adds depth with smooth, velvety tannins.</p>
+        </div>
+        <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300" style="background-color: #7B1E3A;">
+            <div class="overflow-hidden">
+                <img src="{{ asset('assets/images/wine_images/wine9.jpg') }}" alt="Penfolds Bin 51 Eden Valley Riesling" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
+            </div>
+            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Penfolds Bin 51 Eden Valley Riesling</h3>
+            <p class="text-white text-sm px-4 pb-4">Riesling Crisp and vibrant with lime, green apple, and floral notes. High acidity with a mineral backbone and a zesty, refreshing finish.</p>
+        </div>
+        <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300" style="background-color: #7B1E3A;">
+            <div class="overflow-hidden">
+                <img src="{{ asset('assets/images/wine_images/wine10.jpg') }}" alt="Martini Asti" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
+            </div>
+            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Martini Asti</h3>
+            <p class="text-white text-sm px-4 pb-4">Moscato Bianco Sweet and effervescent with peach, apricot, and honey notes. Light and refreshing with fine bubbles and a delicate finish.</p>
+        </div>
+    </div>
+    <a href="{{ path('app_wine') }}" 
+        class="inline-block font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 mt-8"
+        style="background-color: #7F1734; color: #F8EAD8;"
+        onmouseover="this.style.backgroundColor='#9E2B47'"
+        onmouseout="this.style.backgroundColor='#7F1734'">
+            Explore All Wines
+    </a>
+
+</section>
 {% endblock %}

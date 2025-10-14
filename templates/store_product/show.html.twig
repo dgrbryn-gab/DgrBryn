@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ storeProduct.name }} | Wine Store{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50 py-12 px-6">
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-rose-100">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+            <!-- Product Image -->
+            <div class="flex items-center justify-center bg-rose-100">
+                {% if storeProduct.image %}
+                    <img src="{{ asset('assets/images/wine_images/' ~ storeProduct.image) }}" alt="{{ storeProduct.name }}" class="w-full h-full object-cover md:rounded-l-2xl">
+                {% else %}
+                    <img src="{{ asset('images/no-image.png') }}" alt="No image" class="w-full h-full object-cover md:rounded-l-2xl opacity-70">
+                {% endif %}
+            </div>
+
+            <!-- Product Info -->
+            <div class="p-8 flex flex-col justify-between rounded-r-2xl" style="background-color: #7F1734;">
+                <div>
+                    <h1 class="text-3xl font-bold mb-4" style="color: #f9d3b4;">{{ storeProduct.name }}</h1>
+                    <p class="mb-6 leading-relaxed" style="color: #f1e3cc;">
+                        {{ storeProduct.description|default('No description available.') }}
+                    </p>
+
+                    <div class="space-y-3 text-sm">
+                        <p><span class="font-semibold" style="color: #f9d3b4;">Product ID:</span> 
+                        <span style="color: #f1e3cc;">{{ storeProduct.id }}</span>
+                        </p>
+
+                        <p><span class="font-semibold" style="color: #f9d3b4;">Created:</span> 
+                        <span style="color: #f1e3cc;">{{ storeProduct.createdAt ? storeProduct.createdAt|date('F j, Y, g:i a') : '' }}</span>
+                        </p>
+
+                        <p><span class="font-semibold" style="color: #f9d3b4;">Available:</span> 
+                            <span class="{{ storeProduct.isAvailable ? 'text-green-300' : 'text-red-400' }}">
+                                {{ storeProduct.isAvailable ? 'Yes' : 'No' }}
+                            </span>
+                        </p>
+
+                        <p><span class="font-semibold" style="color: #f9d3b4;">In Stock:</span> 
+                        <span style="color: #f1e3cc;">{{ storeProduct.stockQuantity }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <p class="text-2xl font-bold mb-4" style="color: #f9d3b4;">€{{ storeProduct.price }}</p>
+
+                    <div class="flex justify-center flex-wrap gap-4">
+                        <a href="{{ path('app_store_product_index') }}" 
+                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
+                           style="background-color: #f9d3b4; color: #7F1734; border: 1px solid #f4e7ce;"
+                           onmouseover="this.style.backgroundColor='#e9c09e';"
+                           onmouseout="this.style.backgroundColor='#f9d3b4';">
+                            ← Back to list
+                        </a>
+
+                        <a href="{{ path('app_store_product_edit', {'id': storeProduct.id}) }}" 
+                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
+                           style="background-color: #a83244; color: #f4e7ce; border: 1px solid #f9d3b4;"
+                           onmouseover="this.style.backgroundColor='#8b1e2d';"
+                           onmouseout="this.style.backgroundColor='#a83244';">
+                            ✎ Edit Product
+                        </a>
+
+                        {{ include('store_product/_delete_form.html.twig', {
+                            'attr': {'class': 'inline-block'}
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
