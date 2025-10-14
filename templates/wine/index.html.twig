@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Our Fine Wines - CORK{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<section class="wine-page max-w-6xl mx-auto px-4 py-8 bg-stone-50 min-h-screen flex flex-col justify-between">
+    
+    <!-- Page Header -->
+    <div>
+        <div class="page-header text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-red-950 mb-2">Our Fine Wine Collection</h1>
+            <p class="text-lg text-gray-600 max-w-xl mx-auto">
+                Discover our curated selection of premium wines from around the world. Each bottle tells a story of tradition, terroir, and craftsmanship.
+            </p>
+        </div>
+
+        <!-- Category Filter -->
+        {% if categories is defined and categories is not empty %}
+            <div class="flex justify-center mb-10">
+                <form method="get" action="{{ path('app_wine') }}" class="flex items-center space-x-3">
+                    <label for="category" class="text-gray-700 font-medium">Filter by Category:</label>
+                    <select name="category" id="category" 
+                            class="border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-rose-600 focus:outline-none text-gray-700">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" 
+                                {% if selected_category == category.id %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" 
+                            class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
+                            style="background-color: #7F1734 !important;"
+                            onmouseover="this.style.backgroundColor='#9E2B47'"
+                            onmouseout="this.style.backgroundColor='#7F1734'">
+                        Apply
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+
+        <!-- Product Grid -->
+        <div class="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            {% for product in store_products %}
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-300 min-h-[36rem] flex flex-col relative">
+                    
+                    <!-- Product Image -->
+                    <div class="overflow-hidden bg-white flex justify-center items-center h-80">
+                        {% if product.image %}
+                            <img src="{{ asset('assets/images/wine_images/' ~ product.image) }}" 
+                                 alt="{{ product.name }}" 
+                                 class="w-full h-full object-contain"
+                                 loading="lazy">
+                        {% else %}
+                            <img src="{{ asset('assets/images/no-image.png') }}" 
+                                 alt="No image" 
+                                 class="w-full h-full object-contain opacity-60"
+                                 loading="lazy">
+                        {% endif %}
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="product-info p-6 flex-1 flex flex-col space-y-4 rounded-b-xl"
+                         style="background-color: #7F1734;">
+                        <h3 class="product-name text-xl font-bold text-white">{{ product.name }}</h3>
+
+                        <div class="product-details leading-relaxed text-white">
+                            <p>{{ product.description|default('No description available.') }}</p>
+                        </div>
+
+                        <!-- Price, Stock, and Add to Cart -->
+                        <div class="price-section mt-auto flex flex-col space-y-2 pt-4 border-t border-[#a83244]">
+                            <div class="flex justify-between items-center">
+                                <span class="price text-2xl font-bold" style="color: #f9d3b4;">
+                                    €{{ product.price }}
+                                </span>
+                                <a href="{{ path('app_cart_add', {
+                                    'id': product.id,
+                                    'name': product.name,
+                                    'price': product.price,
+                                    'image': asset('assets/images/wine_images/' ~ product.image)
+                                }) }}" 
+                                class="inline-block text-white text-sm font-semibold py-2 px-5 rounded-lg shadow-md border hover:scale-105 hover:shadow-lg transition-all duration-300"
+                                style="background-color: #a83244 !important; border-color: #7a1d2a;"
+                                onmouseover="this.style.backgroundColor='#8b1e2d'"
+                                onmouseout="this.style.backgroundColor='#a83244'">
+                                    Add to Cart
+                                </a>
+                            </div>
+                            <div class="stock-section text-sm">
+                                {% if product.inventory is defined and product.inventory is not null and product.inventory.quantity is defined %}
+                                    <span class="{% if product.inventory.quantity < (product.inventory.threshold ?? 0) %}text-red-400 font-semibold{% else %}text-[#f9d3b4]{% endif %}">
+                                        In Stock: {{ product.inventory.quantity }} bottle{{ product.inventory.quantity != 1 ? 's' : '' }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-gray-400">Stock information unavailable</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-center text-gray-500 text-lg col-span-3">No wines available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
