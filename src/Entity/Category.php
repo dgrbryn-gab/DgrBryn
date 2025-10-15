@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Id] // primary key
+    #[ORM\GeneratedValue] // auto-increment
+    #[ORM\Column] // defines the data type
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -27,7 +27,7 @@ class Category
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: StoreProduct::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: StoreProduct::class)] // relation
     private Collection $storeProducts;
 
     public function __construct()
