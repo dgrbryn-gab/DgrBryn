@@ -32,6 +32,12 @@ class StoreProductType extends AbstractType
                 'scale' => 2,
                 'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
             ])
+            ->add('quantity', NumberType::class, [
+                'label' => 'Initial Stock Quantity',
+                'mapped' => false, // Not mapped to StoreProduct
+                'required' => false,
+                'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
+            ])
             ->add('image', TextType::class, [
                 'label' => 'Image Path',
                 'required' => false,
@@ -45,8 +51,9 @@ class StoreProductType extends AbstractType
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Select a category',
+                'label' => 'Category',
                 'required' => false,
+                'placeholder' => 'Select a category',
                 'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
             ]);
     }
