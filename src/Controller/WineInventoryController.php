@@ -17,8 +17,17 @@ final class WineInventoryController extends AbstractController
     #[Route(name: 'app_wine_inventory_index', methods: ['GET'])]
     public function index(WineInventoryRepository $wineInventoryRepository): Response
     {
+        $inventories = $wineInventoryRepository->findAll();
+
+        // ✅ Group inventories by category name
+        $groupedInventories = [];
+        foreach ($inventories as $inventory) {
+            $categoryName = $inventory->getProduct()?->getCategory()?->getName() ?? 'Uncategorized';
+            $groupedInventories[$categoryName][] = $inventory;
+        }
+
         return $this->render('wine_inventory/index.html.twig', [
-            'wine_inventories' => $wineInventoryRepository->findAll(),
+            'grouped_inventories' => $groupedInventories,
         ]);
     }
 
@@ -30,6 +39,7 @@ final class WineInventoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $wineInventory->setLastUpdated(new \DateTime());
             $entityManager->persist($wineInventory);
             $entityManager->flush();
 
@@ -38,7 +48,7 @@ final class WineInventoryController extends AbstractController
 
         return $this->render('wine_inventory/new.html.twig', [
             'wine_inventory' => $wineInventory,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -57,6 +67,7 @@ final class WineInventoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $wineInventory->setLastUpdated(new \DateTime());
             $entityManager->flush();
 
             return $this->redirectToRoute('app_wine_inventory_index', [], Response::HTTP_SEE_OTHER);
@@ -64,14 +75,14 @@ final class WineInventoryController extends AbstractController
 
         return $this->render('wine_inventory/edit.html.twig', [
             'wine_inventory' => $wineInventory,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}', name: 'app_wine_inventory_delete', methods: ['POST'])]
     public function delete(Request $request, WineInventory $wineInventory, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$wineInventory->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $wineInventory->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($wineInventory);
             $entityManager->flush();
         }

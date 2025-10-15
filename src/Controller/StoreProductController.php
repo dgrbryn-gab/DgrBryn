@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\StoreProduct;
+use App\Entity\WineInventory;
 use App\Form\StoreProductType;
 use App\Repository\StoreProductRepository;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,22 +39,36 @@ class StoreProductController extends AbstractController
     }
 
     #[Route('/store/product/new', name: 'app_store_product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, StoreProductRepository $storeProductRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response
     {
         $storeProduct = new StoreProduct();
         $form = $this->createForm(StoreProductType::class, $storeProduct);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $storeProductRepository->save($storeProduct, true);
+            $storeProduct->setCreatedAt(new \DateTimeImmutable());
+            $entityManager->persist($storeProduct);
+            $entityManager->flush();
 
-            // Redirect to customer-facing product list
-            return $this->redirectToRoute('app_store_product_index');
+            // Create or update WineInventory
+            $quantity = $form->get('quantity')->getData();
+            $inventory = $entityManager->getRepository(WineInventory::class)->findOneBy(['product' => $storeProduct]);
+            if (!$inventory) {
+                $inventory = new WineInventory();
+                $inventory->setProduct($storeProduct);
+                $inventory->setAcquiredDate(new \DateTime());
+            }
+            $inventory->setQuantity($quantity ?? 0);
+            $entityManager->persist($inventory);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('store_product/new.html.twig', [
             'storeProduct' => $storeProduct,
             'form' => $form->createView(),
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
 
@@ -65,19 +81,31 @@ class StoreProductController extends AbstractController
     }
 
     #[Route('/store/product/{id}/edit', name: 'app_store_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, StoreProduct $storeProduct, StoreProductRepository $storeProductRepository): Response
+    public function edit(Request $request, StoreProduct $storeProduct, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response
     {
         $form = $this->createForm(StoreProductType::class, $storeProduct);
+        $form->get('quantity')->setData($storeProduct->getWineInventories()->first() ? $storeProduct->getWineInventories()->first()->getQuantity() : 0);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $storeProductRepository->save($storeProduct, true);
-            return $this->redirectToRoute('app_store_product_index');
+            $quantity = $form->get('quantity')->getData();
+            $inventory = $entityManager->getRepository(WineInventory::class)->findOneBy(['product' => $storeProduct]);
+            if (!$inventory) {
+                $inventory = new WineInventory();
+                $inventory->setProduct($storeProduct);
+                $inventory->setAcquiredDate(new \DateTime());
+            }
+            $inventory->setQuantity($quantity ?? 0);
+            $entityManager->persist($inventory);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('store_product/edit.html.twig', [
             'storeProduct' => $storeProduct,
             'form' => $form->createView(),
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
 
@@ -88,6 +116,6 @@ class StoreProductController extends AbstractController
             $storeProductRepository->remove($storeProduct, true);
         }
 
-        return $this->redirectToRoute('app_store_product_index');
+        return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
     }
 }

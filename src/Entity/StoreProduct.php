@@ -162,4 +162,4 @@ class StoreProduct
 
         return $this;
     }
-}
+}   
