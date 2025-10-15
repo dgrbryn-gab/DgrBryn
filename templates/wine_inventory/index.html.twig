@@ -7,6 +7,32 @@
     <div class="max-w-6xl mx-auto">
         <h1 class="text-3xl font-bold mb-8 text-center" style="color: #7F1734;">Wine Inventory</h1>
 
+        {# ✅ Category Filter Dropdown #}
+        {% if categories is defined and categories is not empty %}
+            <div class="flex justify-center mb-10">
+                <form method="get" action="{{ path('app_wine_inventory_index') }}" class="flex items-center space-x-3">
+                    <label for="category" class="text-gray-700 font-medium">Filter by Category:</label>
+                    <select name="category" id="category" 
+                            class="border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-rose-600 focus:outline-none text-gray-700">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" 
+                                {% if selected_category == category.id %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" 
+                            class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
+                            style="background-color: #7F1734 !important;"
+                            onmouseover="this.style.backgroundColor='#9E2B47'"
+                            onmouseout="this.style.backgroundColor='#7F1734'">
+                        Apply
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+
         {% if grouped_inventories is defined and grouped_inventories|length > 0 %}
             {% for category, inventories in grouped_inventories %}
                 <div class="mb-12">
