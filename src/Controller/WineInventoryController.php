@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\WineInventory;
+use App\Entity\Category;
 use App\Form\WineInventoryType;
 use App\Repository\WineInventoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,11 +16,27 @@ use Symfony\Component\Routing\Attribute\Route;
 final class WineInventoryController extends AbstractController
 {
     #[Route(name: 'app_wine_inventory_index', methods: ['GET'])]
-    public function index(WineInventoryRepository $wineInventoryRepository): Response
+    public function index(Request $request, WineInventoryRepository $wineInventoryRepository, EntityManagerInterface $entityManager): Response
     {
-        $inventories = $wineInventoryRepository->findAll();
+        $selectedCategory = $request->query->get('category');
 
-        // ✅ Group inventories by category name
+        // ✅ Get all categories for dropdown
+        $categories = $entityManager->getRepository(Category::class)->findAll();
+
+        // ✅ Filter by category if selected
+        if ($selectedCategory) {
+            $inventories = $wineInventoryRepository->createQueryBuilder('wi')
+                ->join('wi.product', 'p')
+                ->join('p.category', 'c')
+                ->where('c.id = :categoryId')
+                ->setParameter('categoryId', $selectedCategory)
+                ->getQuery()
+                ->getResult();
+        } else {
+            $inventories = $wineInventoryRepository->findAll();
+        }
+
+        // ✅ Group inventories by category name (for display)
         $groupedInventories = [];
         foreach ($inventories as $inventory) {
             $categoryName = $inventory->getProduct()?->getCategory()?->getName() ?? 'Uncategorized';
@@ -28,6 +45,8 @@ final class WineInventoryController extends AbstractController
 
         return $this->render('wine_inventory/index.html.twig', [
             'grouped_inventories' => $groupedInventories,
+            'categories' => $categories,
+            'selected_category' => $selectedCategory,
         ]);
     }
 
