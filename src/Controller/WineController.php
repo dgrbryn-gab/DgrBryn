@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\CategoryRepository;
 use App\Repository\StoreProductRepository;
+use App\Repository\WineInventoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,8 @@ final class WineController extends AbstractController
     public function index(
         Request $request,
         StoreProductRepository $storeProductRepository,
-        CategoryRepository $categoryRepository
+        CategoryRepository $categoryRepository,
+        WineInventoryRepository $wineInventoryRepository
     ): Response {
         // Fetch all categories for the dropdown
         $categories = $categoryRepository->findAll();
@@ -23,11 +25,17 @@ final class WineController extends AbstractController
         // Get selected category ID from query parameter
         $selectedCategoryId = $request->query->get('category');
 
-        // Filter products by category (no inventory yet)
+        // Filter products by category
         if ($selectedCategoryId) {
             $products = $storeProductRepository->findBy(['category' => $selectedCategoryId]);
         } else {
             $products = $storeProductRepository->findAll();
+        }
+
+        // 🔹 Attach stock quantity to each product
+        foreach ($products as $product) {
+            $inventory = $wineInventoryRepository->findOneBy(['product' => $product]);
+            $product->stockQuantity = $inventory ? $inventory->getQuantity() : 0;
         }
 
         // Render the template

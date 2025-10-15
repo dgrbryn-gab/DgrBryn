@@ -92,13 +92,14 @@
                                     Add to Cart
                                 </a>
                             </div>
+
                             {% if product.stockQuantity is defined %}
-                                <div class="stock-section text-sm">
-                                    <span class="{% if product.stockQuantity < 5 %}text-red-400 font-semibold{% else %}text-[#fefbf3] font-normal{% endif %}">
+                                <div class="stock-section text-sm mt-1">
+                                    <span style="color: #f9d3b4; font-weight: 600;">
                                         In Stock: {{ product.stockQuantity }} bottle{{ product.stockQuantity != 1 ? 's' : '' }}
                                     </span>
                                     {% if product.isAvailable is defined %}
-                                        <span class="{% if product.isAvailable %}text-green-300{% else %}text-red-400{% endif %}">
+                                        <span class="ml-2" style="color: #f9d3b4;">
                                             ({{ product.isAvailable ? 'Available' : 'Unavailable' }})
                                         </span>
                                     {% endif %}
