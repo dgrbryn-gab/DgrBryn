@@ -77,7 +77,7 @@
                         {% endif %}
 
                         <p class="text-lg font-semibold mb-3" style="color: #EFCFB4;">€{{ store_product.price }}</p>
-                        <p class="text-sm mb-4 opacity-85">Stock: {{ store_product.stockQuantity }}</p>
+                        <p class="text-sm mb-4 opacity-85">Stock: {{ store_product.wineInventories|length > 0 ? store_product.wineInventories.first.quantity : 0 }}</p>
 
                         <div class="flex space-x-2">
                             <a href="{{ path('app_store_product_show', {'id': store_product.id}) }}"

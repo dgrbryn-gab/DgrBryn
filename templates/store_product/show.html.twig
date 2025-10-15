@@ -39,7 +39,7 @@
                         </p>
 
                         <p><span class="font-semibold" style="color: #f9d3b4;">In Stock:</span> 
-                        <span style="color: #f1e3cc;">{{ storeProduct.stockQuantity }}</span>
+                        <span style="color: #f1e3cc;">{{ storeProduct.wineInventories|length > 0 ? storeProduct.wineInventories.first.quantity : 0 }}</span>
                         </p>
                     </div>
                 </div>
