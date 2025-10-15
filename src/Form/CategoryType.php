@@ -13,6 +13,7 @@ class CategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // input fields of the form
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Category Name',
@@ -23,6 +24,7 @@ class CategoryType extends AbstractType
             ]);
     }
 
+    // tells which entity the form is connected to
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

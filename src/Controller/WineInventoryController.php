@@ -15,15 +15,15 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/wine/inventory')]
 final class WineInventoryController extends AbstractController
 {
-    #[Route(name: 'app_wine_inventory_index', methods: ['GET'])]
-    public function index(Request $request, WineInventoryRepository $wineInventoryRepository, EntityManagerInterface $entityManager): Response
+    #[Route(name: 'app_wine_inventory_index', methods: ['GET'])] // route to a certain page
+    public function index(Request $request, WineInventoryRepository $wineInventoryRepository, EntityManagerInterface $entityManager): Response // action
     {
         $selectedCategory = $request->query->get('category');
 
-        // ✅ Get all categories for dropdown
-        $categories = $entityManager->getRepository(Category::class)->findAll();
+        // Get all categories for dropdown
+        $categories = $entityManager->getRepository(Category::class)->findAll(); // fetch data from category entity
 
-        // ✅ Filter by category if selected
+        // Filter by category if selected
         if ($selectedCategory) {
             $inventories = $wineInventoryRepository->createQueryBuilder('wi')
                 ->join('wi.product', 'p')
@@ -36,13 +36,14 @@ final class WineInventoryController extends AbstractController
             $inventories = $wineInventoryRepository->findAll();
         }
 
-        // ✅ Group inventories by category name (for display)
+        // Group inventories by category name (for display)
         $groupedInventories = [];
         foreach ($inventories as $inventory) {
             $categoryName = $inventory->getProduct()?->getCategory()?->getName() ?? 'Uncategorized';
             $groupedInventories[$categoryName][] = $inventory;
         }
 
+        // return a response
         return $this->render('wine_inventory/index.html.twig', [
             'grouped_inventories' => $groupedInventories,
             'categories' => $categories,
