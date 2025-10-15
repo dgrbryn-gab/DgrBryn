@@ -8,3 +8,12 @@ import './bootstrap.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import $ from 'jquery';
+import 'datatables.net';           // core functionality
+// import 'datatables.net-dt/css/jquery.dataTables.css'; // default DataTables theme
+
+$(document).ready(function () {
+    $('#wineInventoryTable').DataTable({
+        responsive: true,
+    });
+});

@@ -3,41 +3,81 @@
 {% block title %}Wine Inventory{% endblock %}
 
 {% block body %}
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Wine Inventory</h1>
+<div class="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50 py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center" style="color: #7F1734;">Wine Inventory</h1>
 
-        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-            <thead>
-                <tr class="bg-gray-900 text-white">
-                    <th class="py-3 px-4 text-left">ID</th>
-                    <th class="py-3 px-4 text-left">Product Name</th>
-                    <th class="py-3 px-4 text-left">Quantity</th>
-                    <th class="py-3 px-4 text-left">Acquired Date</th>
-                    <th class="py-3 px-4 text-left">Last Updated</th>
-                    <th class="py-3 px-4 text-left">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for wine_inventory in wine_inventories %}
-                    <tr class="border-b border-gray-200 hover:bg-gray-100">
-                        <td class="py-3 px-4">{{ wine_inventory.id }}</td>
-                        <td class="py-3 px-4">{{ wine_inventory.product.name }}</td>
-                        <td class="py-3 px-4">{{ wine_inventory.quantity }}</td>
-                        <td class="py-3 px-4">{{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('Y-m-d') : '' }}</td>
-                        <td class="py-3 px-4">{{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('Y-m-d H:i:s') : '' }}</td>
-                        <td class="py-3 px-4">
-                            <a href="{{ path('app_wine_inventory_show', {'id': wine_inventory.id}) }}" class="text-white bg-gray-900 hover:bg-amber-500 hover:text-white font-medium py-1 px-3 rounded transition-colors duration-300 mr-2">Show</a>
-                            <a href="{{ path('app_wine_inventory_edit', {'id': wine_inventory.id}) }}" class="text-white bg-gray-900 hover:bg-amber-500 hover:text-white font-medium py-1 px-3 rounded transition-colors duration-300">Edit</a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="6" class="py-3 px-4 text-center text-gray-600">No records found</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if grouped_inventories is defined and grouped_inventories|length > 0 %}
+            {% for category, inventories in grouped_inventories %}
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold mb-6 border-b-4 pb-2" style="color:#7F1734; border-color:#f9d3b4;">
+                        {{ category }}
+                    </h2>
 
-    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {% for wine_inventory in inventories %}
+                            <div class="bg-white rounded-2xl shadow-lg border border-rose-100 overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col">
+                                
+                                <!-- Card Header -->
+                                <div class="bg-[#7F1734] text-[#f9d3b4] px-5 py-3 flex justify-between items-center">
+                                    <h3 class="text-lg font-bold truncate">{{ wine_inventory.product.name }}</h3>
+                                    <span class="text-sm bg-[#f9d3b4] text-[#7F1734] font-semibold px-2 py-1 rounded-md">
+                                        ID: {{ wine_inventory.id }}
+                                    </span>
+                                </div>
+
+                                <!-- Card Body -->
+                                <div class="p-5 flex-grow flex flex-col justify-between">
+                                    <div class="w-full h-56 flex items-center justify-center bg-rose-50 rounded-xl overflow-hidden">
+                                        {% if wine_inventory.product.image %}
+                                            <img src="{{ asset('assets/images/wine_images/' ~ wine_inventory.product.image) }}" 
+                                                 alt="{{ wine_inventory.product.name }}" 
+                                                 class="max-h-56 object-contain rounded-xl">
+                                        {% else %}
+                                            <img src="{{ asset('images/no-image.png') }}" 
+                                                 alt="No image available" 
+                                                 class="max-h-56 object-contain rounded-xl opacity-70">
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="mt-4 space-y-2 text-gray-700 text-sm">
+                                        <p><span class="font-semibold" style="color:#7F1734;">Quantity:</span> {{ wine_inventory.quantity }}</p>
+                                        <p><span class="font-semibold" style="color:#7F1734;">Acquired:</span> {{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('F j, Y') : 'N/A' }}</p>
+                                        <p><span class="font-semibold" style="color:#7F1734;">Last Updated:</span> {{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('F j, Y, g:i a') : 'N/A' }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card Footer -->
+                                <div class="px-5 py-4 flex justify-center gap-3 border-t border-rose-100" style="background-color: #7F1734;">
+                                    <a href="{{ path('app_wine_inventory_show', {'id': wine_inventory.id}) }}"
+                                       class="flex-1 text-center font-semibold rounded-xl shadow-md transition-all duration-300 flex items-center justify-center"
+                                       style="background-color: #f9d3b4; color: #7F1734; border: 1px solid #f4e7ce; min-height: 42px;"
+                                       onmouseover="this.style.backgroundColor='#e9c09e';"
+                                       onmouseout="this.style.backgroundColor='#f9d3b4';">
+                                        Show
+                                    </a>
+                                    <a href="{{ path('app_wine_inventory_edit', {'id': wine_inventory.id}) }}"
+                                       class="flex-1 text-center font-semibold rounded-xl shadow-md transition-all duration-300 flex items-center justify-center"
+                                       style="background-color: #a83244; color: #f4e7ce; border: 1px solid #f9d3b4; min-height: 42px;"
+                                       onmouseover="this.style.backgroundColor='#8b1e2d';"
+                                       onmouseout="this.style.backgroundColor='#a83244';">
+                                        Edit
+                                    </a>
+                                    {{ include('wine_inventory/_delete_form.html.twig', {
+                                        'wine_inventory': wine_inventory,
+                                        'attr': {'class': 'inline-block flex-1'}
+                                    }) }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="bg-white rounded-2xl shadow-lg border border-rose-100 p-8 text-center text-gray-600">
+                No records found
+            </div>
+        {% endif %}
     </div>
+</div>
 {% endblock %}

@@ -3,39 +3,73 @@
 {% block title %}Wine Inventory Details{% endblock %}
 
 {% block body %}
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Wine Inventory Details</h1>
+<div class="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50 py-12 px-6">
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-rose-100">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+            <!-- Product Image -->
+            <div class="flex items-center justify-center bg-rose-100">
+                {% if wine_inventory.product.image %}
+                    <img src="{{ asset('assets/images/wine_images/' ~ wine_inventory.product.image) }}" alt="{{ wine_inventory.product.name }}" class="w-full h-full object-cover md:rounded-l-2xl">
+                {% else %}
+                    <img src="{{ asset('images/no-image.png') }}" alt="No image" class="w-full h-full object-cover md:rounded-l-2xl opacity-70">
+                {% endif %}
+            </div>
 
-        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-            <tbody>
-                <tr class="border-b border-gray-200">
-                    <th class="py-3 px-4 text-left bg-gray-900 text-white">ID</th>
-                    <td class="py-3 px-4">{{ wine_inventory.id }}</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Product Name</th>
-                    <td class="py-3 px-4">{{ wine_inventory.product.name }}</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Quantity</th>
-                    <td class="py-3 px-4">{{ wine_inventory.quantity }}</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Acquired Date</th>
-                    <td class="py-3 px-4">{{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('Y-m-d') : '' }}</td>
-                </tr>
-                <tr>
-                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Last Updated</th>
-                    <td class="py-3 px-4">{{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('Y-m-d H:i:s') : '' }}</td>
-                </tr>
-            </tbody>
-        </table>
+            <!-- Inventory Info -->
+            <div class="p-8 flex flex-col justify-between rounded-r-2xl" style="background-color: #7F1734;">
+                <div>
+                    <h1 class="text-3xl font-bold mb-4" style="color: #f9d3b4;">{{ wine_inventory.product.name }}</h1>
+                    <p class="mb-6 leading-relaxed" style="color: #f1e3cc;">
+                        Inventory details for {{ wine_inventory.product.name }}
+                    </p>
 
-        <div class="mt-6 space-x-4">
-            <a href="{{ path('app_wine_inventory_index') }}" class="inline-block text-white bg-gray-900 hover:bg-amber-500 hover:text-white font-medium py-2 px-4 rounded transition-colors duration-300">Back to List</a>
-            <a href="{{ path('app_wine_inventory_edit', {'id': wine_inventory.id}) }}" class="inline-block text-white bg-gray-900 hover:bg-amber-500 hover:text-white font-medium py-2 px-4 rounded transition-colors duration-300">Edit</a>
+                    <div class="space-y-3 text-sm">
+                        <p>
+                            <span class="font-semibold" style="color: #f9d3b4;">Inventory ID:</span> 
+                            <span style="color: #f1e3cc;">{{ wine_inventory.id }}</span>
+                        </p>
+                        <p>
+                            <span class="font-semibold" style="color: #f9d3b4;">Product Name:</span> 
+                            <span style="color: #f1e3cc;">{{ wine_inventory.product.name }}</span>
+                        </p>
+                        <p>
+                            <span class="font-semibold" style="color: #f9d3b4;">Quantity:</span> 
+                            <span style="color: #f1e3cc;">{{ wine_inventory.quantity }}</span>
+                        </p>
+                        <p>
+                            <span class="font-semibold" style="color: #f9d3b4;">Acquired Date:</span> 
+                            <span style="color: #f1e3cc;">{{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('F j, Y') : 'N/A' }}</span>
+                        </p>
+                        <p>
+                            <span class="font-semibold" style="color: #f9d3b4;">Last Updated:</span> 
+                            <span style="color: #f1e3cc;">{{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('F j, Y, g:i a') : 'N/A' }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="flex justify-center flex-wrap gap-4">
+                        <a href="{{ path('app_wine_inventory_index') }}" 
+                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
+                           style="background-color: #f9d3b4; color: #7F1734; border: 1px solid #f4e7ce;"
+                           onmouseover="this.style.backgroundColor='#e9c09e';"
+                           onmouseout="this.style.backgroundColor='#f9d3b4';">
+                            ← Back to List
+                        </a>
+                        <a href="{{ path('app_wine_inventory_edit', {'id': wine_inventory.id}) }}" 
+                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
+                           style="background-color: #a83244; color: #f4e7ce; border: 1px solid #f9d3b4;"
+                           onmouseover="this.style.backgroundColor='#8b1e2d';"
+                           onmouseout="this.style.backgroundColor='#a83244';">
+                            ✎ Edit Inventory
+                        </a>
+                        {{ include('wine_inventory/_delete_form.html.twig', {
+                            'attr': {'class': 'inline-block'}
+                        }) }}
+                    </div>
+                </div>
+            </div>
         </div>
-
-        {{ include('wine_inventory/_delete_form.html.twig') }}
     </div>
+</div>
 {% endblock %}
