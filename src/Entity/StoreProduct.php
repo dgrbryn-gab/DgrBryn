@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StoreProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Category;
@@ -24,9 +26,6 @@ class StoreProduct
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\Column]
-    private ?int $stockQuantity = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
@@ -40,9 +39,16 @@ class StoreProduct
     #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?Category $category = null;
 
+    /**
+     * @var Collection<int, WineInventory>
+     */
+    #[ORM\OneToMany(targetEntity: WineInventory::class, mappedBy: 'product')]
+    private Collection $wineInventories;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->wineInventories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,17 +86,6 @@ class StoreProduct
     public function setPrice(float $price): static
     {
         $this->price = $price;
-        return $this;
-    }
-
-    public function getStockQuantity(): ?int
-    {
-        return $this->stockQuantity;
-    }
-
-    public function setStockQuantity(int $stockQuantity): static
-    {
-        $this->stockQuantity = $stockQuantity;
         return $this;
     }
 
@@ -135,6 +130,36 @@ class StoreProduct
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WineInventory>
+     */
+    public function getWineInventories(): Collection
+    {
+        return $this->wineInventories;
+    }
+
+    public function addWineInventory(WineInventory $wineInventory): static
+    {
+        if (!$this->wineInventories->contains($wineInventory)) {
+            $this->wineInventories->add($wineInventory);
+            $wineInventory->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWineInventory(WineInventory $wineInventory): static
+    {
+        if ($this->wineInventories->removeElement($wineInventory)) {
+            // set the owning side to null (unless already changed)
+            if ($wineInventory->getProduct() === $this) {
+                $wineInventory->setProduct(null);
+            }
+        }
+
         return $this;
     }
 }

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wine Inventory Details{% endblock %}
+
+{% block body %}
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Wine Inventory Details</h1>
+
+        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+            <tbody>
+                <tr class="border-b border-gray-200">
+                    <th class="py-3 px-4 text-left bg-gray-900 text-white">ID</th>
+                    <td class="py-3 px-4">{{ wine_inventory.id }}</td>
+                </tr>
+                <tr class="border-b border-gray-200">
+                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Product Name</th>
+                    <td class="py-3 px-4">{{ wine_inventory.product.name }}</td>
+                </tr>
+                <tr class="border-b border-gray-200">
+                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Quantity</th>
+                    <td class="py-3 px-4">{{ wine_inventory.quantity }}</td>
+                </tr>
+                <tr class="border-b border-gray-200">
+                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Acquired Date</th>
+                    <td class="py-3 px-4">{{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('Y-m-d') : '' }}</td>
+                </tr>
+                <tr>
+                    <th class="py-3 px-4 text-left bg-gray-900 text-white">Last Updated</th>
+                    <td class="py-3 px-4">{{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="mt-6 space-x-4">
+            <a href="{{ path('app_wine_inventory_index') }}" class="inline-block text-white bg-gray-900 hover:bg-amber-500 hover:text-white font-medium py-2 px-4 rounded transition-colors duration-300">Back to List</a>
+            <a href="{{ path('app_wine_inventory_edit', {'id': wine_inventory.id}) }}" class="inline-block text-white bg-gray-900 hover:bg-amber-500 hover:text-white font-medium py-2 px-4 rounded transition-colors duration-300">Edit</a>
+        </div>
+
+        {{ include('wine_inventory/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

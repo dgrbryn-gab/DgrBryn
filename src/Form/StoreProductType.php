@@ -20,31 +20,34 @@ class StoreProductType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Product Name',
+                'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'required' => false,
+                'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
             ])
             ->add('price', NumberType::class, [
                 'label' => 'Price',
                 'scale' => 2,
-            ])
-            ->add('stockQuantity', NumberType::class, [
-                'label' => 'Stock Quantity',
+                'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
             ])
             ->add('image', TextType::class, [
                 'label' => 'Image Path',
                 'required' => false,
+                'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
             ])
             ->add('isAvailable', CheckboxType::class, [
                 'label' => 'Is Available',
                 'required' => false,
+                'attr' => ['class' => 'h-4 w-4 text-rose-600 border-gray-300 rounded focus:ring-rose-400']
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'label' => 'Category',
+                'placeholder' => 'Select a category',
                 'required' => false,
+                'attr' => ['class' => 'w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 bg-white']
             ]);
     }
 

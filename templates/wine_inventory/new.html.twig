@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Wine Inventory{% endblock %}
+
+{% block body %}
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Create New Wine Inventory</h1>
+
+        {{ include('wine_inventory/_form.html.twig') }}
+
+        <a href="{{ path('app_wine_inventory_index') }}" class="inline-block mt-6 text-white bg-gray-900 hover:bg-amber-500 hover:text-white font-medium py-2 px-4 rounded transition-colors duration-300">Back to List</a>
+    </div>
+{% endblock %}
