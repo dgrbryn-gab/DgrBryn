@@ -88,4 +88,10 @@ class WineInventory
         $this->product = $product;
         return $this;
     }
+
+    public function __toString(): string
+    {
+        $productName = $this->product ? $this->product->getName() : 'Unknown Product';
+        return sprintf('%s (Qty: %d)', $productName, $this->quantity);
+    }
 }

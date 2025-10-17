@@ -1,0 +1,149 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <style>
+        /* === Sidebar (Burgundy & Cream Theme) === */
+        .ea-sidebar,
+        .ea-sidebar .menu {
+            background-color: #7B1E3A !important;
+            color: #FFF8E7 !important;
+            background-image: none !important;
+        }
+
+        .ea-sidebar .menu .menu-section {
+            color: #FFEFD5 !important;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .ea-sidebar .menu .menu-item > a,
+        .ea-sidebar .menu .menu-item {
+            color: #FFF8E7 !important;
+        }
+
+        .ea-sidebar .menu .menu-item .menu-icon {
+            color: #FFF8E7 !important;
+            opacity: 0.95;
+        }
+
+        .ea-sidebar .menu .menu-item > a:hover,
+        .ea-sidebar .menu .menu-item.active > a,
+        .ea-sidebar .menu .menu-item:hover > a {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+        }
+
+        /* === Main Content (Milky Theme) === */
+        body.ea {
+            background-color: #fafaf8 !important;
+            color: #333 !important;
+            background-image: none !important;
+        }
+
+        .content,
+        .content-body,
+        .content-header,
+        .content-panel {
+            background-color: #ffffff !important;
+            color: #333 !important;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+            background-image: none !important;
+        }
+
+        /* Tables */
+        table,
+        table th,
+        table td {
+            background: #ffffff !important;
+            color: #333 !important;
+            border-color: #ddd !important;
+        }
+
+        table thead th {
+            background-color: #f5f2f0 !important;
+            color: #7B1E3A !important;
+            font-weight: bold;
+        }
+
+        /* Headings */
+        .content-header h1 {
+            color: #7B1E3A !important;
+            font-weight: 700;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: #7B1E3A !important;
+            border-color: #7B1E3A !important;
+            color: #fff !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #9c2548 !important;
+        }
+
+        /* Hide public site header */
+        header { display: none !important; }
+
+        /* === Force-hide EasyAdmin top search bar === */
+        .ea-search,
+        .ea-search-form,
+        .ea-search-wrapper,
+        .navbar-search,
+        .global-search,
+        form[action*="search"],
+        .content-top form,
+        .ea-header-content form,
+        .ea-main .form-inline {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+    </style>
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            /* === REMOVE EasyAdmin top search bar (even if injected later) === */
+            const removeGlobalSearch = () => {
+                document.querySelectorAll(
+                    '.ea-search, .ea-search-form, .navbar-search, .global-search, .ea-header-content form, .content-top form'
+                ).forEach(el => el.remove());
+            };
+
+            // Run removal twice: immediately and after a short delay for dynamic content
+            removeGlobalSearch();
+            setTimeout(removeGlobalSearch, 800);
+
+            /* === Initialize DataTables === */
+            const tables = document.querySelectorAll('table');
+            tables.forEach(function (table) {
+                if (!table.classList.contains('dataTable')) {
+                    new DataTable(table, {
+                        paging: true,
+                        searching: true,
+                        ordering: true,
+                        pageLength: 10,
+                        language: { search: "Search Table:" }
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}
