@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/category')]
+#[Route('/admin/category')]
 class CategoryController extends AbstractController
 {
     #[Route('', name: 'app_category_index', methods: ['GET'])]
@@ -29,13 +29,13 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Automatically set creation timestamp
+            // Set created timestamp
             $category->setCreatedAt(new \DateTimeImmutable());
 
             $categoryRepository->save($category, true);
-            $this->addFlash('success', 'Category created successfully!');
+            $this->addFlash('success', '✅ Category created successfully!');
 
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_category_index');
         }
 
         return $this->render('category/new.html.twig', [
@@ -51,13 +51,13 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Update timestamp
+            // Set updated timestamp
             $category->setUpdatedAt(new \DateTimeImmutable());
 
             $categoryRepository->save($category, true);
-            $this->addFlash('success', 'Category updated successfully!');
+            $this->addFlash('success', '✅ Category updated successfully!');
 
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_category_index');
         }
 
         return $this->render('category/edit.html.twig', [
@@ -71,9 +71,9 @@ class CategoryController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->request->get('_token'))) {
             $categoryRepository->remove($category, true);
-            $this->addFlash('success', 'Category deleted successfully!');
+            $this->addFlash('success', '🗑️ Category deleted successfully!');
         }
 
-        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_category_index');
     }
 }

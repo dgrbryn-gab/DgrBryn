@@ -1,0 +1,28 @@
+/* Global admin overrides for EasyAdmin */
+/* Sidebar background and text */
+.sidebar, .ea-sidebar, .ea-sidebar .menu, .ea-dark-scheme .sidebar {
+    background-color: #7B1E3A !important; /* burgundy */
+    color: #ffffff !important;
+}
+
+.ea-sidebar .menu .menu-item a, .ea-sidebar .menu .menu-item {
+    color: #ffffff !important;
+}
+
+.ea-sidebar .menu .menu-item a:hover,
+.ea-sidebar .menu .menu-item.active > a,
+.ea-sidebar .menu .menu-item:hover > a {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Content text to dark */
+.content, .content-body, body.ea {
+    color: #111827; /* gray-900 */
+}
+
+/* Remove public site header if present */
+header {
+    display: none !important;
+}
+

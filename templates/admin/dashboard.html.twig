@@ -1,0 +1,35 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block admin_content %}
+<section class="bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <h2 class="text-4xl font-bold text-[#5E0B15]">🍷 Admin Dashboard</h2>
+        <p class="text-gray-700 mt-1">Manage categories, products, and inventory — your digital wine cellar at a glance.</p>
+    </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-6 py-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="{{ categoryUrl }}" class="block rounded-lg border border-gray-200 bg-white hover:shadow-lg transition-shadow wine-shadow">
+            <div class="p-6 flex flex-col items-center text-center">
+                <h3 class="text-lg font-semibold mt-3">🍇 Categories</h3>
+                <p class="text-sm text-gray-700 mt-1">Create, edit, and organize wine categories.</p>
+            </div>
+        </a>
+        <a href="{{ productUrl }}" class="block rounded-lg border border-gray-200 bg-white hover:shadow-lg transition-shadow wine-shadow">
+            <div class="p-6 flex flex-col items-center text-center">
+                <h3 class="text-lg font-semibold mt-3">🍷 Products</h3>
+                <p class="text-sm text-gray-700 mt-1">Manage wine products, pricing, and availability.</p>
+            </div>
+        </a>
+        <a href="{{ inventoryUrl }}" class="block rounded-lg border border-gray-200 bg-white hover:shadow-lg transition-shadow wine-shadow">
+            <div class="p-6 flex flex-col items-center text-center">
+                <h3 class="text-lg font-semibold mt-3">📦 Inventory</h3>
+                <p class="text-sm text-gray-700 mt-1">Track stock quantities and acquisition dates.</p>
+            </div>
+        </a>
+    </div>
+</section>
+{% endblock %}
