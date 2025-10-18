@@ -1,0 +1,25 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Create New Wine Inventory | Wine Store{% endblock %}
+
+{% block admin_content %}
+<div class="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50 py-12 px-6">
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-rose-100">
+        <h1 class="text-3xl font-bold mb-8 text-center" style="color:#7F1734;">Create New Wine Inventory</h1>
+
+        <div class="mb-8">
+            {{ include('wine_inventory/_form.html.twig', {'button_label': 'Save'}) }}
+        </div>
+
+        <div class="flex justify-center space-x-4">
+            <a href="{{ path('app_wine_inventory_index') }}"
+               class="px-6 py-3 text-white font-semibold rounded-xl transition-all duration-300"
+               style="background-color:#7F1734; border:1px solid #f9d3b4;"
+               onmouseover="this.style.backgroundColor='#9E2B47';"
+               onmouseout="this.style.backgroundColor='#7F1734';">
+                Back to List
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

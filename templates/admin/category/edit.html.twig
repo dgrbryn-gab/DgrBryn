@@ -1,0 +1,49 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Edit Category | CORK{% endblock %}
+
+{% block admin_content %}
+<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
+    <div class="max-w-3xl mx-auto bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-8">
+        <h1 class="text-3xl font-extrabold text-[#5E0B15] mb-8 text-center">Edit Category</h1>
+
+        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+            <div>
+                {{ form_label(form.name, 'Category Name', {'label_attr': {'class': 'block text-sm font-semibold text-[#5E0B15] mb-2'}}) }}
+                {{ form_widget(form.name, {'attr': {
+                    'class': 'w-full border border-[#EFCFB4]/70 rounded-xl px-4 py-2 text-gray-800 bg-[#FFF8F0] focus:ring-2 focus:ring-[#7F1734] focus:outline-none'
+                }}) }}
+                {{ form_errors(form.name, {'attr': {'class': 'text-[#B6465F] text-sm mt-1'}}) }}
+            </div>
+
+            <div>
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-semibold text-[#5E0B15] mb-2'}}) }}
+                {{ form_widget(form.description, {'attr': {
+                    'class': 'w-full border border-[#EFCFB4]/70 rounded-xl px-4 py-2 text-gray-800 bg-[#FFF8F0] focus:ring-2 focus:ring-[#7F1734] focus:outline-none'
+                }}) }}
+                {{ form_errors(form.description, {'attr': {'class': 'text-[#B6465F] text-sm mt-1'}}) }}
+            </div>
+
+            {{ form_widget(form._token) }}
+
+            <div class="flex justify-end gap-4 mt-8">
+                <button type="submit"
+                        class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300"
+                        style="background-color: #7F1734; color: #F8EAD8; border-color: #EFCFB4;"
+                        onmouseover="this.style.backgroundColor='#9E2B47'"
+                        onmouseout="this.style.backgroundColor='#7F1734'">
+                    💾 Save
+                </button>
+
+                <a href="{{ path('app_category_index') }}"
+                   class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300"
+                   style="background-color: #EFCFB4; color: #7F1734; border-color: #EFCFB4;"
+                   onmouseover="this.style.backgroundColor='#E3B78E'"
+                   onmouseout="this.style.backgroundColor='#EFCFB4'">
+                    ✖ Cancel
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
+{# templates/admin/admin_base.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Admin - {% endblock %}
@@ -5,19 +6,23 @@
 {% block stylesheets %}
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <style>
-    header { display: none !important; }
+    /* Hide base header/navigation globally */
+    header, nav.navbar, .site-header {
+        display: none !important;
+    }
 
+    /* Also hide base footer */
+    footer, .site-footer {
+        display: none !important;
+    }
+
+    /* Sidebar gradient and styles */
     .wine-gradient {
         background: linear-gradient(180deg, #5E0B15 0%, #7B1E3A 100%);
     }
 
     .hover-wine:hover {
         background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    body {
-        background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
-        background-repeat: repeat;
     }
 
     .wine-shadow {
@@ -28,8 +33,9 @@
 
 {% block body %}
 <div class="min-h-screen flex text-gray-900">
+
     <!-- Sidebar -->
-    <aside class="w-64 wine-gradient text-white sticky top-0 min-h-screen border-r border-[#6F0F26] flex flex-col">
+    <aside class="w-64 wine-gradient text-white fixed top-0 left-0 h-screen border-r border-[#6F0F26] flex flex-col z-50">
         <div class="px-6 py-8 border-b border-white/20 text-center">
             <div class="flex items-center justify-center space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-pink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,20 +48,23 @@
         </div>
 
         <nav class="mt-6 px-2 space-y-2 flex-1">
-            <a href="{{ path('admin') }}" class="block px-4 py-3 rounded-md hover-wine font-semibold">🏠 Dashboard</a>
-            <a href="{{ categoryUrl }}" class="block px-4 py-3 rounded-md hover-wine font-semibold">🍇 Categories</a>
-            <a href="{{ productUrl }}" class="block px-4 py-3 rounded-md hover-wine font-semibold">🍷 Products</a>
-            <a href="{{ inventoryUrl }}" class="block px-4 py-3 rounded-md hover-wine font-semibold">📦 Inventory</a>
+            <a href="{{ path('admin_dashboard') }}"
+               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') == 'admin_dashboard' ? 'bg-white/10' : '' }}">🏠 Dashboard</a>
+            <a href="{{ path('app_category_index') }}"
+               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') starts with 'app_category' ? 'bg-white/10' : '' }}">🍇 Categories</a>
+            <a href="{{ path('app_store_product_index') }}"
+               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') starts with 'app_store_product' ? 'bg-white/10' : '' }}">🍷 Products</a>
+            <a href="{{ path('app_wine_inventory_index') }}"
+               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') starts with 'app_wine_inventory' ? 'bg-white/10' : '' }}">📦 Inventory</a>
         </nav>
-
-        <div class="border-t border-white/20 px-6 py-4 text-sm text-white/70">
-            <p>© {{ "now"|date("Y") }} Wine Cellar</p>
-        </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 bg-gray-50">
+    <main class="flex-1 bg-gray-50 ml-64 p-8">
         {% block admin_content %}{% endblock %}
     </main>
 </div>
 {% endblock %}
+
+{# Override base footer so it doesn’t show in admin pages #}
+{% block footer %}{% endblock %}

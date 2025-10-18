@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/admin_base.html.twig' %}
 
 {% block title %}Wine Inventory Details{% endblock %}
 
-{% block body %}
+{% block admin_content %}
 <div class="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50 py-12 px-6">
     <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-rose-100">
         <div class="grid grid-cols-1 md:grid-cols-2">
@@ -63,7 +63,7 @@
                            onmouseout="this.style.backgroundColor='#a83244';">
                             ✎ Edit Inventory
                         </a>
-                        {{ include('wine_inventory/_delete_form.html.twig', {
+                        {{ include('admin/wine_inventory/_delete_form.html.twig', {
                             'attr': {'class': 'inline-block'}
                         }) }}
                     </div>

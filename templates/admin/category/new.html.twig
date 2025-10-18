@@ -1,0 +1,69 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Add New Category | CORK{% endblock %}
+
+{% block admin_content %}
+<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
+    <div class="max-w-3xl mx-auto bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-10 relative overflow-hidden">
+
+        <!-- Decorative Accent -->
+        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#7F1734] via-[#9E2B47] to-[#EFCFB4] rounded-t-2xl"></div>
+
+        <h1 class="text-3xl font-extrabold text-center text-[#5E0B15] tracking-tight mb-10">
+            🍷 Add New Category
+        </h1>
+
+        {{ form_start(form, {'attr': {'class': 'space-y-8'}}) }}
+
+            <!-- Category Name -->
+            <div>
+                {{ form_label(form.name, 'Category Name', {'label_attr': {'class': 'block text-sm font-semibold text-[#5E0B15] mb-2'}}) }}
+                {{ form_widget(form.name, {
+                    'attr': {
+                        'class': 'w-full px-5 py-3 rounded-xl bg-[#FFF8F0] border border-[#EFCFB4]/70 shadow-sm focus:ring-2 focus:ring-[#7F1734]/50 focus:border-[#7F1734] text-gray-800 placeholder-gray-500 transition-all duration-300'
+                    }
+                }) }}
+                {% if form_errors(form.name) %}
+                    <p class="text-sm text-[#B6465F] mt-1">{{ form_errors(form.name) }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Description -->
+            <div>
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-semibold text-[#5E0B15] mb-2'}}) }}
+                {{ form_widget(form.description, {
+                    'attr': {
+                        'rows': 4,
+                        'class': 'w-full px-5 py-3 rounded-xl bg-[#FFF8F0] border border-[#EFCFB4]/70 shadow-sm focus:ring-2 focus:ring-[#7F1734]/50 focus:border-[#7F1734] text-gray-800 placeholder-gray-500 resize-none transition-all duration-300'
+                    }
+                }) }}
+                {% if form_errors(form.description) %}
+                    <p class="text-sm text-[#B6465F] mt-1">{{ form_errors(form.description) }}</p>
+                {% endif %}
+            </div>
+
+            {{ form_widget(form._token) }}
+
+            <!-- Buttons -->
+            <div class="flex justify-end gap-4 mt-10">
+                <button type="submit"
+                        class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300"
+                        style="background-color: #7F1734; color: #F8EAD8; border-color: #EFCFB4;"
+                        onmouseover="this.style.backgroundColor='#9E2B47'"
+                        onmouseout="this.style.backgroundColor='#7F1734'">
+                    💾 Save
+                </button>
+
+                <a href="{{ path('app_category_index') }}"
+                   class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300"
+                   style="background-color: #EFCFB4; color: #7F1734; border-color: #EFCFB4;"
+                   onmouseover="this.style.backgroundColor='#E3B78E'"
+                   onmouseout="this.style.backgroundColor='#EFCFB4'">
+                    ✖ Cancel
+                </a>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

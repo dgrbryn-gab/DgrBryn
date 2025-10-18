@@ -1,37 +1,58 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/admin_base.html.twig' %}
 
-{% block title %}Wine Inventory{% endblock %}
+{% block title %}Wine Inventory | Wine Store{% endblock %}
 
-{% block body %}
+{% block admin_content %}
 <div class="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50 py-12 px-6">
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold mb-8 text-center" style="color: #7F1734;">Wine Inventory</h1>
 
-        {# ✅ Category Filter Dropdown #}
-        {% if categories is defined and categories is not empty %}
-            <div class="flex justify-center mb-10">
+        <!-- ✅ Page Title -->
+        <h1 class="text-3xl font-bold mb-6 text-center" style="color: #7F1734;">Wine Inventory</h1>
+
+        <!-- ✅ Search and Category Row -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+
+            <!-- 🔍 Search Bar (Left, below title) -->
+            <form method="get" action="{{ path('app_wine_inventory_index') }}" class="flex items-center space-x-3 mb-4 md:mb-0">
+                <input type="text"
+                       name="search"
+                       value="{{ search_term|default('') }}"
+                       placeholder="Search product..."
+                       class="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:ring-2 focus:ring-[#7F1734] focus:outline-none text-gray-700"
+                       />
+                <button type="submit"
+                        class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
+                        style="background-color: #7F1734; border: 1px solid #f4e7ce;"
+                        onmouseover="this.style.backgroundColor='#9E2B47';"
+                        onmouseout="this.style.backgroundColor='#7F1734';">
+                    🔍 Search
+                </button>
+            </form>
+
+            <!-- 📂 Category Filter (Right Side) -->
+            {% if categories is defined and categories is not empty %}
                 <form method="get" action="{{ path('app_wine_inventory_index') }}" class="flex items-center space-x-3">
                     <label for="category" class="text-gray-700 font-medium">Filter by Category:</label>
-                    <select name="category" id="category" 
-                            class="border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-rose-600 focus:outline-none text-gray-700">
+                    <select name="category" id="category"
+                            class="border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-[#7F1734] focus:outline-none text-gray-700">
                         <option value="">All Categories</option>
                         {% for category in categories %}
-                            <option value="{{ category.id }}" 
+                            <option value="{{ category.id }}"
                                 {% if selected_category == category.id %}selected{% endif %}>
                                 {{ category.name }}
                             </option>
                         {% endfor %}
                     </select>
-                    <button type="submit" 
+                    <button type="submit"
                             class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
-                            style="background-color: #7F1734 !important;"
-                            onmouseover="this.style.backgroundColor='#9E2B47'"
-                            onmouseout="this.style.backgroundColor='#7F1734'">
+                            style="background-color: #7F1734; border: 1px solid #f4e7ce;"
+                            onmouseover="this.style.backgroundColor='#9E2B47';"
+                            onmouseout="this.style.backgroundColor='#7F1734';">
                         Apply
                     </button>
                 </form>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
 
         {% if grouped_inventories is defined and grouped_inventories|length > 0 %}
             {% for category, inventories in grouped_inventories %}
@@ -44,7 +65,6 @@
                         {% for wine_inventory in inventories %}
                             <div class="bg-white rounded-2xl shadow-lg border border-rose-100 overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col">
                                 
-                                <!-- Card Header -->
                                 <div class="bg-[#7F1734] text-[#f9d3b4] px-5 py-3 flex justify-between items-center">
                                     <h3 class="text-lg font-bold truncate">{{ wine_inventory.product.name }}</h3>
                                     <span class="text-sm bg-[#f9d3b4] text-[#7F1734] font-semibold px-2 py-1 rounded-md">
@@ -52,16 +72,15 @@
                                     </span>
                                 </div>
 
-                                <!-- Card Body -->
                                 <div class="p-5 flex-grow flex flex-col justify-between">
                                     <div class="w-full h-56 flex items-center justify-center bg-rose-50 rounded-xl overflow-hidden">
                                         {% if wine_inventory.product.image %}
-                                            <img src="{{ asset('assets/images/wine_images/' ~ wine_inventory.product.image) }}" 
-                                                 alt="{{ wine_inventory.product.name }}" 
+                                            <img src="{{ asset('assets/images/wine_images/' ~ wine_inventory.product.image) }}"
+                                                 alt="{{ wine_inventory.product.name }}"
                                                  class="max-h-56 object-contain rounded-xl">
                                         {% else %}
-                                            <img src="{{ asset('images/no-image.png') }}" 
-                                                 alt="No image available" 
+                                            <img src="{{ asset('images/no-image.png') }}"
+                                                 alt="No image available"
                                                  class="max-h-56 object-contain rounded-xl opacity-70">
                                         {% endif %}
                                     </div>
@@ -73,7 +92,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Card Footer -->
                                 <div class="px-5 py-4 flex justify-center gap-3 border-t border-rose-100" style="background-color: #7F1734;">
                                     <a href="{{ path('app_wine_inventory_show', {'id': wine_inventory.id}) }}"
                                        class="flex-1 text-center font-semibold rounded-xl shadow-md transition-all duration-300 flex items-center justify-center"
@@ -89,7 +107,7 @@
                                        onmouseout="this.style.backgroundColor='#a83244';">
                                         Edit
                                     </a>
-                                    {{ include('wine_inventory/_delete_form.html.twig', {
+                                    {{ include('admin/wine_inventory/_delete_form.html.twig', {
                                         'wine_inventory': wine_inventory,
                                         'attr': {'class': 'inline-block flex-1'}
                                     }) }}
@@ -101,7 +119,7 @@
             {% endfor %}
         {% else %}
             <div class="bg-white rounded-2xl shadow-lg border border-rose-100 p-8 text-center text-gray-600">
-                No records found
+                No records found.
             </div>
         {% endif %}
     </div>

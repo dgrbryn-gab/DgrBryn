@@ -1,10 +1,10 @@
 <form method="post" action="{{ path('app_store_product_delete', {'id': storeProduct.id}) }}" onsubmit="return confirm('Are you sure you want to delete this product?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ storeProduct.id) }}">
     <button type="submit" 
-            class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
-            style="background-color: #7F1734; color: #f4e7ce; border: 1px solid #f9d3b4;"
-            onmouseover="this.style.backgroundColor='#6b132a';"
-            onmouseout="this.style.backgroundColor='#7F1734';">
+            class="px-5 py-2 font-semibold rounded-xl shadow-md border transition-all duration-300"
+            style="background-color: #B6465F; color: #FFF8E7; border-color: #EFCFB4;"
+            onmouseover="this.style.backgroundColor='#9E2B47';"
+            onmouseout="this.style.backgroundColor='#B6465F';">
         🗑 Delete
     </button>
 </form>

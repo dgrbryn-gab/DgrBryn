@@ -1,0 +1,18 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+    {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+        {{ form_widget(form, {
+            'attr': {
+                'class': 'w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-rose-400 focus:outline-none bg-white text-gray-800'
+            }
+        }) }}
+        <div class="text-center mt-6">
+            <button type="submit"
+                    class="px-6 py-2 text-white rounded-xl shadow-md transition-all duration-300"
+                    style="background-color: #7F1734; border: 1px solid #f4e7ce;"
+                    onmouseover="this.style.backgroundColor='#6b132a';"
+                    onmouseout="this.style.backgroundColor='#7F1734';">
+                {{ button_label|default('Save') }}
+            </button>
+        </div>
+    {{ form_end(form) }}
+</div>
