@@ -1,22 +1,42 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/admin_base.html.twig' %}
 
-{% block title %}Store Products{% endblock %}
+{% block title %}Store Products | Wine Store{% endblock %}
 
-{% block body %}
-<div class="max-w-7xl mx-auto py-10">
+{% block admin_content %}
+<div class="max-w-7xl mx-auto pt-0 pb-10"> <!-- Reduced top padding -->
+
+    <!-- 🔍 Search Bar (Now at the top of the page) -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start mb-8 gap-3">
+        <form method="get" action="{{ path('app_store_product_index') }}" class="flex items-center space-x-3">
+            <input type="text"
+                   name="search"
+                   value="{{ search_term|default('') }}"
+                   placeholder="Search product..."
+                   class="border border-[#EFCFB4] rounded-lg py-2 px-4 w-72 focus:ring-2 focus:ring-[#7F1734] focus:outline-none text-gray-700"
+                   />
+            <button type="submit"
+                    class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
+                    style="background-color: #7F1734; border: 1px solid #EFCFB4;"
+                    onmouseover="this.style.backgroundColor='#9E2B47';"
+                    onmouseout="this.style.backgroundColor='#7F1734';">
+                🔍 Search
+            </button>
+        </form>
+    </div>
+
     <!-- Header + Add Button -->
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-4xl font-extrabold text-yellow-900 tracking-tight">Store Products</h1>
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
+        <h1 class="text-4xl font-extrabold text-[#7F1734] tracking-tight">Store Products</h1>
         <a href="{{ path('app_store_product_new') }}"
            class="px-5 py-2 rounded-xl shadow font-semibold transition-all duration-300 border"
            style="background-color: #7F1734; color: #F8EAD8; border-color: #EFCFB4;"
-           onmouseover="this.style.backgroundColor='#9E2B47'"
-           onmouseout="this.style.backgroundColor='#7F1734'">
+           onmouseover="this.style.backgroundColor='#9E2B47';"
+           onmouseout="this.style.backgroundColor='#7F1734';">
            + Add New Product
         </a>
     </div>
 
-    <!-- Category Filter Bar -->
+    <!-- 🏷️ Category Filter Bar -->
     <div class="flex flex-wrap gap-3 mb-10">
         <a href="{{ path('app_store_product_index') }}"
            class="px-4 py-2 rounded-full border font-semibold transition-all duration-300
@@ -45,21 +65,21 @@
         <p class="text-gray-500 text-lg text-center">No products found in this category.</p>
     {% else %}
         <!-- Product Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {% for store_product in store_products %}
-                <div class="group bg-white rounded-2xl shadow-md overflow-hidden border hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
+                <div class="group bg-white rounded-2xl shadow-md overflow-hidden border border-[#EFCFB4] hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
                     
                     {% if store_product.image %}
                         <img src="{{ asset('assets/images/wine_images/' ~ store_product.image) }}"
                              alt="{{ store_product.name }}"
                              class="w-full h-64 object-contain bg-white p-3 transition-transform duration-500 group-hover:scale-105">
                     {% else %}
-                        <div class="w-full h-64 bg-gray-100 flex items-center justify-center text-gray-400">
+                        <div class="w-full h-64 bg-gray-100 flex items-center justify-center text-gray-400 italic">
                             No Image
                         </div>
                     {% endif %}
 
-                    <div class="p-4 rounded-b-2xl relative overflow-hidden transition-all duration-500 ease-in-out"
+                    <div class="p-4 rounded-b-2xl relative transition-all duration-500"
                          style="background-color: #7F1734; color: #F8EAD8;">
                          
                         <h2 class="text-xl font-bold mb-1">{{ store_product.name }}</h2>
@@ -76,22 +96,26 @@
                             </div>
                         {% endif %}
 
-                        <p class="text-lg font-semibold mb-3" style="color: #EFCFB4;">€{{ store_product.price }}</p>
-                        <p class="text-sm mb-4 opacity-85">Stock: {{ store_product.wineInventories|length > 0 ? store_product.wineInventories.first.quantity : 0 }}</p>
+                        <p class="text-lg font-semibold mb-3" style="color: #EFCFB4;">
+                            €{{ store_product.price }}
+                        </p>
+                        <p class="text-sm mb-4 opacity-85">
+                            Stock: {{ store_product.wineInventories|length > 0 ? store_product.wineInventories.first.quantity : 0 }}
+                        </p>
 
                         <div class="flex space-x-2">
                             <a href="{{ path('app_store_product_show', {'id': store_product.id}) }}"
                                class="flex-1 text-center px-3 py-1 rounded-lg font-semibold transition-all duration-300 border"
                                style="background-color: #B6465F; border-color: #EFCFB4; color: #F8EAD8;"
-                               onmouseover="this.style.backgroundColor='#9E2B47'"
-                               onmouseout="this.style.backgroundColor='#B6465F'">
+                               onmouseover="this.style.backgroundColor='#9E2B47';"
+                               onmouseout="this.style.backgroundColor='#B6465F';">
                                View
                             </a>
                             <a href="{{ path('app_store_product_edit', {'id': store_product.id}) }}"
                                class="flex-1 text-center px-3 py-1 rounded-lg font-semibold transition-all duration-300 border"
                                style="background-color: #EFCFB4; border-color: #F8EAD8; color: #7F1734;"
-                               onmouseover="this.style.backgroundColor='#E3B78E'"
-                               onmouseout="this.style.backgroundColor='#EFCFB4'">
+                               onmouseover="this.style.backgroundColor='#E3B78E';"
+                               onmouseout="this.style.backgroundColor='#EFCFB4';">
                                Edit
                             </a>
                         </div>

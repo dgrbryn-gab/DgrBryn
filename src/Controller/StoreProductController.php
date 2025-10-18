@@ -15,30 +15,39 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StoreProductController extends AbstractController
 {
-    #[Route('/store/product', name: 'app_store_product_index', methods: ['GET'])]
+    #[Route('admin/store/product', name: 'app_store_product_index', methods: ['GET'])]
     public function index(Request $request, StoreProductRepository $storeProductRepository, CategoryRepository $categoryRepository): Response
     {
         $categories = $categoryRepository->findAll();
         $categoryId = $request->query->get('category');
+        $searchTerm = $request->query->get('search');
+
+        // Build dynamic query
+        $queryBuilder = $storeProductRepository->createQueryBuilder('p')
+            ->leftJoin('p.category', 'c')
+            ->addSelect('c');
 
         if ($categoryId) {
-            // Filter products by category
-            $storeProducts = $storeProductRepository->findBy(['category' => $categoryId]);
-            $selectedCategory = $categoryId;
-        } else {
-            // Show all products (no inventory logic)
-            $storeProducts = $storeProductRepository->findAll();
-            $selectedCategory = null;
+            $queryBuilder->andWhere('c.id = :categoryId')
+                         ->setParameter('categoryId', $categoryId);
         }
 
-        return $this->render('store_product/index.html.twig', [
+        if ($searchTerm) {
+            $queryBuilder->andWhere('p.name LIKE :search OR p.description LIKE :search')
+                         ->setParameter('search', '%' . $searchTerm . '%');
+        }
+
+        $storeProducts = $queryBuilder->getQuery()->getResult();
+
+        return $this->render('admin/store_product/index.html.twig', [
             'store_products' => $storeProducts,
             'categories' => $categories,
-            'selected_category' => $selectedCategory,
+            'selected_category' => $categoryId,
+            'search_term' => $searchTerm,
         ]);
     }
 
-    #[Route('/store/product/new', name: 'app_store_product_new', methods: ['GET', 'POST'])]
+    #[Route('admin/store/product/new', name: 'app_store_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response
     {
         $storeProduct = new StoreProduct();
@@ -48,53 +57,54 @@ class StoreProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $storeProduct->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($storeProduct);
-            $entityManager->flush();
 
             // Create or update WineInventory
             $quantity = $form->get('quantity')->getData();
-            $inventory = $entityManager->getRepository(WineInventory::class)->findOneBy(['product' => $storeProduct]);
-            if (!$inventory) {
-                $inventory = new WineInventory();
-                $inventory->setProduct($storeProduct);
-                $inventory->setAcquiredDate(new \DateTime());
-            }
+            $inventory = new WineInventory();
+            $inventory->setProduct($storeProduct);
+            $inventory->setAcquiredDate(new \DateTime());
             $inventory->setQuantity($quantity ?? 0);
+
             $entityManager->persist($inventory);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('store_product/new.html.twig', [
+        return $this->render('admin/store_product/new.html.twig', [
             'storeProduct' => $storeProduct,
             'form' => $form->createView(),
             'categories' => $categoryRepository->findAll(),
         ]);
     }
 
-    #[Route('/store/product/{id}', name: 'app_store_product_show', methods: ['GET'])]
+    #[Route('admin/store/product/{id}', name: 'app_store_product_show', methods: ['GET'])]
     public function show(StoreProduct $storeProduct): Response
     {
-        return $this->render('store_product/show.html.twig', [
+        return $this->render('admin/store_product/show.html.twig', [
             'storeProduct' => $storeProduct,
         ]);
     }
 
-    #[Route('/store/product/{id}/edit', name: 'app_store_product_edit', methods: ['GET', 'POST'])]
+    #[Route('admin/store/product/{id}/edit', name: 'app_store_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, StoreProduct $storeProduct, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository): Response
     {
         $form = $this->createForm(StoreProductType::class, $storeProduct);
-        $form->get('quantity')->setData($storeProduct->getWineInventories()->first() ? $storeProduct->getWineInventories()->first()->getQuantity() : 0);
+        $form->get('quantity')->setData(
+            $storeProduct->getWineInventories()->first() ? $storeProduct->getWineInventories()->first()->getQuantity() : 0
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $quantity = $form->get('quantity')->getData();
             $inventory = $entityManager->getRepository(WineInventory::class)->findOneBy(['product' => $storeProduct]);
+
             if (!$inventory) {
                 $inventory = new WineInventory();
                 $inventory->setProduct($storeProduct);
                 $inventory->setAcquiredDate(new \DateTime());
             }
+
             $inventory->setQuantity($quantity ?? 0);
             $entityManager->persist($inventory);
             $entityManager->flush();
@@ -102,17 +112,24 @@ class StoreProductController extends AbstractController
             return $this->redirectToRoute('app_store_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('store_product/edit.html.twig', [
+        return $this->render('admin/store_product/edit.html.twig', [
             'storeProduct' => $storeProduct,
             'form' => $form->createView(),
             'categories' => $categoryRepository->findAll(),
         ]);
     }
 
-    #[Route('/store/product/{id}', name: 'app_store_product_delete', methods: ['POST'])]
-    public function delete(Request $request, StoreProduct $storeProduct, StoreProductRepository $storeProductRepository): Response
+    #[Route('admin/store/product/{id}', name: 'app_store_product_delete', methods: ['POST'])]
+    public function delete(Request $request, StoreProduct $storeProduct, EntityManagerInterface $entityManager, StoreProductRepository $storeProductRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $storeProduct->getId(), $request->request->get('_token'))) {
+
+            // Remove related WineInventory first to avoid foreign key constraint errors
+            $inventory = $entityManager->getRepository(WineInventory::class)->findOneBy(['product' => $storeProduct]);
+            if ($inventory) {
+                $entityManager->remove($inventory);
+            }
+
             $storeProductRepository->remove($storeProduct, true);
         }
 

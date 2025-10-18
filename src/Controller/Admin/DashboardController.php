@@ -2,57 +2,47 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
-use App\Entity\StoreProduct;
-use App\Entity\WineInventory;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CategoryRepository;
+use App\Repository\StoreProductRepository;
+use App\Repository\WineInventoryRepository;
 
-class DashboardController extends AbstractDashboardController
+class DashboardController extends AbstractController
 {
-    public function __construct(private AdminUrlGenerator $adminUrlGenerator)
-    {
-    }
+    #[Route('/admin', name: 'admin_dashboard')]
+    public function index(
+        CategoryRepository $categoryRepository,
+        StoreProductRepository $productRepository,
+        WineInventoryRepository $inventoryRepository
+    ): Response {
+        // URLs for navigation
+        $categoryUrl = $this->generateUrl('app_category_index');
+        $productUrl = $this->generateUrl('app_store_product_index');
+        $inventoryUrl = $this->generateUrl('app_wine_inventory_index');
 
-    #[Route('/admin', name: 'admin')]
-    public function index(): Response
-    {
-        $categoryUrl = $this->adminUrlGenerator->setController(CategoryCrudController::class)->generateUrl();
-        $productUrl = $this->adminUrlGenerator->setController(StoreProductCrudController::class)->generateUrl();
-        $inventoryUrl = $this->adminUrlGenerator->setController(WineInventoryCrudController::class)->generateUrl();
+        // Fetch live counts
+        $totalCategories = $categoryRepository->count([]);
+        $totalProducts = $productRepository->count([]);
+        $totalInventory = $inventoryRepository->count([]);
+
+        // Count low-stock items
+        $lowStockItems = $inventoryRepository->createQueryBuilder('i')
+            ->select('COUNT(i.id)')
+            ->where('i.quantity < :limit')
+            ->setParameter('limit', 10)
+            ->getQuery()
+            ->getSingleScalarResult();
 
         return $this->render('admin/dashboard.html.twig', [
             'categoryUrl' => $categoryUrl,
             'productUrl' => $productUrl,
             'inventoryUrl' => $inventoryUrl,
+            'totalCategories' => $totalCategories,
+            'totalProducts' => $totalProducts,
+            'totalInventory' => $totalInventory,
+            'lowStockItems' => $lowStockItems,
         ]);
     }
-
-    public function configureDashboard(): Dashboard
-    {
-        return Dashboard::new()
-            ->setTitle('Admin Dashboard');
-    }
-
-    public function configureMenuItems(): iterable
-    {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::section('Catalog');
-        yield MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class);
-        yield MenuItem::linkToCrud('Products', 'fa fa-wine-bottle', StoreProduct::class);
-        yield MenuItem::linkToCrud('Inventory', 'fa fa-boxes', WineInventory::class);
-    }
-
-    public function configureAssets(): Assets
-    {
-        return Assets::new()
-            ->addCssFile('/admin.css');
-    }
 }
-
-

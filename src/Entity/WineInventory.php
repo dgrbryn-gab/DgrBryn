@@ -25,7 +25,7 @@ class WineInventory
     private \DateTime $lastUpdated;
 
     #[ORM\ManyToOne(inversedBy: 'wineInventories')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')] // ✅ Added onDelete cascade
     private ?StoreProduct $product = null;
 
     public function __construct()

@@ -10,44 +10,51 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/wine/inventory')]
-final class WineInventoryController extends AbstractController
+#[Route('/admin/wine/inventory')]
+class WineInventoryController extends AbstractController
 {
-    #[Route(name: 'app_wine_inventory_index', methods: ['GET'])] // route to a certain page
-    public function index(Request $request, WineInventoryRepository $wineInventoryRepository, EntityManagerInterface $entityManager): Response // action
+    #[Route('', name: 'app_wine_inventory_index', methods: ['GET'])]
+    public function index(Request $request, WineInventoryRepository $wineInventoryRepository, EntityManagerInterface $entityManager): Response
     {
         $selectedCategory = $request->query->get('category');
+        $searchTerm = $request->query->get('search'); // ✅ added search support
 
         // Get all categories for dropdown
-        $categories = $entityManager->getRepository(Category::class)->findAll(); // fetch data from category entity
+        $categories = $entityManager->getRepository(Category::class)->findAll();
 
-        // Filter by category if selected
+        // Base query builder
+        $queryBuilder = $wineInventoryRepository->createQueryBuilder('wi')
+            ->join('wi.product', 'p')
+            ->join('p.category', 'c');
+
+        // ✅ Filter by category if selected
         if ($selectedCategory) {
-            $inventories = $wineInventoryRepository->createQueryBuilder('wi')
-                ->join('wi.product', 'p')
-                ->join('p.category', 'c')
-                ->where('c.id = :categoryId')
-                ->setParameter('categoryId', $selectedCategory)
-                ->getQuery()
-                ->getResult();
-        } else {
-            $inventories = $wineInventoryRepository->findAll();
+            $queryBuilder->andWhere('c.id = :categoryId')
+                ->setParameter('categoryId', $selectedCategory);
         }
 
-        // Group inventories by category name (for display)
+        // ✅ Filter by search term if provided
+        if ($searchTerm) {
+            $queryBuilder->andWhere('LOWER(p.name) LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . strtolower($searchTerm) . '%');
+        }
+
+        $inventories = $queryBuilder->getQuery()->getResult();
+
+        // Group inventories by category name
         $groupedInventories = [];
         foreach ($inventories as $inventory) {
             $categoryName = $inventory->getProduct()?->getCategory()?->getName() ?? 'Uncategorized';
             $groupedInventories[$categoryName][] = $inventory;
         }
 
-        // return a response
-        return $this->render('wine_inventory/index.html.twig', [
+        return $this->render('admin/wine_inventory/index.html.twig', [
             'grouped_inventories' => $groupedInventories,
             'categories' => $categories,
             'selected_category' => $selectedCategory,
+            'search_term' => $searchTerm, // ✅ send back to Twig
         ]);
     }
 
@@ -59,14 +66,16 @@ final class WineInventoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $wineInventory->setLastUpdated(new \DateTime());
+            $wineInventory->setLastUpdated(new \DateTimeImmutable());
+
             $entityManager->persist($wineInventory);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_wine_inventory_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', '✅ Wine inventory added successfully!');
+            return $this->redirectToRoute('app_wine_inventory_index');
         }
 
-        return $this->render('wine_inventory/new.html.twig', [
+        return $this->render('admin/wine_inventory/new.html.twig', [
             'wine_inventory' => $wineInventory,
             'form' => $form->createView(),
         ]);
@@ -75,7 +84,7 @@ final class WineInventoryController extends AbstractController
     #[Route('/{id}', name: 'app_wine_inventory_show', methods: ['GET'])]
     public function show(WineInventory $wineInventory): Response
     {
-        return $this->render('wine_inventory/show.html.twig', [
+        return $this->render('admin/wine_inventory/show.html.twig', [
             'wine_inventory' => $wineInventory,
         ]);
     }
@@ -87,13 +96,14 @@ final class WineInventoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $wineInventory->setLastUpdated(new \DateTime());
+            $wineInventory->setLastUpdated(new \DateTimeImmutable());
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_wine_inventory_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', '✅ Wine inventory updated successfully!');
+            return $this->redirectToRoute('app_wine_inventory_index');
         }
 
-        return $this->render('wine_inventory/edit.html.twig', [
+        return $this->render('admin/wine_inventory/edit.html.twig', [
             'wine_inventory' => $wineInventory,
             'form' => $form->createView(),
         ]);
@@ -102,11 +112,13 @@ final class WineInventoryController extends AbstractController
     #[Route('/{id}', name: 'app_wine_inventory_delete', methods: ['POST'])]
     public function delete(Request $request, WineInventory $wineInventory, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $wineInventory->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $wineInventory->getId(), $request->request->get('_token'))) {
             $entityManager->remove($wineInventory);
             $entityManager->flush();
+
+            $this->addFlash('success', '🗑️ Wine inventory deleted successfully!');
         }
 
-        return $this->redirectToRoute('app_wine_inventory_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_wine_inventory_index');
     }
 }

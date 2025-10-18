@@ -11,8 +11,16 @@ module.exports = {
         roboto: ['Roboto', 'sans-serif'],
       },
       colors: {
-        burgundy: '#4A0E0E',
-        'burgundy-hover': '#6B1C1C',
+        burgundy: {
+          DEFAULT: '#7F1734',   // main
+          light: '#9E2B47',     // hover
+          dark: '#4A0E0E',      // deep tone
+        },
+        cream: {
+          DEFAULT: '#F8EAD8',   // main cream
+          light: '#FFF6EE',     // softer tone
+        },
+        gold: '#EFCFB4',
       },
       animation: {
         'fade-in': 'fadeIn 1s ease-out',

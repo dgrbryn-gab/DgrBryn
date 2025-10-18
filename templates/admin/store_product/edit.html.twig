@@ -1,0 +1,70 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Edit {{ storeProduct.name }} | Wine Store{% endblock %}
+
+{% block admin_content %}
+<div class="py-8 px-4 max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-[#7F1734] mb-6 text-center">Edit Product</h1>
+
+    <div class="bg-[#FFF8E7] p-6 rounded-2xl border border-[#EFCFB4] shadow-sm">
+        {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+            
+            {# 🍷 Category Dropdown #}
+            {% if form.category is defined %}
+                <div>
+                    {{ form_label(form.category, 'Category', {'label_attr': {'class': 'block text-[#7F1734] font-semibold mb-2'}}) }}
+                    {{ form_widget(form.category, {'attr': {
+                        'class': 'w-full border border-[#EFCFB4] rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-[#7F1734]/40 focus:outline-none'
+                    }}) }}
+                    {{ form_errors(form.category, {'attr': {'class': 'text-red-600 text-sm mt-1'}}) }}
+                </div>
+            {% endif %}
+
+            {# Render all other fields except category, isAvailable, and _token #}
+            {% for field in form %}
+                {% if field.vars.name not in ['_token', 'category', 'isAvailable'] %}
+                    <div>
+                        {{ form_label(field, null, {'label_attr': {'class': 'block text-[#7F1734] font-semibold mb-2'}}) }}
+                        {{ form_widget(field, {'attr': {
+                            'class': 'w-full border border-[#EFCFB4] rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-[#7F1734]/40 focus:outline-none'
+                        }}) }}
+                        {{ form_errors(field, {'attr': {'class': 'text-red-600 text-sm mt-1'}}) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {# Custom checkbox for availability #}
+            {% if form.isAvailable is defined %}
+                <div class="flex items-center mt-2">
+                    {{ form_widget(form.isAvailable, {'attr': {
+                        'class': 'h-4 w-4 text-[#7F1734] border-[#EFCFB4] rounded focus:ring-[#7F1734]/50'
+                    }}) }}
+                    {{ form_label(form.isAvailable, 'Available', {'label_attr': {'class': 'ml-2 text-[#7F1734] font-semibold'}}) }}
+                    {{ form_errors(form.isAvailable, {'attr': {'class': 'text-red-600 text-sm ml-2'}}) }}
+                </div>
+            {% endif %}
+
+            {# Hidden CSRF token #}
+            {{ form_widget(form._token) }}
+
+            <div class="flex justify-end gap-3 mt-8">
+                <button type="submit" 
+                        class="px-6 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
+                        style="background-color: #7F1734; color: #FFF8E7; border: 1px solid #EFCFB4;"
+                        onmouseover="this.style.backgroundColor='#9E2B47';"
+                        onmouseout="this.style.backgroundColor='#7F1734';">
+                    {{ button_label|default('Save') }}
+                </button>
+
+                <a href="{{ path('app_store_product_index') }}" 
+                   class="px-6 py-2 font-semibold rounded-xl shadow-md border transition-all duration-300"
+                   style="background-color: #EFCFB4; color: #4a2b1e; border-color: #EFCFB4;"
+                   onmouseover="this.style.backgroundColor='#dcb98f';"
+                   onmouseout="this.style.backgroundColor='#EFCFB4';">
+                    Cancel
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
