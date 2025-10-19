@@ -1,25 +1,78 @@
 {% extends 'admin/admin_base.html.twig' %}
 
-{% block title %}Create New Wine Inventory | Wine Store{% endblock %}
+{% block title %}Add New Wine Inventory | Wine Store{% endblock %}
 
 {% block admin_content %}
-<div class="min-h-screen bg-gradient-to-b from-rose-50 to-amber-50 py-12 px-6">
-    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-rose-100">
-        <h1 class="text-3xl font-bold mb-8 text-center" style="color:#7F1734;">Create New Wine Inventory</h1>
+<section class="bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <h2 class="text-4xl font-bold text-[#5E0B15]">📦 Add New Wine Inventory</h2>
+        <p class="text-gray-700 mt-1">Record a new wine stock entry — manage quantities and acquisition details.</p>
+    </div>
+</section>
 
-        <div class="mb-8">
-            {{ include('wine_inventory/_form.html.twig', {'button_label': 'Save'}) }}
-        </div>
+<!-- Form Section -->
+<section class="max-w-4xl mx-auto px-6 py-12">
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
+        <h3 class="text-2xl font-semibold text-[#7F1734] mb-8">Inventory Details</h3>
 
-        <div class="flex justify-center space-x-4">
+        <form method="post" class="space-y-6">
+            <!-- Product -->
+            <div>
+                <label for="wine_inventory_product" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Select Product
+                </label>
+                {{ form_widget(form.product, {
+                    'attr': {
+                        'class': 'w-full rounded-lg border-gray-300 focus:border-[#7F1734] focus:ring-[#7F1734] shadow-sm'
+                    }
+                }) }}
+                {{ form_errors(form.product) }}
+            </div>
+
+            <!-- Quantity -->
+            <div>
+                <label for="wine_inventory_quantity" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Quantity
+                </label>
+                {{ form_widget(form.quantity, {
+                    'attr': {
+                        'class': 'w-full rounded-lg border-gray-300 focus:border-[#7F1734] focus:ring-[#7F1734] shadow-sm'
+                    }
+                }) }}
+                {{ form_errors(form.quantity) }}
+            </div>
+
+            <!-- Acquisition Date -->
+            <div>
+                <label for="wine_inventory_acquiredDate" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Acquisition Date
+                </label>
+                {{ form_widget(form.acquiredDate, {
+                    'attr': {
+                        'class': 'w-full rounded-lg border-gray-300 focus:border-[#7F1734] focus:ring-[#7F1734] shadow-sm'
+                    }
+                }) }}
+                {{ form_errors(form.acquiredDate) }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-6 flex justify-center">
+                <button type="submit"
+                        class="px-8 py-3 text-base font-semibold rounded-xl shadow transition-all duration-300 border"
+                        style="background-color:#7F1734; color:#F8EAD8; border-color:#EFCFB4;"
+                        onmouseover="this.style.backgroundColor='#9E2B47';"
+                        onmouseout="this.style.backgroundColor='#7F1734';">
+                    💾 Save Inventory
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-6 text-center">
             <a href="{{ path('app_wine_inventory_index') }}"
-               class="px-6 py-3 text-white font-semibold rounded-xl transition-all duration-300"
-               style="background-color:#7F1734; border:1px solid #f9d3b4;"
-               onmouseover="this.style.backgroundColor='#9E2B47';"
-               onmouseout="this.style.backgroundColor='#7F1734';">
-                Back to List
+               class="inline-block text-[#7F1734] font-medium hover:text-[#9E2B47] transition">
+                ← Back to Inventory List
             </a>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

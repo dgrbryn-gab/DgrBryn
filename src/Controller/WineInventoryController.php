@@ -19,7 +19,7 @@ class WineInventoryController extends AbstractController
     public function index(Request $request, WineInventoryRepository $wineInventoryRepository, EntityManagerInterface $entityManager): Response
     {
         $selectedCategory = $request->query->get('category');
-        $searchTerm = $request->query->get('search'); // ✅ added search support
+        $searchTerm = $request->query->get('search'); 
 
         // Get all categories for dropdown
         $categories = $entityManager->getRepository(Category::class)->findAll();
@@ -29,13 +29,13 @@ class WineInventoryController extends AbstractController
             ->join('wi.product', 'p')
             ->join('p.category', 'c');
 
-        // ✅ Filter by category if selected
+        // Filter by category if selected
         if ($selectedCategory) {
             $queryBuilder->andWhere('c.id = :categoryId')
                 ->setParameter('categoryId', $selectedCategory);
         }
 
-        // ✅ Filter by search term if provided
+        // Filter by search term if provided
         if ($searchTerm) {
             $queryBuilder->andWhere('LOWER(p.name) LIKE :searchTerm')
                 ->setParameter('searchTerm', '%' . strtolower($searchTerm) . '%');
@@ -54,7 +54,7 @@ class WineInventoryController extends AbstractController
             'grouped_inventories' => $groupedInventories,
             'categories' => $categories,
             'selected_category' => $selectedCategory,
-            'search_term' => $searchTerm, // ✅ send back to Twig
+            'search_term' => $searchTerm,
         ]);
     }
 
@@ -66,7 +66,7 @@ class WineInventoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $wineInventory->setLastUpdated(new \DateTimeImmutable());
+            $wineInventory->setLastUpdated(new \DateTime());
 
             $entityManager->persist($wineInventory);
             $entityManager->flush();
@@ -96,7 +96,7 @@ class WineInventoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $wineInventory->setLastUpdated(new \DateTimeImmutable());
+            $wineInventory->setLastUpdated(new \DateTime());
             $entityManager->flush();
 
             $this->addFlash('success', '✅ Wine inventory updated successfully!');
