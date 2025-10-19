@@ -6,6 +6,26 @@
 {% block stylesheets %}
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <style>
+    /* Sidebar link styling */
+    .sidebar-link {
+        color: #F8EAD8;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .sidebar-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #FFF6E8; /* lighter milky tone */
+        border-color: #EFCFB4;
+    }
+
+    /* Active (current page) link */
+    .active-sidebar {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-left: 4px solid #EFCFB4;
+        font-weight: bold;
+    }
+
     /* Hide base header/navigation globally */
     header, nav.navbar, .site-header {
         display: none !important;
@@ -28,39 +48,87 @@
     .wine-shadow {
         box-shadow: 0 4px 6px rgba(123, 30, 58, 0.2);
     }
+
+    /* Milky background and readable text */
+    body, main {
+        background-color: #FFF8F0 !important; /* Milky soft beige */
+        color: #3B0A0A; /* Deep wine text for contrast */
+    }
+
+    h1, h2, h3, h4, h5, h6, label {
+        color: #5E0B15; /* Wine-colored headings */
+    }
+
+    a {
+        color: #7B1E3A;
+    }
+
+    a:hover {
+        color: #9E2B47;
+    }
+
+    /* Optional: soften card backgrounds */
+    .card, .bg-white {
+        background-color: #FFFAF5 !important;
+    }
+    /* custom site colors (safe without Tailwind JIT) */
+    .bg-burgundy { background-color: #7F1734 !important; }
+    .text-milky { color: #F8EAD8 !important; }
+    .border-efcfb4 { border-color: #EFCFB4 !important; }
+
+    /* hover helper */
+    .hover-burgundy:hover { background-color: #7F1734 !important; color: #F8EAD8 !important; }
+
+    /* active/selected look */
+    .active-burgundy { background-color: #7F1734 !important; color: #F8EAD8 !important; border-color: #EFCFB4 !important; }
+
 </style>
 {% endblock %}
 
 {% block body %}
 <div class="min-h-screen flex text-gray-900">
 
-    <!-- Sidebar -->
-    <aside class="w-64 wine-gradient text-white fixed top-0 left-0 h-screen border-r border-[#6F0F26] flex flex-col z-50">
+   <!-- Sidebar -->
+    <aside class="w-64 wine-gradient text-[#F8EAD8] fixed top-0 left-0 h-screen border-r border-[#6F0F26] flex flex-col z-50">
         <div class="px-6 py-8 border-b border-white/20 text-center">
             <div class="flex items-center justify-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-pink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    style="color: #EFCFB4;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zM5 22l7-7 7 7" />
                 </svg>
-                <h1 class="text-2xl font-extrabold tracking-wide">Wine Admin</h1>
+                <h1 class="text-2xl font-extrabold tracking-wide" style="color: #F8EAD8;">
+                    Wine Admin
+                </h1>
             </div>
-            <p class="text-white/70 text-sm mt-2">Fine Cellar Management</p>
+            <p class="text-sm mt-2" style="color: #EFCFB4; opacity: 0.9;">
+                Fine Cellar Management
+            </p>
         </div>
 
         <nav class="mt-6 px-2 space-y-2 flex-1">
             <a href="{{ path('admin_dashboard') }}"
-               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') == 'admin_dashboard' ? 'bg-white/10' : '' }}">🏠 Dashboard</a>
+            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') == 'admin_dashboard' ? 'active-sidebar' : '' }}">
+            🏠 Dashboard
+            </a>
             <a href="{{ path('app_category_index') }}"
-               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') starts with 'app_category' ? 'bg-white/10' : '' }}">🍇 Categories</a>
+            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_category' ? 'active-sidebar' : '' }}">
+            🍇 Categories
+            </a>
             <a href="{{ path('app_store_product_index') }}"
-               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') starts with 'app_store_product' ? 'bg-white/10' : '' }}">🍷 Products</a>
+            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_store_product' ? 'active-sidebar' : '' }}">
+            🍷 Products
+            </a>
             <a href="{{ path('app_wine_inventory_index') }}"
-               class="block px-4 py-3 rounded-md hover-wine font-semibold {{ app.request.get('_route') starts with 'app_wine_inventory' ? 'bg-white/10' : '' }}">📦 Inventory</a>
+            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_wine_inventory' ? 'active-sidebar' : '' }}">
+            📦 Inventory
+            </a>
         </nav>
     </aside>
 
+
     <!-- Main Content -->
-    <main class="flex-1 bg-gray-50 ml-64 p-8">
+    <main class="flex-1 ml-64 p-8">
         {% block admin_content %}{% endblock %}
     </main>
 </div>

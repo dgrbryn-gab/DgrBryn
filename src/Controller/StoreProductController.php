@@ -123,8 +123,6 @@ class StoreProductController extends AbstractController
     public function delete(Request $request, StoreProduct $storeProduct, EntityManagerInterface $entityManager, StoreProductRepository $storeProductRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $storeProduct->getId(), $request->request->get('_token'))) {
-
-            // Remove related WineInventory first to avoid foreign key constraint errors
             $inventory = $entityManager->getRepository(WineInventory::class)->findOneBy(['product' => $storeProduct]);
             if ($inventory) {
                 $entityManager->remove($inventory);

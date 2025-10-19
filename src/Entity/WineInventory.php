@@ -25,19 +25,30 @@ class WineInventory
     private \DateTime $lastUpdated;
 
     #[ORM\ManyToOne(inversedBy: 'wineInventories')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')] // ✅ Added onDelete cascade
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?StoreProduct $product = null;
 
     public function __construct()
     {
-        $this->lastUpdated = new \DateTime();
+        $timezone = new \DateTimeZone('Asia/Manila');
+        $this->lastUpdated = new \DateTime('now', $timezone);
+    }
+
+    #[ORM\PrePersist]
+    public function setDefaultAcquiredDate(): void
+    {
+        $timezone = new \DateTimeZone('Asia/Manila');
+        if (!$this->acquiredDate) {
+            $this->acquiredDate = new \DateTime('now', $timezone);
+        }
     }
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
     public function updateLastUpdated(): void
     {
-        $this->lastUpdated = new \DateTime();
+        $timezone = new \DateTimeZone('Asia/Manila');
+        $this->lastUpdated = new \DateTime('now', $timezone);
     }
 
     public function getId(): ?int
