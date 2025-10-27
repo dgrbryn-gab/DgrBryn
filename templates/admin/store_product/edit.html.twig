@@ -49,18 +49,12 @@
 
             <div class="flex justify-end gap-3 mt-8">
                 <button type="submit" 
-                        class="px-6 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
-                        style="background-color: #7F1734; color: #FFF8E7; border: 1px solid #EFCFB4;"
-                        onmouseover="this.style.backgroundColor='#9E2B47';"
-                        onmouseout="this.style.backgroundColor='#7F1734';">
+                        class="px-6 py-2 font-semibold rounded-xl shadow-md transition-all duration-300 bg-[#7F1734] text-[#FFF8E7] border border-[#EFCFB4] hover:bg-[#9E2B47]">
                     {{ button_label|default('Save') }}
                 </button>
 
                 <a href="{{ path('app_store_product_index') }}" 
-                   class="px-6 py-2 font-semibold rounded-xl shadow-md border transition-all duration-300"
-                   style="background-color: #EFCFB4; color: #4a2b1e; border-color: #EFCFB4;"
-                   onmouseover="this.style.backgroundColor='#dcb98f';"
-                   onmouseout="this.style.backgroundColor='#EFCFB4';">
+                   class="px-6 py-2 font-semibold rounded-xl shadow-md border transition-all duration-300 bg-[#EFCFB4] text-[#4a2b1e] border-[#EFCFB4] hover:bg-[#dcb98f]">
                     Cancel
                 </a>
             </div>

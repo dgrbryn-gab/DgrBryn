@@ -7,7 +7,7 @@
     <div class="max-w-6xl mx-auto">
 
         <!-- ✅ Page Title -->
-        <h1 class="text-3xl font-bold mb-6 text-center" style="color: #7F1734;">Wine Inventory</h1>
+    <h1 class="text-3xl font-bold mb-6 text-left text-[#7F1734]">Wine Inventory</h1>
 
         <!-- ✅ Search and Category Row -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
@@ -20,11 +20,8 @@
                        placeholder="Search product..."
                        class="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:ring-2 focus:ring-[#7F1734] focus:outline-none text-gray-700"
                        />
-                <button type="submit"
-                        class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
-                        style="background-color: #7F1734; border: 1px solid #f4e7ce;"
-                        onmouseover="this.style.backgroundColor='#9E2B47';"
-                        onmouseout="this.style.backgroundColor='#7F1734';">
+        <button type="submit"
+            class="px-5 py-2 rounded-lg font-semibold transition-all duration-300 bg-[#7F1734] text-[#F8EAD8] border border-[#f4e7ce] hover:bg-[#9E2B47] btn-hover">
                     🔍 Search
                 </button>
             </form>
@@ -44,10 +41,7 @@
                         {% endfor %}
                     </select>
                     <button type="submit"
-                            class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
-                            style="background-color: #7F1734; border: 1px solid #f4e7ce;"
-                            onmouseover="this.style.backgroundColor='#9E2B47';"
-                            onmouseout="this.style.backgroundColor='#7F1734';">
+                            class="px-5 py-2 rounded-lg font-semibold transition-all duration-300 bg-[#7F1734] text-[#F8EAD8] border border-[#f4e7ce] hover:bg-[#9E2B47] btn-hover">
                         Apply
                     </button>
                 </form>
@@ -57,9 +51,9 @@
         {% if grouped_inventories is defined and grouped_inventories|length > 0 %}
             {% for category, inventories in grouped_inventories %}
                 <div class="mb-12">
-                    <h2 class="text-2xl font-bold mb-6 border-b-4 pb-2" style="color:#7F1734; border-color:#f9d3b4;">
-                        {{ category }}
-                    </h2>
+                    <h2 class="text-2xl font-bold mb-6 border-b-4 pb-2 text-[#7F1734] border-[#f9d3b4]">
+                            {{ category }}
+                        </h2>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {% for wine_inventory in inventories %}
@@ -86,25 +80,19 @@
                                     </div>
 
                                     <div class="mt-4 space-y-2 text-gray-700 text-sm">
-                                        <p><span class="font-semibold" style="color:#7F1734;">Quantity:</span> {{ wine_inventory.quantity }}</p>
-                                        <p><span class="font-semibold" style="color:#7F1734;">Acquired:</span> {{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('F j, Y') : 'N/A' }}</p>
-                                        <p><span class="font-semibold" style="color:#7F1734;">Last Updated:</span> {{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('F j, Y, g:i a') : 'N/A' }}</p>
+                                        <p><span class="font-semibold text-[#7F1734]">Quantity:</span> {{ wine_inventory.quantity }}</p>
+                                        <p><span class="font-semibold text-[#7F1734]">Acquired:</span> {{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('F j, Y') : 'N/A' }}</p>
+                                        <p><span class="font-semibold text-[#7F1734]">Last Updated:</span> {{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('F j, Y, g:i a') : 'N/A' }}</p>
                                     </div>
                                 </div>
 
-                                <div class="px-5 py-4 flex justify-center gap-3 border-t border-rose-100" style="background-color: #7F1734;">
+                                <div class="px-5 py-4 flex justify-center gap-3 border-t border-rose-100 bg-burgundy">
                                     <a href="{{ path('app_wine_inventory_show', {'id': wine_inventory.id}) }}"
-                                       class="flex-1 text-center font-semibold rounded-xl shadow-md transition-all duration-300 flex items-center justify-center"
-                                       style="background-color: #f9d3b4; color: #7F1734; border: 1px solid #f4e7ce; min-height: 42px;"
-                                       onmouseover="this.style.backgroundColor='#e9c09e';"
-                                       onmouseout="this.style.backgroundColor='#f9d3b4';">
+                                       class="flex-1 text-center font-semibold rounded-xl shadow-md transition-all duration-300 flex items-center justify-center bg-[#f9d3b4] text-[#7F1734] border border-[#f4e7ce] min-h-[42px] hover:bg-[#e9c09e] btn-hover">
                                         Show
                                     </a>
                                     <a href="{{ path('app_wine_inventory_edit', {'id': wine_inventory.id}) }}"
-                                       class="flex-1 text-center font-semibold rounded-xl shadow-md transition-all duration-300 flex items-center justify-center"
-                                       style="background-color: #a83244; color: #f4e7ce; border: 1px solid #f9d3b4; min-height: 42px;"
-                                       onmouseover="this.style.backgroundColor='#8b1e2d';"
-                                       onmouseout="this.style.backgroundColor='#a83244';">
+                                       class="flex-1 text-center font-semibold rounded-xl shadow-md transition-all duration-300 flex items-center justify-center bg-[#a83244] text-[#f4e7ce] border border-[#f9d3b4] min-h-[42px] hover:bg-[#8b1e2d] btn-hover">
                                         Edit
                                     </a>
                                     {{ include('admin/wine_inventory/_delete_form.html.twig', {

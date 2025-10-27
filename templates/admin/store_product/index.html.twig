@@ -15,10 +15,7 @@
                    class="border border-[#EFCFB4] rounded-lg py-2 px-4 w-72 focus:ring-2 focus:ring-[#7F1734] focus:outline-none text-gray-700"
                    />
             <button type="submit"
-                    class="px-5 py-2 rounded-lg text-white font-semibold transition-all duration-300"
-                    style="background-color: #7F1734; border: 1px solid #EFCFB4;"
-                    onmouseover="this.style.backgroundColor='#9E2B47';"
-                    onmouseout="this.style.backgroundColor='#7F1734';">
+                    class="px-5 py-2 rounded-lg font-semibold transition-all duration-300 bg-[#7F1734] text-[#F8EAD8] border border-[#EFCFB4] btn-hover">
                 🔍 Search
             </button>
         </form>
@@ -27,13 +24,10 @@
     <!-- Header + Add Button -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
         <h1 class="text-4xl font-extrabold text-[#7F1734] tracking-tight">Store Products</h1>
-        <a href="{{ path('app_store_product_new') }}"
-           class="px-5 py-2 rounded-xl shadow font-semibold transition-all duration-300 border"
-           style="background-color: #7F1734; color: #F8EAD8; border-color: #EFCFB4;"
-           onmouseover="this.style.backgroundColor='#9E2B47';"
-           onmouseout="this.style.backgroundColor='#7F1734';">
-           + Add New Product
-        </a>
+          <a href="{{ path('app_store_product_new') }}"
+              class="px-5 py-2 rounded-xl shadow font-semibold transition-all duration-300 border bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] btn-hover">
+              + Add New Product
+          </a>
     </div>
 
     <!-- Category Filter Bar -->
@@ -85,43 +79,36 @@
                     </div>
                 {% endif %}
 
-                <div class="p-4 rounded-b-2xl relative transition-all duration-500"
-                        style="background-color: #7F1734; color: #F8EAD8;">
+            <div class="p-4 rounded-b-2xl relative transition-all duration-500 bg-burgundy text-[#F8EAD8]">
                         
-                    <h2 class="text-xl font-bold mb-1 text-white">{{ store_product.name }}</h2>
-                    <p class="text-sm mb-2 opacity-90">
+                    <h2 class="text-xl font-bold mb-1 text-milky">{{ store_product.name }}</h2>
+                    <p class="text-sm mb-2 opacity-90 text-milky">
                         {{ store_product.category ? store_product.category.name : 'Uncategorized' }}
                     </p>
 
                     {% if store_product.description %}
                         <div class="relative overflow-hidden transition-all duration-700 ease-in-out max-h-14 group-hover:max-h-40">
-                            <p class="text-sm italic mb-3 opacity-85 transition-opacity duration-500 group-hover:opacity-100">
+                            <p class="text-sm italic mb-3 opacity-85 transition-opacity duration-500 group-hover:opacity-100 text-milky">
                                 {{ store_product.description }}
                             </p>
                             <div class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#7F1734] to-transparent opacity-70 group-hover:opacity-0 transition-opacity duration-500"></div>
                         </div>
                     {% endif %}
 
-                    <p class="text-lg font-semibold mb-3" style="color: #EFCFB4;">
+                    <p class="text-lg font-semibold mb-3 text-milky">
                         €{{ store_product.price }}
                     </p>
-                    <p class="text-sm mb-4 opacity-85">
+                    <p class="text-sm mb-4 opacity-85 text-milky">
                         Stock: {{ store_product.wineInventories|length > 0 ? store_product.wineInventories.first.quantity : 0 }}
                     </p>
 
                     <div class="flex space-x-2">
                         <a href="{{ path('app_store_product_show', {'id': store_product.id}) }}"
-                            class="flex-1 text-center px-3 py-1 rounded-lg font-semibold transition-all duration-300 border"
-                            style="background-color: #B6465F; border-color: #EFCFB4; color: #F8EAD8;"
-                            onmouseover="this.style.backgroundColor='#9E2B47';"
-                            onmouseout="this.style.backgroundColor='#B6465F';">
+                            class="flex-1 text-center px-3 py-1 rounded-lg font-semibold transition-all duration-300 border btn-hover">
                             View
                         </a>
                         <a href="{{ path('app_store_product_edit', {'id': store_product.id}) }}"
-                            class="flex-1 text-center px-3 py-1 rounded-lg font-semibold transition-all duration-300 border"
-                            style="background-color: #EFCFB4; border-color: #F8EAD8; color: #7F1734;"
-                            onmouseover="this.style.backgroundColor='#E3B78E';"
-                            onmouseout="this.style.backgroundColor='#EFCFB4';">
+                            class="flex-1 text-center px-3 py-1 rounded-lg font-semibold transition-all duration-300 border btn-hover">
                             Edit
                         </a>
                     </div>

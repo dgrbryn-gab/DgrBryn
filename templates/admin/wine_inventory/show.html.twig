@@ -16,33 +16,33 @@
             </div>
 
             <!-- Inventory Info -->
-            <div class="p-8 flex flex-col justify-between rounded-r-2xl" style="background-color: #7F1734;">
+            <div class="p-8 flex flex-col justify-between rounded-r-2xl bg-[#7F1734] text-[#f1e3cc]">
                 <div>
-                    <h1 class="text-3xl font-bold mb-4" style="color: #f9d3b4;">{{ wine_inventory.product.name }}</h1>
-                    <p class="mb-6 leading-relaxed" style="color: #f1e3cc;">
+                    <h1 class="text-3xl font-bold mb-4 text-[#f9d3b4]">{{ wine_inventory.product.name }}</h1>
+                    <p class="mb-6 leading-relaxed text-[#f1e3cc]">
                         Inventory details for {{ wine_inventory.product.name }}
                     </p>
 
                     <div class="space-y-3 text-sm">
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Inventory ID:</span> 
-                            <span style="color: #f1e3cc;">{{ wine_inventory.id }}</span>
+                            <span class="font-semibold text-[#f9d3b4]">Inventory ID:</span> 
+                            <span class="text-[#f1e3cc]">{{ wine_inventory.id }}</span>
                         </p>
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Product Name:</span> 
-                            <span style="color: #f1e3cc;">{{ wine_inventory.product.name }}</span>
+                            <span class="font-semibold text-[#f9d3b4]">Product Name:</span> 
+                            <span class="text-[#f1e3cc]">{{ wine_inventory.product.name }}</span>
                         </p>
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Quantity:</span> 
-                            <span style="color: #f1e3cc;">{{ wine_inventory.quantity }}</span>
+                            <span class="font-semibold text-[#f9d3b4]">Quantity:</span> 
+                            <span class="text-[#f1e3cc]">{{ wine_inventory.quantity }}</span>
                         </p>
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Acquired Date:</span> 
-                            <span style="color: #f1e3cc;">{{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('F j, Y') : 'N/A' }}</span>
+                            <span class="font-semibold text-[#f9d3b4]">Acquired Date:</span> 
+                            <span class="text-[#f1e3cc]">{{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('F j, Y') : 'N/A' }}</span>
                         </p>
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Last Updated:</span> 
-                            <span style="color: #f1e3cc;">{{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('F j, Y, g:i a') : 'N/A' }}</span>
+                            <span class="font-semibold text-[#f9d3b4]">Last Updated:</span> 
+                            <span class="text-[#f1e3cc]">{{ wine_inventory.lastUpdated ? wine_inventory.lastUpdated|date('F j, Y, g:i a') : 'N/A' }}</span>
                         </p>
                     </div>
                 </div>
@@ -50,17 +50,11 @@
                 <div class="mt-6">
                     <div class="flex justify-center flex-wrap gap-4">
                         <a href="{{ path('app_wine_inventory_index') }}" 
-                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
-                           style="background-color: #f9d3b4; color: #7F1734; border: 1px solid #f4e7ce;"
-                           onmouseover="this.style.backgroundColor='#e9c09e';"
-                           onmouseout="this.style.backgroundColor='#f9d3b4';">
+                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300 bg-[#f9d3b4] text-[#7F1734] border border-[#f4e7ce] hover:bg-[#e9c09e]">
                             ← Back to List
                         </a>
                         <a href="{{ path('app_wine_inventory_edit', {'id': wine_inventory.id}) }}" 
-                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300"
-                           style="background-color: #a83244; color: #f4e7ce; border: 1px solid #f9d3b4;"
-                           onmouseover="this.style.backgroundColor='#8b1e2d';"
-                           onmouseout="this.style.backgroundColor='#a83244';">
+                           class="px-4 py-2 font-semibold rounded-xl shadow-md transition-all duration-300 bg-[#a83244] text-[#f4e7ce] border border-[#f9d3b4] hover:bg-[#8b1e2d]">
                             ✎ Edit Inventory
                         </a>
                         {{ include('admin/wine_inventory/_delete_form.html.twig', {

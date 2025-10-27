@@ -17,10 +17,7 @@
             
             <!-- redirect to wine product list page -->
             <a href="{{ path('app_wine') }}" 
-                class="inline-block font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 mt-8"
-                style="background-color: #7F1734; color: #F8EAD8;"
-                onmouseover="this.style.backgroundColor='#9E2B47'"
-                onmouseout="this.style.backgroundColor='#7F1734'">
+                class="inline-block font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 mt-8 bg-[#7F1734] text-[#F8EAD8] hover:bg-[#9E2B47]">
                     Explore Our Wines
             </a>
         </div>
@@ -48,25 +45,5 @@
     </div>
 </section>
 
-<style>
-    @media (max-width: 768px) {
-        .about-header h1 {
-            font-size: 2rem;
-        }
-
-        .about-content {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .about-image {
-            height: 300px;
-        }
-
-        .values-grid {
-            flex-direction: row;
-            overflow-x: auto;
-        }
-    }
-</style>
+{# Responsive adjustments are covered by Tailwind utilities; no inline style block required #}
 {% endblock %}
