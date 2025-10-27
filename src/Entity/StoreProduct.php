@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert; // <-- NEW
 use App\Entity\Category;
 
 #[ORM\Entity(repositoryClass: StoreProductRepository::class)]
@@ -26,6 +28,19 @@ class StoreProduct
     #[ORM\Column]
     private ?float $price = null;
 
+    // -----------------------------------------------------------------
+    // 1. NEW: Virtual property for file upload (not persisted)
+    // -----------------------------------------------------------------
+    #[Assert\Image(
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        mimeTypesMessage: 'Please upload a valid image (JPEG, PNG, WebP)'
+    )]
+    private ?File $imageFile = null;
+
+    // -----------------------------------------------------------------
+    // 2. Existing: Stored filename in DB (kept unchanged)
+    // -----------------------------------------------------------------
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
@@ -89,6 +104,23 @@ class StoreProduct
         return $this;
     }
 
+    // -----------------------------------------------------------------
+    // 3. NEW: Getter & Setter for the uploaded file
+    // -----------------------------------------------------------------
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile): static
+    {
+        $this->imageFile = $imageFile;
+        return $this;
+    }
+
+    // -----------------------------------------------------------------
+    // 4. Existing: Getter & Setter for DB image name (unchanged)
+    // -----------------------------------------------------------------
     public function getImage(): ?string
     {
         return $this->image;
@@ -154,7 +186,6 @@ class StoreProduct
     public function removeWineInventory(WineInventory $wineInventory): static
     {
         if ($this->wineInventories->removeElement($wineInventory)) {
-            // set the owning side to null (unless already changed)
             if ($wineInventory->getProduct() === $this) {
                 $wineInventory->setProduct(null);
             }
@@ -167,4 +198,4 @@ class StoreProduct
     {
         return (string) ($this->name ?? 'Product #'.$this->id);
     }
-}   
+}
