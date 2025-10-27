@@ -2,6 +2,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Admin - {% endblock %}
+
 {% block stylesheets %}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -14,28 +15,20 @@
 
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
-            color: #FFF6E8; /* lighter milky tone */
+            color: #FFF6E8;
             border-color: #EFCFB4;
         }
 
-        /* Active (current page) link */
         .active-sidebar {
             background-color: rgba(255, 255, 255, 0.15);
             border-left: 4px solid #EFCFB4;
             font-weight: bold;
         }
 
-        /* Hide base header/navigation globally */
-        header, nav.navbar, .site-header {
+        header, nav.navbar, .site-header, footer, .site-footer {
             display: none !important;
         }
 
-        /* Also hide base footer */
-        footer, .site-footer {
-            display: none !important;
-        }
-
-        /* Sidebar gradient and styles */
         .wine-gradient {
             background: linear-gradient(180deg, #5E0B15 0%, #7B1E3A 100%);
         }
@@ -48,144 +41,96 @@
             box-shadow: 0 4px 6px rgba(123, 30, 58, 0.2);
         }
 
-        /* Milky background and readable text */
         body, main {
-            background-color: #FFF8F0 !important; /* Milky soft beige */
-            color: #3B0A0A; /* Deep wine text for contrast */
+            background-color: #FFF8F0 !important;
+            color: #3B0A0A;
         }
 
         h1, h2, h3, h4, h5, h6, label {
-            color: #5E0B15; /* Wine-colored headings */
+            color: #5E0B15;
         }
 
-        a {
-            color: #7B1E3A;
-        }
+        a { color: #7B1E3A; }
+        a:hover { color: #9E2B47; }
 
-        a:hover {
-            color: #9E2B47;
-        }
-
-        /* Optional: soften card backgrounds */
         .card, .bg-white {
             background-color: #FFFAF5 !important;
         }
-        /* custom site colors (safe without Tailwind JIT) */
+
         .bg-burgundy { background-color: #7F1734 !important; }
         .text-milky { color: #F8EAD8 !important; }
         .border-efcfb4 { border-color: #EFCFB4 !important; }
-
-        /* hover helper */
         .hover-burgundy:hover { background-color: #7F1734 !important; color: #F8EAD8 !important; }
-
-        /* active/selected look */
         .active-burgundy { background-color: #7F1734 !important; color: #F8EAD8 !important; border-color: #EFCFB4 !important; }
 
+        .badge-burgundy { background-color: rgba(94,11,21,0.08); }
+        .badge-red { background-color: rgba(220,38,38,0.08); }
+
+        .card-hover { transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease; }
+        .admin-main .card-hover:hover {
+            background-color: #7F1734 !important; color: #F8EAD8 !important;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.08) !important;
+        }
+        .admin-main .card-hover:hover p,
+        .admin-main .card-hover:hover h1, .admin-main .card-hover:hover h2,
+        .admin-main .card-hover:hover h3, .admin-main .card-hover:hover h4,
+        .admin-main .card-hover:hover .card-label,
+        .admin-main .card-hover:hover .card-count {
+            color: #F8EAD8 !important;
+        }
+
+        .icon-badge { transition: background-color 200ms ease, color 200ms ease; }
+        .admin-main .card-hover:hover .icon-badge {
+            background-color: rgba(248,234,216,0.06) !important;
+        }
+
+        .btn-hover { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+        .admin-main .btn-hover:hover,
+        .admin-main button.btn-hover:hover,
+        .admin-main a.btn-hover:hover {
+            background-color: #7F1734 !important; color: #F8EAD8 !important; border-color: #EFCFB4 !important;
+        }
+
+        .admin-main button:hover,
+        .admin-main input[type="submit"]:hover,
+        .admin-main input[type="button"]:hover,
+        .admin-main .btn:hover,
+        .admin-main a.btn:hover,
+        .admin-main .form-actions button:hover,
+        .admin-main a[role="button"]:hover {
+            background-color: #7F1734 !important; color: #F8EAD8 !important; border-color: #EFCFB4 !important;
+        }
+
+        .admin-main button:focus-visible,
+        .admin-main a:focus-visible,
+        .admin-main input[type="submit"]:focus-visible {
+            outline: 3px solid rgba(239,207,180,0.6); outline-offset: 2px;
+        }
+
+        .admin-main .bg-burgundy .btn-hover,
+        .admin-main .bg-burgundy a.btn-hover,
+        .admin-main .bg-burgundy button.btn-hover {
+            background-color: #EFCFB4 !important; color: #7F1734 !important; border-color: #EFCFB4 !important;
+        }
+        .admin-main .bg-burgundy .btn-hover:hover,
+        .admin-main .bg-burgundy a.btn-hover:hover,
+        .admin-main .bg-burgundy button.btn-hover:hover {
+            background-color: #7F1734 !important; color: #F8EAD8 !important; border-color: #EFCFB4 !important;
+        }
     </style>
-        <style>
-            /* Helper badges for admin overview cards (avoid inline styles) */
-            .badge-burgundy {
-                background-color: rgba(94,11,21,0.08);
-            }
-
-            .badge-red {
-                background-color: rgba(220,38,38,0.08);
-            }
-        
-            /* Card and button hover helpers (no inline CSS) */
-            .card-hover {
-                transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
-            }
-
-            /* Scoped to admin area and stronger specificity to ensure Tailwind doesn't override it */
-            .admin-main .card-hover:hover {
-                background-color: #7F1734 !important; /* burgundy */
-                color: #F8EAD8 !important; /* milky text */
-                box-shadow: 0 10px 15px rgba(0,0,0,0.08) !important;
-            }
-
-            /* Ensure text inside the card becomes readable when card background changes */
-            .admin-main .card-hover:hover p,
-            .admin-main .card-hover:hover h1,
-            .admin-main .card-hover:hover h2,
-            .admin-main .card-hover:hover h3,
-            .admin-main .card-hover:hover h4,
-            .admin-main .card-hover:hover .card-label,
-            .admin-main .card-hover:hover .card-count {
-                color: #F8EAD8 !important;
-            }
-
-            .icon-badge {
-                transition: background-color 200ms ease, color 200ms ease;
-            }
-
-            .admin-main .card-hover:hover .icon-badge {
-                background-color: rgba(248,234,216,0.06) !important; /* subtle milky tint for contrast */
-            }
-
-            .btn-hover {
-                transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
-            }
-
-            .admin-main .btn-hover:hover,
-            .admin-main button.btn-hover:hover,
-            .admin-main a.btn-hover:hover {
-                background-color: #7F1734 !important; /* burgundy on hover to match design */
-                color: #F8EAD8 !important;
-                border-color: #EFCFB4 !important;
-            }
-
-            /* Apply burgundy hover to the common interactive controls across admin pages */
-            .admin-main button:hover,
-            .admin-main input[type="submit"]:hover,
-            .admin-main input[type="button"]:hover,
-            .admin-main .btn:hover,
-            .admin-main a.btn:hover,
-            .admin-main .form-actions button:hover,
-            .admin-main a[role="button"]:hover {
-                background-color: #7F1734 !important;
-                color: #F8EAD8 !important;
-                border-color: #EFCFB4 !important;
-            }
-
-            /* Keep accessible focus styles (visible keyboard focus) */
-            .admin-main button:focus-visible,
-            .admin-main a:focus-visible,
-            .admin-main input[type="submit"]:focus-visible {
-                outline: 3px solid rgba(239,207,180,0.6);
-                outline-offset: 2px;
-            }
-
-            /* Ensure buttons placed on burgundy backgrounds remain readable and have clear hover states */
-            .admin-main .bg-burgundy .btn-hover,
-            .admin-main .bg-burgundy a.btn-hover,
-            .admin-main .bg-burgundy button.btn-hover {
-                background-color: #EFCFB4 !important; /* milky button background */
-                color: #7F1734 !important; /* burgundy text */
-                border-color: #EFCFB4 !important;
-            }
-
-            .admin-main .bg-burgundy .btn-hover:hover,
-            .admin-main .bg-burgundy a.btn-hover:hover,
-            .admin-main .bg-burgundy button.btn-hover:hover {
-                background-color: #7F1734 !important; /* burgundy on hover */
-                color: #F8EAD8 !important; /* milky text on hover */
-                border-color: #EFCFB4 !important;
-            }
-        </style>
 {% endblock %}
 
 {% block body %}
 <div class="min-h-screen flex text-gray-900">
 
-   <!-- Sidebar -->
+    <!-- Sidebar -->
     <aside class="w-64 wine-gradient text-[#F8EAD8] fixed top-0 left-0 h-screen border-r border-[#6F0F26] flex flex-col z-50">
         <div class="px-6 py-8 border-b border-white/20 text-center">
             <div class="flex items-center justify-center space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    style="color: #EFCFB4;">
+                     style="color: #EFCFB4;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zM5 22l7-7 7 7" />
+                          d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zM5 22l7-7 7 7" />
                 </svg>
                 <h1 class="text-2xl font-extrabold tracking-wide" style="color: #F8EAD8;">
                     Wine Admin
@@ -198,31 +143,33 @@
 
         <nav class="mt-6 px-2 space-y-2 flex-1">
             <a href="{{ path('admin_dashboard') }}"
-            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') == 'admin_dashboard' ? 'active-sidebar' : '' }}">
-            🏠 Dashboard
+               class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') == 'admin_dashboard' ? 'active-sidebar' : '' }}">
+                Dashboard
             </a>
             <a href="{{ path('app_category_index') }}"
-            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_category' ? 'active-sidebar' : '' }}">
-            🍇 Categories
+               class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_category' ? 'active-sidebar' : '' }}">
+                Categories
             </a>
             <a href="{{ path('app_store_product_index') }}"
-            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_store_product' ? 'active-sidebar' : '' }}">
-            🍷 Products
+               class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_store_product' ? 'active-sidebar' : '' }}">
+                Products
             </a>
             <a href="{{ path('app_wine_inventory_index') }}"
-            class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_wine_inventory' ? 'active-sidebar' : '' }}">
-            📦 Inventory
+               class="block px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'app_wine_inventory' ? 'active-sidebar' : '' }}">
+                Inventory
             </a>
         </nav>
     </aside>
-
 
     <!-- Main Content -->
     <main class="flex-1 ml-64 p-8 admin-main">
         {% block admin_content %}{% endblock %}
     </main>
 </div>
+
+{# Modal Scroll Lock – Only active on modal pages #}
+{% block modal_scroll_lock %}{% endblock %}
 {% endblock %}
 
-{# Override base footer so it doesn’t show in admin pages #}
+{# Hide base footer #}
 {% block footer %}{% endblock %}

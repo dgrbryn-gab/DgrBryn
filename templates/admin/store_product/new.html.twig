@@ -3,100 +3,135 @@
 {% block title %}Add New Product | CORK Admin{% endblock %}
 
 {% block admin_content %}
-<div class="min-h-screen bg-[#4B164C] py-2 px-0">  {# Deep grape background; remove side padding so form can expand to edges #}
-    <div class="min-h-screen bg-[#4B164C]">  {# Deep grape background #}
-        {# Full-screen centered overlay; prevents body scroll while visible #}
-        {# Position the overlay to the right of the admin sidebar (sidebar is w-64) so it doesn't overlap it #}
+<div class="min-h-screen bg-[#4B164C] py-2 px-0">
+    <div class="min-h-screen bg-[#4B164C]">
         <div class="fixed top-0 left-64 right-0 bottom-0 z-50 flex items-center justify-center">
-            <div class="w-full mx-0 max-w-none px-6 sm:px-8 lg:px-12 bg-white/95 backdrop-blur-lg py-8 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden">
+            <div class="w-full mx-0 max-w-none px-6 sm:px-8 lg:px-12 bg-white/95 backdrop-bl  backdrop-blur-lg py-8 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden">
 
-        <!-- Top Accent Line -->
-        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#EFCFB4] via-[#9E2B47] to-[#7F1734] rounded-t-3xl"></div>
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#EFCFB4] via-[#9E2B47] to-[#7F1734] rounded-t-3xl"></div>
 
-        <!-- Header -->
-        <h1 class="text-4xl font-extrabold text-center text-[#7F1734] tracking-tight mb-5">
-            🍇 Add New Wine Product
-        </h1>
+                <!-- Header -->
+                <h1 class="text-4xl font-extrabold text-center text-[#7F1734] tracking-tight mb-5">
+                    Add New Wine Product
+                </h1>
 
-    {{ form_start(form, {'attr': {'class': 'grid grid-cols-1 md:grid-cols-2 gap-2 h-full'}, 'multipart': true}) }}
+                {{ form_start(form, {
+                    'attr': {'class': 'grid grid-cols-1 md:grid-cols-2 gap-2 h-full'},
+                    'multipart': true
+                }) }}
 
-            <!-- Category -->
-            {% if form.category is defined %}
-                <div class="col-span-1 md:col-span-1">
-                    {{ form_label(form.category, 'Category', {'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}}) }}
-                    {{ form_widget(form.category, {'attr': {
-                        'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
-                    }}) }}
-                    {% if form_errors(form.category) %}
-                        <p class="text-sm text-red-600 mt-1">{{ form_errors(form.category) }}</p>
-                    {% endif %}
-                </div>
-            {% endif %}
-
-            <!-- Other Fields -->
-            {% for field in form %}
-                {% if field.vars.name not in ['_token', 'category', 'isAvailable'] %}
-                    {# Make description and image fields span both columns for better layout #}
-                    {% set span_class = field.vars.name in ['description', 'image'] ? 'col-span-1 md:col-span-2' : 'col-span-1' %}
-                    <div class="{{ span_class }}">
-                        {{ form_label(field, null, {'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}}) }}
-                        {# Build base attrs and add image-specific accept attribute when appropriate #}
-                        {% set base_attrs = {
-                            'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
-                        } %}
-                        {% if field.vars.name == 'image' %}
-                            {% set base_attrs = base_attrs|merge({'accept':'image/*'}) %}
-                        {% endif %}
-                        {{ form_widget(field, {'attr': base_attrs}) }}
-                        {% if form_errors(field) %}
-                            <p class="text-sm text-red-600 mt-1">{{ form_errors(field) }}</p>
+                <!-- Category -->
+                {% if form.category is defined %}
+                    <div class="col-span-1 md:col-span-1">
+                        {{ form_label(form.category, 'Category', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                        }) }}
+                        {{ form_widget(form.category, {
+                            'attr': {
+                                'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                            }
+                        }) }}
+                        {% if form_errors(form.category) %}
+                            <p class="text-sm text-red-600 mt-1">{{ form_errors(form.category) }}</p>
                         {% endif %}
                     </div>
                 {% endif %}
-            {% endfor %}
 
-            <!-- Checkbox -->
-            {% if form.isAvailable is defined %}
-                <div class="col-span-1 md:col-span-2 flex items-center space-x-3">
-                    {{ form_widget(form.isAvailable, {'attr': {
-                        'class': 'h-5 w-5 text-[#7F1734] border-gray-300 rounded focus:ring-[#9E2B47]'
-                    }}) }}
-                    {{ form_label(form.isAvailable, 'Available for Sale', {'label_attr': {'class': 'text-sm font-semibold text-[#4B164C]'}}) }}
+                <!-- Other Fields -->
+                {% for field in form %}
+                    {% if field.vars.name not in ['_token', 'category', 'isAvailable', 'imageFile'] %}
+                        {% set span_class = field.vars.name == 'description' ? 'col-span-1 md:col-span-2' : 'col-span-1' %}
+                        <div class="{{ span_class }}">
+                            {{ form_label(field, null, {
+                                'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                            }) }}
+                            {{ form_widget(field, {
+                                'attr': {
+                                    'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                                }
+                            }) }}
+                            {% if form_errors(field) %}
+                                <p class="text-sm text-red-600 mt-1">{{ form_errors(field) }}</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Image Upload -->
+                {% if form.imageFile is defined %}
+                    <div class="col-span-1 md:col-span-2">
+                        {{ form_label(form.imageFile, 'Product Image', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                        }) }}
+                        {{ form_widget(form.imageFile, {
+                            'attr': {
+                                'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#7F1734] file:text-[#F8EAD8] hover:file:bg-[#9E2B47] cursor-pointer'
+                            }
+                        }) }}
+                        {% if form_errors(form.imageFile) %}
+                            <p class="text-sm text-red-600 mt-1">{{ form_errors(form.imageFile) }}</p>
+                        {% endif %}
+                        <p class="text-xs text-gray-500 mt-1">Max 5 MB – JPEG, PNG, WebP</p>
+                    </div>
+                {% endif %}
+
+                <!-- Checkbox -->
+                {% if form.isAvailable is defined %}
+                    <div class="col-span-1 md:col-span-2 flex items-center space-x-3">
+                        {{ form_widget(form.isAvailable, {
+                            'attr': {
+                                'class': 'h-5 w-5 text-[#7F1734] border-gray-300 rounded focus:ring-[#9E2B47]'
+                            }
+                        }) }}
+                        {{ form_label(form.isAvailable, 'Available for Sale', {
+                            'label_attr': {'class': 'text-sm font-semibold text-[#4B164C]'}
+                        }) }}
+                    </div>
+                {% endif %}
+
+                {{ form_widget(form._token) }}
+
+                <!-- Buttons -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex justify-center gap-6 mt-6">
+                        <button type="submit"
+                                class="px-8 py-3.5 rounded-xl shadow-md font-semibold text-lg border transition-all duration-300 transform hover:scale-105 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47]">
+                            Save Product
+                        </button>
+
+                        <a href="{{ path('app_store_product_index') }}"
+                           class="px-8 py-3.5 rounded-xl shadow-md font-semibold text-lg border border-[#EFCFB4] text-[#7F1734] bg-[#F8EAD8] hover:bg-[#F3D8C0] transition-all duration-300 transform hover:scale-105">
+                            Cancel
+                        </a>
+                    </div>
                 </div>
-            {% endif %}
 
-            <!-- CSRF -->
-            {{ form_widget(form._token) }}
-
-            <!-- Buttons -->
-            <div class="col-span-1 md:col-span-2">
-                <div class="flex justify-center gap-6 mt-6">
-                    <button type="submit"
-                            class="px-8 py-3.5 rounded-xl shadow-md font-semibold text-lg border transition-all duration-300 transform hover:scale-105 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47]">
-                        🍷 Save Product
-                    </button>
-
-                    <a href="{{ path('app_store_product_index') }}"
-                       class="px-8 py-3.5 rounded-xl shadow-md font-semibold text-lg border border-[#EFCFB4] text-[#7F1734] bg-[#F8EAD8] hover:bg-[#F3D8C0] transition-all duration-300 transform hover:scale-105">
-                        Cancel
-                    </a>
-                </div>
-            </div>
-
-</div>
-                    {{ form_end(form) }}
-                </div>
+                {{ form_end(form) }}
             </div>
         </div>
-
-        {# Prevent the page behind the overlay from scrolling while this form is open #}
-        <script>
-            (function(){
-                try { document.documentElement.style.overflow = 'hidden'; } catch(e){}
-                // restore on unload/navigation
-                window.addEventListener('unload', function(){ try{ document.documentElement.style.overflow = ''; } catch(e){} });
-            })();
-        </script>
     </div>
 </div>
+
+<!-- Prevent Background Scroll -->
+<script>
+    // Lock scroll on modal open
+    document.documentElement.style.overflow = 'hidden';
+
+    // Unlock on ANY navigation
+    const unlock = () => {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+    };
+
+    // All possible events
+    window.addEventListener('pagehide', unlock);
+    window.addEventListener('beforeunload', unlock);
+    window.addEventListener('unload', unlock);
+
+    // Also unlock on link clicks (fallback)
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => setTimeout(unlock, 50));
+    });
+</script>
 {% endblock %}

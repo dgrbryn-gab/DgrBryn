@@ -40,4 +40,17 @@
         {{ form_end(form) }}
     </div>
 </div>
+
+<!-- Prevent Background Scroll -->
+<script>
+    document.documentElement.style.overflow = 'hidden';
+    const unlock = () => {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+    };
+    window.addEventListener('pagehide', unlock);
+    window.addEventListener('beforeunload', unlock);
+    window.addEventListener('unload', unlock);
+    document.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setTimeout(unlock, 50)));
+</script>
 {% endblock %}
