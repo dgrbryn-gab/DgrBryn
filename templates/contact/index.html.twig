@@ -3,7 +3,7 @@
 {% block title %}Contact CORK{% endblock %}
 
 {% block body %}
-<section class="contact-page max-w-6xl mx-auto px-4 py-8 text-gray-700" style="background-color: #f7f1e9;">
+<section class="contact-page max-w-6xl mx-auto px-4 py-8 text-gray-700 bg-[#f7f1e9]">
     <div class="contact-header text-center mb-12">
         <h1 class="text-3xl md:text-4xl font-bold text-red-900 mb-2">Contact CORK</h1>
         <p class="text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">We're here to assist you with any questions about our fine wines or your shopping experience. Reach out to us!</p>
@@ -23,10 +23,7 @@
                 <textarea id="message" name="message" required class="w-full p-3 mb-4 border border-gray-300 rounded-md text-base text-gray-700 bg-white/50 backdrop-blur-sm h-36 resize-y focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"></textarea>
 
                 <button type="submit" 
-                    class="inline-block font-semibold py-3 px-6 rounded-lg transition-all duration-300"
-                    style="background-color: #7F1734; color: #F8EAD8;"
-                    onmouseover="this.style.backgroundColor='#9E2B47'"
-                    onmouseout="this.style.backgroundColor='#7F1734'">
+                    class="inline-block font-semibold py-3 px-6 rounded-lg transition-all duration-300 bg-[#7F1734] text-[#F8EAD8] hover:bg-[#9E2B47]">
                     Send Message
                 </button>
 
@@ -34,7 +31,8 @@
         </div>
 
         <div class="contact-info flex-1 min-w-[300px] max-w-md p-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg">
-            <div class="contact-image w-full h-48 bg-cover bg-center rounded-lg shadow-md mb-6" style="background-image: url('{{ asset('images/contact_winery.jpg') }}')">
+            <div class="contact-image w-full h-48 bg-cover bg-center rounded-lg shadow-md mb-6">
+                <img src="{{ asset('images/contact_winery.jpg') }}" alt="Winery" class="w-full h-full object-cover rounded-lg mb-2">
                 <img src="{{ asset('assets/images/cork_logo.png') }}" alt="CORK Logo" class="w-full h-full object-contain rounded-lg hover:scale-110 transition-transform duration-300">
             </div>
             <h2 class="text-2xl text-gray-900 mb-4">Contact Information</h2>

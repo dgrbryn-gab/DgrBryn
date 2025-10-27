@@ -1,10 +1,7 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button type="submit"
-            class="text-sm font-semibold px-5 py-2 rounded-lg border transition-all duration-300 mt-4"
-            style="background-color: #7F1734; color: #F8EAD8; border-color: #EFCFB4;"
-            onmouseover="this.style.backgroundColor='#9E2B47'"
-            onmouseout="this.style.backgroundColor='#7F1734'">
+            class="text-sm font-semibold px-5 py-2 rounded-lg border transition-all duration-300 mt-4 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47]">
         {{ button_label|default('💾 Save') }}
     </button>
 {{ form_end(form) }}

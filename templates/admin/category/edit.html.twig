@@ -27,19 +27,13 @@
             {{ form_widget(form._token) }}
 
             <div class="flex justify-end gap-4 mt-8">
-                <button type="submit"
-                        class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300"
-                        style="background-color: #7F1734; color: #F8EAD8; border-color: #EFCFB4;"
-                        onmouseover="this.style.backgroundColor='#9E2B47'"
-                        onmouseout="this.style.backgroundColor='#7F1734'">
+        <button type="submit"
+            class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47]">
                     💾 Save
                 </button>
 
-                <a href="{{ path('app_category_index') }}"
-                   class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300"
-                   style="background-color: #EFCFB4; color: #7F1734; border-color: #EFCFB4;"
-                   onmouseover="this.style.backgroundColor='#E3B78E'"
-                   onmouseout="this.style.backgroundColor='#EFCFB4'">
+                     <a href="{{ path('app_category_index') }}"
+                         class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300 bg-[#EFCFB4] text-[#7F1734] border-[#EFCFB4] hover:bg-[#E3B78E]">
                     ✖ Cancel
                 </a>
             </div>

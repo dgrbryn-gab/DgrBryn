@@ -24,38 +24,38 @@
             </div>
 
             <!-- Product Info -->
-            <div class="p-10 flex flex-col justify-between rounded-r-3xl" style="background-color: #7F1734;">
+            <div class="p-10 flex flex-col justify-between rounded-r-3xl bg-[#7F1734] text-[#f1e3cc]">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-6 tracking-wide" style="color: #f9d3b4;">
+                    <h1 class="text-4xl font-extrabold mb-6 tracking-wide text-[#f9d3b4]">
                         {{ storeProduct.name }}
                     </h1>
-                    <p class="mb-8 leading-relaxed text-base" style="color: #f1e3cc;">
+                    <p class="mb-8 leading-relaxed text-base text-[#f1e3cc]">
                         {{ storeProduct.description|default('No description available.') }}
                     </p>
 
                     <div class="space-y-4 text-sm">
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Product ID:</span>
-                            <span style="color: #f1e3cc;">{{ storeProduct.id }}</span>
+                            <span class="font-semibold text-[#f9d3b4]">Product ID:</span>
+                            <span class="text-[#f1e3cc]">{{ storeProduct.id }}</span>
                         </p>
 
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Created:</span>
-                            <span style="color: #f1e3cc;">
+                            <span class="font-semibold text-[#f9d3b4]">Created:</span>
+                            <span class="text-[#f1e3cc]">
                                 {{ storeProduct.createdAt ? storeProduct.createdAt|date('F j, Y, g:i a') : '' }}
                             </span>
                         </p>
 
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">Available:</span>
+                            <span class="font-semibold text-[#f9d3b4]">Available:</span>
                             <span class="{{ storeProduct.isAvailable ? 'text-green-300' : 'text-red-400' }}">
                                 {{ storeProduct.isAvailable ? 'Yes' : 'No' }}
                             </span>
                         </p>
 
                         <p>
-                            <span class="font-semibold" style="color: #f9d3b4;">In Stock:</span>
-                            <span style="color: #f1e3cc;">
+                            <span class="font-semibold text-[#f9d3b4]">In Stock:</span>
+                            <span class="text-[#f1e3cc]">
                                 {{ storeProduct.wineInventories|length > 0 ? storeProduct.wineInventories.first.quantity : 0 }}
                             </span>
                         </p>
@@ -64,20 +64,18 @@
 
                 <!-- Buttons Section -->
                <div class="mt-10">
-                    <p class="text-3xl font-bold mb-6 text-center" style="color: #f9d3b4;">€{{ storeProduct.price }}</p>
+                    <p class="text-3xl font-bold mb-6 text-center text-[#f9d3b4]">€{{ storeProduct.price }}</p>
 
                     <div class="flex justify-center items-center gap-5 flex-nowrap">
                         <!-- Back Button -->
                         <a href="{{ path('app_store_product_index') }}" 
-                        class="w-40 h-12 flex items-center justify-center font-semibold rounded-xl shadow-md border border-[#f4e7ce] transition-all duration-300 transform hover:scale-105"
-                        style="background-color: #f9d3b4; color: #7F1734;">
+                        class="w-40 h-12 flex items-center justify-center font-semibold rounded-xl shadow-md border border-[#f4e7ce] transition-all duration-300 transform hover:scale-105 bg-[#f9d3b4] text-[#7F1734]">
                             ← Back
                         </a>
 
                         <!-- Edit Button -->
                         <a href="{{ path('app_store_product_edit', {'id': storeProduct.id}) }}" 
-                        class="w-40 h-12 flex items-center justify-center font-semibold rounded-xl shadow-md border border-[#f9d3b4] transition-all duration-300 transform hover:scale-105"
-                        style="background-color: #a83244; color: #f4e7ce;">
+                        class="w-40 h-12 flex items-center justify-center font-semibold rounded-xl shadow-md border border-[#f9d3b4] transition-all duration-300 transform hover:scale-105 bg-[#a83244] text-[#f4e7ce]">
                             ✎ Edit
                         </a>
 
@@ -87,8 +85,7 @@
                             class="w-40 h-12">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ storeProduct.id) }}">
                             <button type="submit"
-                                    class="w-full h-full flex items-center justify-center font-semibold rounded-xl shadow-md border border-[#f9d3b4] transition-all duration-300 transform hover:scale-105"
-                                    style="background-color: #7F1734; color: #f4e7ce;">
+                                    class="w-full h-full flex items-center justify-center font-semibold rounded-xl shadow-md border border-[#f9d3b4] transition-all duration-300 transform hover:scale-105 bg-[#7F1734] text-[#f4e7ce]">
                                 🗑 Delete
                             </button>
                         </form>
