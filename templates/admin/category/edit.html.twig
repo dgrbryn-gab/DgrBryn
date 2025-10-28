@@ -1,56 +1,78 @@
 {% extends 'admin/admin_base.html.twig' %}
 
-{% block title %}Edit Category | CORK{% endblock %}
+{% block title %}Edit Category | CORK Admin{% endblock %}
 
 {% block admin_content %}
-<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
-    <div class="max-w-3xl mx-auto bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-8">
-        <h1 class="text-3xl font-extrabold text-[#5E0B15] mb-8 text-center">Edit Category</h1>
+<div class="min-h-screen bg-[#4B164C] py-2 px-0">
+    <div class="min-h-screen bg-[#4B164C]">
+        <div class="fixed top-0 left-64 right-0 bottom-0 z-50 flex items-center justify-center modal-overlay">
+            <div class="w-full px-6 sm:px-8 lg:px-16 xl:px-24 2xl:px-32 bg-white/95 backdrop-blur-lg py-10 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden">
 
-        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
-            <div>
-                {{ form_label(form.name, 'Category Name', {'label_attr': {'class': 'block text-sm font-semibold text-[#5E0B15] mb-2'}}) }}
-                {{ form_widget(form.name, {'attr': {
-                    'class': 'w-full border border-[#EFCFB4]/70 rounded-xl px-4 py-2 text-gray-800 bg-[#FFF8F0] focus:ring-2 focus:ring-[#7F1734] focus:outline-none'
-                }}) }}
-                {{ form_errors(form.name, {'attr': {'class': 'text-[#B6465F] text-sm mt-1'}}) }}
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#EFCFB4] via-[#9E2B47] to-[#7F1734] rounded-t-3xl"></div>
+
+                <!-- Header -->
+                <h1 class="text-4xl font-extrabold text-center text-[#7F1734] tracking-tight mb-8">
+                    Edit Category
+                </h1>
+
+                {{ form_start(form, {
+                    'attr': {'class': 'space-y-8'}
+                }) }}
+
+                <!-- Category Name -->
+                <div>
+                    {{ form_label(form.name, 'Category Name', {
+                        'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                    }) }}
+                    {{ form_widget(form.name, {
+                        'attr': {
+                            'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300',
+                            'placeholder': 'e.g., Red Wine, Sparkling'
+                        }
+                    }) }}
+                    {% if form_errors(form.name) %}
+                        <p class="text-sm text-red-600 mt-1">{{ form_errors(form.name) }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div>
+                    {{ form_label(form.description, 'Description', {
+                        'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                    }) }}
+                    {{ form_widget(form.description, {
+                        'attr': {
+                            'rows': 5,
+                            'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 resize-none transition-all duration-300',
+                            'placeholder': 'Brief description of this category...'
+                        }
+                    }) }}
+                    {% if form_errors(form.description) %}
+                        <p class="text-sm text-red-600 mt-1">{{ form_errors(form.description) }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- CSRF Token -->
+                {{ form_widget(form._token) }}
+
+                <!-- Buttons -->
+                <div class="flex justify-center gap-6 mt-10">
+                    <button type="submit"
+                            class="px-8 py-3.5 rounded-xl shadow-md font-semibold text-lg border transition-all duration-300 transform hover:scale-105 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47]">
+                        Save Category
+                    </button>
+
+                    <a href="{{ path('app_category_index') }}"
+                       class="px-8 py-3.5 rounded-xl shadow-md font-semibold text-lg border border-[#EFCFB4] text-[#7F1734] bg-[#F8EAD8] hover:bg-[#F3D8C0] transition-all duration-300 transform hover:scale-105">
+                        Cancel
+                    </a>
+                </div>
+
+                {{ form_end(form) }}
+
             </div>
-
-            <div>
-                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-semibold text-[#5E0B15] mb-2'}}) }}
-                {{ form_widget(form.description, {'attr': {
-                    'class': 'w-full border border-[#EFCFB4]/70 rounded-xl px-4 py-2 text-gray-800 bg-[#FFF8F0] focus:ring-2 focus:ring-[#7F1734] focus:outline-none'
-                }}) }}
-                {{ form_errors(form.description, {'attr': {'class': 'text-[#B6465F] text-sm mt-1'}}) }}
-            </div>
-
-            {{ form_widget(form._token) }}
-
-            <div class="flex justify-end gap-4 mt-8">
-        <button type="submit"
-            class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47]">
-                    💾 Save
-                </button>
-
-                     <a href="{{ path('app_category_index') }}"
-                         class="px-6 py-2 font-semibold rounded-xl border transition-all duration-300 bg-[#EFCFB4] text-[#7F1734] border-[#EFCFB4] hover:bg-[#E3B78E]">
-                    ✖ Cancel
-                </a>
-            </div>
-        {{ form_end(form) }}
+        </div>
     </div>
 </div>
-
-<!-- Prevent Background Scroll -->
-<script>
-    document.documentElement.style.overflow = 'hidden';
-    const unlock = () => {
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-    };
-    window.addEventListener('pagehide', unlock);
-    window.addEventListener('beforeunload', unlock);
-    window.addEventListener('unload', unlock);
-    document.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setTimeout(unlock, 50)));
-</script>
 {% endblock %}
