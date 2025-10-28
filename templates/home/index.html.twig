@@ -7,90 +7,185 @@
 {% endblock %}
 
 {% block body %}
-<section class="hero bg-[#7B1E3A] text-white min-h-screen flex items-center justify-center">
-    <div class="overflow-hidden relative">
-    <img src="{{ asset('assets/images/cork_logo.png') }}" alt="CORK Logo" class="w-full h-70 object-contain transition-transform duration-300 hover:scale-110 relative z-10">
+<!-- ========================================
+     HERO SECTION – BURGUNDY BACKGROUND
+======================================== -->
+<section class="bg-[#7B1E3A] text-white min-h-screen flex flex-col items-center justify-center px-6 py-16">
+    <div class="max-w-3xl mx-auto text-center">
+        <!-- Logo with glassmorphism -->
+        <div class="overflow-hidden rounded-full shadow-2xl mb-10 mx-auto w-72 h-72 bg-white/10 backdrop-blur-md p-6 border border-white/20">
+            <img 
+                src="{{ asset('assets/images/cork_logo.png') }}" 
+                alt="CORK Logo" 
+                class="w-full h-full object-contain rounded-full transition-transform duration-700 hover:scale-110"
+            >
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-4 leading-tight">
+            Welcome to <span class="text-amber-400">CORK</span>
+        </h1>
+        <p class="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto leading-relaxed">
+            Your curated gateway to exceptional wines from the world’s finest vineyards.
+        </p>
     </div>
 </section>
 
-<section class="featured-wines py-16 bg-gray text-center">
-    <h2 class="text-3xl font-bold mb-4 text-gray-900">Explore Our Featured Wines</h2>
-    <p class="text-lg mb-8 max-w-xl mx-auto text-gray-600">Discover our handpicked selection of premium wines from renowned vineyards.</p>
-    <div class="wine-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-    <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300">
-            <div class="overflow-hidden">
-                <img src="{{ asset('assets/images/wine_images/wine5.jpg') }}" alt="Marques de Riscal Arienzo Crianza" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
-            </div>
-            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Marques de Riscal Arienzo Crianza</h3>
-            <p class="text-white text-sm px-4 pb-4">Tempranillo (90%), with Graciano and Mazuelo Structured and elegant with red fruit, vanilla, and spice notes. Aged in oak for a smooth, balanced finish with fine tannins.</p>
-        </div>
-    <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300">
-            <div class="overflow-hidden">
-                <img src="{{ asset('assets/images/wine_images/wine2.jpg') }}" alt="Estampa Reserva Malbec Syrah 2021" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
-            </div>
-            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Estampa Reserva Malbec Syrah 2021</h3>
-            <p class="text-white text-sm px-4 pb-4">Malbec and Syrah Rich and robust with aromas of blackberry, plum, and spice. Velvety tannins and a touch of oak create a balanced, lingering finish.</p>
-        </div>
-    <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300">
-            <div class="overflow-hidden">
-                <img src="{{ asset('assets/images/wine_images/wine3.jpg') }}" alt="Rothbury Estate Shiraz Cabernet" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
-            </div>
-            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Rothbury Estate Shiraz Cabernet</h3>
-            <p class="text-white text-sm px-4 pb-4">Shiraz (Syrah) and Cabernet Sauvignon Bold and juicy with flavors of black cherry, cassis, and pepper. A harmonious blend with smooth tannins and a vibrant finish.</p>
-        </div>
-    </div>
-</section>
+<!-- ========================================
+     MAIN CONTENT – MILKY BACKGROUND ONLY
+======================================== -->
+<div class="bg-[#FDF6F0]">
 
-<section class="about-teaser py-16 bg-gradient-to-br from-gray-900 to-gray-800 text-white text-center">
-    <h2 class="text-3xl font-bold mb-4">Our Story</h2>
-    <p class="text-lg mb-8 max-w-xl mx-auto opacity-90">At CORK, we’re passionate about bringing the finest wines to your table. Our journey began with a love for craftsmanship and a commitment to quality.</p>
-    <a href="{{ path('app_about') }}" class="inline-block bg-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-amber-700 hover:scale-105 hover:shadow-xl transition-all duration-300 bg-[#D97706] text-white">Learn More</a>
-</section>
+    <!-- Featured Wines -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-[#5E0B15] mb-4">Explore Our Featured Wines</h2>
+            <p class="text-lg text-[#5E0B15]/80 max-w-2xl mx-auto leading-relaxed">
+                Handpicked premium selections — crafted for connoisseurs and casual sippers alike.
+            </p>
+        </div>
 
-<section class="testimonials py-16 bg-white text-center">
-    <h2 class="text-3xl font-bold mb-4 text-gray-900">What Our Customers Say</h2>
-    <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        <div class="testimonial-card bg-gray-100 rounded-lg p-8 shadow-md hover:bg-gray-200 hover:border-2 hover:border-amber-500 transition-all duration-300">
-            <p class="text-base text-gray-600 italic mb-4">"CORK’s selection is unmatched! The wines are exceptional, and the service is top-notch."</p>
-            <cite class="text-sm text-gray-900 font-semibold">— Sarah M.</cite>
-        </div>
-        <div class="testimonial-card bg-gray-100 rounded-lg p-8 shadow-md hover:bg-gray-200 hover:border-2 hover:border-amber-500 transition-all duration-300">
-            <p class="text-base text-gray-600 italic mb-4">"I found my favorite Pinot Noir here. The quality is outstanding, and delivery was fast."</p>
-            <cite class="text-sm text-gray-900 font-semibold">— James T.</cite>
-        </div>
-    </div>
-</section>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+            {% set featured_wines = [
+                {
+                    img: 'wine5.jpg',
+                    name: 'Marques de Riscal Arienzo Crianza',
+                    grape: 'Tempranillo (90%), Graciano, Mazuelo',
+                    desc: 'Structured and elegant with red fruit, vanilla, and spice notes. Aged in oak for a smooth, balanced finish with fine tannins.'
+                },
+                {
+                    img: 'wine2.jpg',
+                    name: 'Estampa Reserva Malbec Syrah 2021',
+                    grape: 'Malbec & Syrah',
+                    desc: 'Rich and robust with aromas of blackberry, plum, and spice. Velvety tannins and a touch of oak create a balanced, lingering finish.'
+                },
+                {
+                    img: 'wine3.jpg',
+                    name: 'Rothbury Estate Shiraz Cabernet',
+                    grape: 'Shiraz & Cabernet Sauvignon',
+                    desc: 'Bold and juicy with flavors of black cherry, cassis, and pepper. A harmonious blend with smooth tannins and a vibrant finish.'
+                }
+            ] %}
 
-<section class="seasonal-picks py-16 bg-amber-50 text-center">
-    <h2 class="text-3xl font-bold mb-4 text-gray-900">Our Seasonal Picks</h2>
-    <p class="text-lg mb-8 max-w-xl mx-auto text-gray-600">Enjoy our curated selection of wines perfect for the fall season, from robust reds to festive sparklings.</p>
-    <div class="wine-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-    <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300">
-            <div class="overflow-hidden">
-                <img src="{{ asset('assets/images/wine_images/wine12.jpg') }}" alt="Jacob's Creek Double Barrel Shiraz" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
-            </div>
-            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Jacob's Creek Double Barrel Shiraz</h3>
-            <p class="text-white text-sm px-4 pb-4">Shiraz Rich and complex with blackberry, dark chocolate, and oak notes. Double-barreled aging adds depth with smooth, velvety tannins.</p>
+            {% for wine in featured_wines %}
+            <article class="wine-card group bg-[#FEFDFB] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border border-[#E8D9C9]">
+                <div class="h-64 bg-[#7B1E3A]/5 overflow-hidden">
+                    <img 
+                        src="{{ asset('assets/images/wine_images/' ~ wine.img) }}" 
+                        alt="{{ wine.name }}" 
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    >
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-[#5E0B15] mb-1">{{ wine.name }}</h3>
+                    <p class="text-sm font-medium text-amber-700 mb-3">{{ wine.grape }}</p>
+                    <p class="text-[#5E0B15]/70 text-sm leading-relaxed line-clamp-3">{{ wine.desc }}</p>
+                </div>
+            </article>
+            {% endfor %}
         </div>
-    <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300">
-            <div class="overflow-hidden">
-                <img src="{{ asset('assets/images/wine_images/wine9.jpg') }}" alt="Penfolds Bin 51 Eden Valley Riesling" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
-            </div>
-            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Penfolds Bin 51 Eden Valley Riesling</h3>
-            <p class="text-white text-sm px-4 pb-4">Riesling Crisp and vibrant with lime, green apple, and floral notes. High acidity with a mineral backbone and a zesty, refreshing finish.</p>
-        </div>
-    <div class="wine-card bg-[#7B1E3A] rounded-lg overflow-hidden shadow-md hover:-translate-y-1 hover:scale-105 hover:shadow-lg transition-all duration-300">
-            <div class="overflow-hidden">
-                <img src="{{ asset('assets/images/wine_images/wine10.jpg') }}" alt="Martini Asti" class="w-full h-70 object-cover hover:scale-110 transition-transform duration-300">
-            </div>
-            <h3 class="text-white text-xl font-semibold mt-4 mb-2">Martini Asti</h3>
-            <p class="text-white text-sm px-4 pb-4">Moscato Bianco Sweet and effervescent with peach, apricot, and honey notes. Light and refreshing with fine bubbles and a delicate finish.</p>
-        </div>
-    </div>
-    <a href="{{ path('app_wine') }}" 
-        class="inline-block font-semibold py-3 px-6 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 mt-8 bg-[#7F1734] text-[#F8EAD8] hover:bg-[#9E2B47]">
-            Explore All Wines
-    </a>
+    </section>
 
-</section>
+    <!-- About Teaser -->
+    <section class="py-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-[#5E0B15] mb-6">Our Story</h2>
+            <p class="text-lg text-[#5E0B15]/80 mb-8 leading-relaxed max-w-2xl mx-auto">
+                At <span class="font-bold text-[#7B1E3A]">CORK</span>, we’re passionate about bringing the finest wines to your table. 
+                Our journey began with a love for craftsmanship, terroir, and the timeless art of winemaking.
+            </p>
+            <a href="{{ path('app_about') }}" 
+               class="inline-flex items-center gap-3 bg-[#7B1E3A] text-white font-semibold py-3 px-8 rounded-full shadow-xl hover:bg-[#5E0B15] hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                <span>Learn More</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-[#5E0B15] mb-16">What Our Customers Say</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+                <div class="testimonial-card bg-[#FEFDFB] p-8 rounded-2xl shadow-md hover:shadow-xl hover:border hover:border-amber-400 transition-all duration-300 border border-[#E8D9C9]">
+                    <p class="text-[#5E0B15]/75 italic mb-6 leading-relaxed">
+                        "CORK’s selection is unmatched! The wines are exceptional, and the service is top-notch."
+                    </p>
+                    <cite class="block text-right text-sm font-bold text-[#7B1E3A]">— Sarah M.</cite>
+                </div>
+
+                <div class="testimonial-card bg-[#FEFDFB] p-8 rounded-2xl shadow-md hover:shadow-xl hover:border hover:border-amber-400 transition-all duration-300 border border-[#E8D9C9]">
+                    <p class="text-[#5E0B15]/75 italic mb-6 leading-relaxed">
+                        "I found my favorite Pinot Noir here. The quality is outstanding, and delivery was fast."
+                    </p>
+                    <cite class="block text-right text-sm font-bold text-[#7B1E3A]">— James T.</cite>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seasonal Picks -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-[#5E0B15] mb-4">Our Seasonal Picks</h2>
+            <p class="text-lg text-[#5E0B15]/80 max-w-2xl mx-auto">
+                Enjoy our curated selection of wines perfect for the fall season — from robust reds to festive sparklings.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto mb-12">
+            {% set seasonal_wines = [
+                {
+                    img: 'wine12.jpg',
+                    name: "Jacob's Creek Double Barrel Shiraz",
+                    grape: 'Shiraz',
+                    desc: 'Rich and complex with blackberry, dark chocolate, and oak. Double-barreled aging adds depth and velvety tannins.'
+                },
+                {
+                    img: 'wine9.jpg',
+                    name: 'Penfolds Bin 51 Eden Valley Riesling',
+                    grape: 'Riesling',
+                    desc: 'Crisp and vibrant with lime, green apple, and floral notes. High acidity with a mineral backbone and zesty finish.'
+                },
+                {
+                    img: 'wine10.jpg',
+                    name: 'Martini Asti',
+                    grape: 'Moscato Bianco',
+                    desc: 'Sweet and effervescent with peach, apricot, and honey. Light and refreshing with fine bubbles and a delicate finish.'
+                }
+            ] %}
+
+            {% for wine in seasonal_wines %}
+            <article class="wine-card group bg-[#FEFDFB] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border border-[#E8D9C9]">
+                <div class="h-64 bg-[#7B1E3A]/5 overflow-hidden">
+                    <img 
+                        src="{{ asset('assets/images/wine_images/' ~ wine.img) }}" 
+                        alt="{{ wine.name }}" 
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    >
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-[#5E0B15] mb-1">{{ wine.name }}</h3>
+                    <p class="text-sm font-medium text-amber-700 mb-3">{{ wine.grape }}</p>
+                    <p class="text-[#5E0B15]/70 text-sm leading-relaxed line-clamp-3">{{ wine.desc }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <!-- CTA Button -->
+        <div class="text-center">
+            <a href="{{ path('app_wine') }}" 
+               class="inline-flex items-center gap-3 bg-[#7F1734] text-[#F8EAD8] font-bold py-4 px-10 rounded-full shadow-xl hover:bg-[#9E2B47] hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-lg">
+                <span>Explore All Wines</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+</div>
 {% endblock %}
