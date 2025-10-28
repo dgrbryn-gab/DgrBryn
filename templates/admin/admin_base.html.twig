@@ -166,10 +166,36 @@
         {% block admin_content %}{% endblock %}
     </main>
 </div>
-
-{# Modal Scroll Lock – Only active on modal pages #}
-{% block modal_scroll_lock %}{% endblock %}
 {% endblock %}
 
 {# Hide base footer #}
 {% block footer %}{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // GLOBAL MODAL SCROLL LOCK – Only runs on modal pages
+        if (document.querySelector('.modal-overlay')) {
+            // Lock scroll
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+
+            const unlock = () => {
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+            };
+
+            // All navigation events
+            ['pagehide', 'beforeunload', 'unload'].forEach(event => {
+                window.addEventListener(event, unlock);
+            });
+
+            // Fast link clicks
+            document.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', () => setTimeout(unlock, 100));
+            });
+
+            // Final safety net
+            setTimeout(unlock, 1000);
+        }
+    </script>
+{% endblock %}

@@ -5,7 +5,7 @@
 {% block admin_content %}
 <div class="min-h-screen bg-[#4B164C] py-2 px-0">
     <div class="min-h-screen bg-[#4B164C]">
-        <div class="fixed top-0 left-64 right-0 bottom-0 z-50 flex items-center justify-center">
+        <div class="fixed top-0 left-64 right-0 bottom-0 z-50 flex items-center justify-center modal-overlay">
             <div class="w-full mx-0 max-w-none px-6 sm:px-8 lg:px-12 bg-white/95 backdrop-blur-lg py-8 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden">
 
                 <!-- Top Accent Line -->
@@ -66,7 +66,7 @@
                         }) }}
 
                         <div class="flex items-center gap-6">
-                            <!-- Tiny Preview (centered) -->
+                            <!-- Tiny Preview -->
                             {% if storeProduct.image %}
                                 <div class="flex flex-col items-center">
                                     <span class="text-xs font-medium text-[#4B164C] mb-1">Current:</span>
@@ -78,7 +78,7 @@
                                 </div>
                             {% endif %}
 
-                            <!-- File Input (vertically centered) -->
+                            <!-- File Input -->
                             <div class="flex-1">
                                 {{ form_widget(form.imageFile, {
                                     'attr': {
@@ -131,17 +131,4 @@
         </div>
     </div>
 </div>
-
-<!-- Scroll Lock + Unlock -->
-<script>
-    document.documentElement.style.overflow = 'hidden';
-    const unlock = () => {
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-    };
-    window.addEventListener('pagehide', unlock);
-    window.addEventListener('beforeunload', unlock);
-    window.addEventListener('unload', unlock);
-    document.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setTimeout(unlock, 50)));
-</script>
 {% endblock %}

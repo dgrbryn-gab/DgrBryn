@@ -5,8 +5,8 @@
 {% block admin_content %}
 <div class="min-h-screen bg-[#4B164C] py-2 px-0">
     <div class="min-h-screen bg-[#4B164C]">
-        <div class="fixed top-0 left-64 right-0 bottom-0 z-50 flex items-center justify-center">
-            <div class="w-full mx-0 max-w-none px-6 sm:px-8 lg:px-12 bg-white/95 backdrop-bl  backdrop-blur-lg py-8 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden">
+        <div class="fixed top-0 left-64 right-0 bottom-0 z-50 flex items-center justify-center modal-overlay">
+            <div class="w-full mx-0 max-w-none px-6 sm:px-8 lg:px-12 bg-white/95 backdrop-blur-lg py-8 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden">
 
                 <!-- Top Accent Line -->
                 <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#EFCFB4] via-[#9E2B47] to-[#7F1734] rounded-t-3xl"></div>
@@ -112,26 +112,4 @@
         </div>
     </div>
 </div>
-
-<!-- Prevent Background Scroll -->
-<script>
-    // Lock scroll on modal open
-    document.documentElement.style.overflow = 'hidden';
-
-    // Unlock on ANY navigation
-    const unlock = () => {
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-    };
-
-    // All possible events
-    window.addEventListener('pagehide', unlock);
-    window.addEventListener('beforeunload', unlock);
-    window.addEventListener('unload', unlock);
-
-    // Also unlock on link clicks (fallback)
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => setTimeout(unlock, 50));
-    });
-</script>
 {% endblock %}
