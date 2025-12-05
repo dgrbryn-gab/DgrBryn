@@ -1,0 +1,273 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block body %}
+<style>
+    .wine-login-container {
+        width: 100%;
+        max-width: 420px;
+        background: linear-gradient(135deg, #FFFAF5 0%, #F8EAD8 100%);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(94, 11, 21, 0.2);
+        border: 2px solid #EFCFB4;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .wine-login-container::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(127, 23, 52, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 32px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .wine-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+        display: inline-block;
+    }
+
+    .wine-login-container h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #5E0B15;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .wine-login-container p {
+        color: #7B1E3A;
+        font-size: 14px;
+        margin: 8px 0 0 0;
+        opacity: 0.8;
+    }
+
+    .wine-login-container form {
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .wine-login-container label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #5E0B15;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .wine-login-container input[type="email"],
+    .wine-login-container input[type="password"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #EFCFB4;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #3B0A0A;
+        background-color: white;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .wine-login-container input[type="email"]:focus,
+    .wine-login-container input[type="password"]:focus {
+        outline: none;
+        border-color: #7F1734;
+        background-color: #FFFAF5;
+        box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1);
+    }
+
+    .wine-login-container input::placeholder {
+        color: #9E8B7E;
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .wine-login-container input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #7F1734;
+        cursor: pointer;
+        margin-right: 8px;
+    }
+
+    .checkbox-group label {
+        margin: 0;
+        text-transform: none;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .sign-in-btn {
+        width: 100%;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #7F1734 0%, #5E0B15 100%);
+        color: #F8EAD8;
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(127, 23, 52, 0.3);
+        margin-top: 8px;
+    }
+
+    .sign-in-btn:hover {
+        background: linear-gradient(135deg, #5E0B15 0%, #3D0A0A 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(127, 23, 52, 0.4);
+    }
+
+    .sign-in-btn:active {
+        transform: translateY(0);
+    }
+
+    .error-message {
+        background-color: #FFEBEE;
+        color: #C62828;
+        padding: 14px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #C62828;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .success-message {
+        background-color: #E8F5E9;
+        color: #2E7D32;
+        padding: 14px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #2E7D32;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .success-message a {
+        color: #1B5E20;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .success-message a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="min-h-screen flex items-center justify-center" style="background: linear-gradient(135deg, #5E0B15 0%, #7B1E3A 50%, #3D0A0A 100%); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 50;">
+    <div class="wine-login-container">
+        
+        <div class="login-header">
+            <div class="wine-icon">🍷</div>
+            <h2>Admin Login</h2>
+            <p>Fine Cellar Management System</p>
+        </div>
+
+        {% if error %}
+            <div class="error-message">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="success-message">
+                You are logged in as <strong>{{ app.user.userIdentifier }}</strong>.
+                <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div class="form-group">
+                <label for="inputEmail">Email Address</label>
+                <input 
+                    type="email" 
+                    id="inputEmail" 
+                    name="email" 
+                    value="{{ last_username }}" 
+                    placeholder="admin@example.com"
+                    required autofocus
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input 
+                    type="password" 
+                    id="inputPassword" 
+                    name="password" 
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="rememberMe" name="_remember_me" class="h-4 w-4">
+                <label for="rememberMe">Remember me on this device</label>
+            </div>
+
+            <button type="submit" class="sign-in-btn">
+                Sign In
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    // Aggressively prevent back button navigation after logout
+    (function() {
+        // Push multiple entries to history stack
+        window.history.pushState(null, null, window.location.href);
+        
+        // Prevent back button
+        window.addEventListener('popstate', function() {
+            window.history.pushState(null, null, window.location.href);
+        });
+
+        // Also prevent navigation when page is shown
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.history.forward();
+            }
+        });
+
+        // Prevent page restoration from cache
+        window.addEventListener('pagehide', function() {
+            window.history.pushState(null, null, window.location.href);
+        });
+    })();
+</script>
+{% endblock %}
