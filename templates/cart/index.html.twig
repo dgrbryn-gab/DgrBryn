@@ -71,15 +71,16 @@
 
                 <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                     <a href="{{ path('app_wine') }}" 
-                       class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-yellow-600 transition-colors duration-300 text-center shadow-md z-20">
+                       class="inline-block bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors duration-300 text-center shadow-md">
                         Continue Shopping
                     </a>
                     <a href="{{ path('app_cart_clear') }}" 
-                       class="inline-block bg-red-500 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-red-600 transition-colors duration-300 text-center shadow-md z-20">
+                       class="inline-block bg-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-600 transition-colors duration-300 text-center shadow-md"
+                       onclick="return confirm('Clear entire cart?')">
                         Clear Cart
                     </a>
                     <a href="{{ path('app_checkout') }}" 
-                       class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-green-700 transition-colors duration-300 text-center shadow-md z-20">
+                       class="inline-block bg-[#7F1734] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#5E0B15] transition-colors duration-300 text-center shadow-md">
                         Proceed to Checkout
                     </a>
                 </div>

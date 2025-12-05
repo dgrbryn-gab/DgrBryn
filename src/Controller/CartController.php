@@ -16,7 +16,7 @@ class CartController extends AbstractController
         $name = (string) $request->query->get('name');
         $price = (float) $request->query->get('price');
         $quantity = (int) $request->query->get('quantity', 1);
-        $image = (string) $request->query->get('image', '/assets/images/wine_images/placeholder.webp');
+        $imageFile = (string) $request->query->get('image', 'placeholder.jpg');
 
         // Validate inputs
         if ($id <= 0 || empty($name) || $price < 0) {
@@ -28,6 +28,9 @@ class CartController extends AbstractController
         if ($quantity < 1) {
             $quantity = 1;
         }
+
+        // Construct full image path
+        $image = '/assets/images/wine_images/' . $imageFile;
 
         // Get session
         $session = $request->getSession();
@@ -52,7 +55,7 @@ class CartController extends AbstractController
                 'id' => $id,
                 'name' => $name,
                 'price' => $price,
-                'quantity' => $quantity,  // Set EXACTLY to the requested quantity
+                'quantity' => $quantity,
                 'image' => $image,
             ];
         }

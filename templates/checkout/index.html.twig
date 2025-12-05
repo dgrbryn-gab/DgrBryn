@@ -1,20 +1,160 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CheckoutController!{% endblock %}
+{% block title %}Checkout - CORK{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<main class="w-full min-h-screen pt-16 pb-20 bg-[#f7f1e9]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-4xl font-bold text-[#5E0B15] mb-8">Checkout</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Checkout Form -->
+            <div class="lg:col-span-2">
+                <form method="POST" class="bg-white rounded-xl shadow-lg p-8 border border-[#EFCFB4]/30">
+                    <!-- Customer Information -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-[#5E0B15] mb-6 pb-3 border-b-2 border-[#7F1734]">👤 Customer Information</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="customer_name" class="block text-sm font-bold text-[#5E0B15] mb-2">Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="customer_name" name="customer_name" required 
+                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7F1734] focus:border-transparent text-gray-800 placeholder-gray-400"
+                                       placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label for="customer_email" class="block text-sm font-bold text-[#5E0B15] mb-2">Email Address <span class="text-red-500">*</span></label>
+                                <input type="email" id="customer_email" name="customer_email" required 
+                                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7F1734] focus:border-transparent text-gray-800 placeholder-gray-400"
+                                       placeholder="john@example.com">
+                            </div>
+                        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/ACER/Desktop/webapp_project/src/Controller/CheckoutController.php</code></li>
-        <li>Your template at <code>C:/Users/ACER/Desktop/webapp_project/templates/checkout/index.html.twig</code></li>
-    </ul>
-</div>
+                        <div class="mb-6">
+                            <label for="customer_phone" class="block text-sm font-bold text-[#5E0B15] mb-2">Phone Number <span class="text-red-500">*</span></label>
+                            <input type="tel" id="customer_phone" name="customer_phone" required 
+                                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7F1734] focus:border-transparent text-gray-800 placeholder-gray-400"
+                                   placeholder="+63 9XX XXX XXXX">
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-[#5E0B15] mb-6 pb-3 border-b-2 border-[#7F1734]">📦 Shipping Address</h2>
+                        
+                        <div class="mb-6">
+                            <label for="shipping_address" class="block text-sm font-bold text-[#5E0B15] mb-2">Address <span class="text-red-500">*</span></label>
+                            <textarea id="shipping_address" name="shipping_address" required rows="3"
+                                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7F1734] focus:border-transparent text-gray-800 placeholder-gray-400"
+                                      placeholder="Street address, city, province, postal code"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Billing Address -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-[#5E0B15] mb-6 pb-3 border-b-2 border-[#7F1734]">💳 Billing Address</h2>
+                        
+                        <div class="mb-6">
+                            <label for="billing_address" class="block text-sm font-bold text-[#5E0B15] mb-2">Address (Leave blank to use shipping address)</label>
+                            <textarea id="billing_address" name="billing_address" rows="3"
+                                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7F1734] focus:border-transparent text-gray-800 placeholder-gray-400"
+                                      placeholder="Street address, city, province, postal code"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="mb-10">
+                        <h2 class="text-2xl font-bold text-[#5E0B15] mb-6 pb-3 border-b-2 border-[#7F1734]">💰 Payment Method</h2>
+                        
+                        <div class="space-y-3">
+                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#7F1734] hover:bg-[#FDF6F0] transition duration-200">
+                                <input type="radio" name="payment_method" value="credit_card" checked class="h-5 w-5 accent-[#7F1734]">
+                                <span class="ml-3 font-semibold text-gray-800">💳 Credit Card</span>
+                            </label>
+                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#7F1734] hover:bg-[#FDF6F0] transition duration-200">
+                                <input type="radio" name="payment_method" value="debit_card" class="h-5 w-5 accent-[#7F1734]">
+                                <span class="ml-3 font-semibold text-gray-800">🏦 Debit Card</span>
+                            </label>
+                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#7F1734] hover:bg-[#FDF6F0] transition duration-200">
+                                <input type="radio" name="payment_method" value="bank_transfer" class="h-5 w-5 accent-[#7F1734]">
+                                <span class="ml-3 font-semibold text-gray-800">🏛️ Bank Transfer</span>
+                            </label>
+                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#7F1734] hover:bg-[#FDF6F0] transition duration-200">
+                                <input type="radio" name="payment_method" value="gcash" class="h-5 w-5 accent-[#7F1734]">
+                                <span class="ml-3 font-semibold text-gray-800">📱 GCash</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Hidden fields for totals -->
+                    <input type="hidden" name="shipping_cost" value="{{ shipping }}">
+                    <input type="hidden" name="tax_amount" value="{{ tax }}">
+                    <input type="hidden" name="discount_amount" value="0">
+
+                    <!-- Submit Button -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-6 mt-8 border-t-2 border-gray-200">
+                        <a href="{{ path('app_cart') }}" class="w-full px-6 py-4 rounded-lg font-bold border-2 border-[#7F1734] text-[#7F1734] bg-white hover:bg-[#7F1734] hover:text-white transition duration-300 text-center text-base shadow-md">
+                            ← Back to Cart
+                        </a>
+                        <button type="submit" style="color: white; background-color: #7F1734;" class="w-full px-6 py-4 rounded-lg font-bold hover:bg-[#5E0B15] transition duration-300 text-base shadow-lg hover:shadow-xl">
+                            Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-lg p-8 sticky top-24 border border-[#EFCFB4]/30">
+                    <h2 class="text-2xl font-bold text-[#5E0B15] mb-6 pb-3 border-b-2 border-[#7F1734]">📋 Order Summary</h2>
+
+                    <!-- Cart Items -->
+                    <div class="mb-6 max-h-64 overflow-y-auto space-y-3">
+                        {% for item in cart %}
+                            <div class="flex justify-between items-start p-3 bg-[#FDF6F0] rounded-lg">
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-800 text-sm">{{ item.name }}</p>
+                                    <p class="text-xs text-gray-600">Qty: <span class="font-bold text-gray-800">{{ item.quantity }}</span></p>
+                                </div>
+                                <p class="font-bold text-[#7F1734] text-sm">₱{{ (item.price * item.quantity)|number_format(2) }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="border-t-2 border-gray-300 pt-4 space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-700 font-medium">Subtotal:</span>
+                            <span class="text-gray-800 font-bold">₱{{ subtotal|number_format(2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-700 font-medium">Tax (10%):</span>
+                            <span class="text-gray-800 font-bold">₱{{ tax|number_format(2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-700 font-medium">Shipping:</span>
+                            <span class="text-gray-800 font-bold">{% if shipping == 0 %}<span class="text-green-600">FREE</span>{% else %}₱{{ shipping|number_format(2) }}{% endif %}</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold text-white bg-[#7F1734] p-3 rounded-lg mt-3">
+                            <span>Total:</span>
+                            <span>₱{{ total|number_format(2) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Info -->
+                    <div class="mt-6 p-4 bg-[#FDF6F0] rounded-lg border border-[#EFCFB4]">
+                        <p class="text-sm text-gray-700 font-medium">
+                            <span class="text-[#7F1734] font-bold">ℹ️</span>
+                            {% if shipping == 0 %}
+                                <strong>Free Shipping!</strong> Your order qualifies for free shipping.
+                            {% else %}
+                                <strong>Shipping:</strong> ₱{{ shipping|number_format(2) }}. Free shipping on orders over ₱5,000.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}
