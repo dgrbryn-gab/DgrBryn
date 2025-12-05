@@ -35,16 +35,17 @@
 
                         <div class="col-span-2">
                             <span class="text-lg font-medium text-gray-800">{{ item.name }}</span>
-                            <p class="text-sm text-gray-500">Price: ${{ item.price|number_format(2) }}</p>
+                            <p class="text-sm text-gray-500">Price: ₱{{ item.price|number_format(2) }}</p>
                         </div>
 
                         <div>
                             <span class="text-lg text-gray-600">{{ item.quantity }}</span>
+                            <!-- Debug: Item data: id={{ item.id }}, qty={{ item.quantity }}, price={{ item.price }} -->
                         </div>
 
                         <div class="flex items-center justify-between">
                             <span class="text-lg font-medium text-gray-800">
-                                ${{ (item.price * item.quantity)|number_format(2) }}
+                                ₱{{ (item.price * item.quantity)|number_format(2) }}
                             </span>
                             <form action="{{ path('app_cart_remove', {'id': item.id}) }}" method="post" class="inline">
                                 <button type="submit"
@@ -63,7 +64,7 @@
                     <p class="text-lg font-medium text-gray-800">
                         Total:
                         <span class="text-2xl text-yellow-800">
-                            ${{ cart|reduce((total, item) => total + (item.price * item.quantity), 0)|number_format(2) }}
+                            ₱{{ cart|reduce((total, item) => total + (item.price * item.quantity), 0)|number_format(2) }}
                         </span>
                     </p>
                 </div>

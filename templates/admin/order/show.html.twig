@@ -1,0 +1,231 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Order {{ order.orderNumber }} - CORK Admin{% endblock %}
+
+{% block admin_content %}
+
+<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-6 mb-8">
+            <div>
+                <h1 class="text-4xl font-extrabold text-[#5E0B15] tracking-tight mb-2">
+                    Order {{ order.orderNumber }}
+                </h1>
+                <p class="text-gray-600">Created: {{ order.createdAt ? order.createdAt|date('M j, Y H:i') : 'N/A' }}</p>
+            </div>
+            <div class="flex flex-col gap-2 w-full sm:w-auto">
+                <a href="{{ path('app_order_edit', {'id': order.id}) }}"
+                    class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border text-center bg-[#EFCFB4] text-[#7F1734] border-[#EFCFB4] hover:bg-[#7F1734] hover:text-white btn-hover">
+                    ✏️ Edit Order
+                </a>
+                <a href="{{ path('app_order_index') }}"
+                    class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border text-center bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover">
+                    ← Back to Orders
+                </a>
+            </div>
+        </div>
+
+        <!-- Order Status and Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Status Card -->
+            <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-[#5E0B15] mb-4">Order Status</h3>
+                <div class="mb-4">
+                    <span class="px-4 py-2 rounded-full text-sm font-semibold
+                        {% if order.status == 'pending' %}bg-yellow-100 text-yellow-700
+                        {% elseif order.status == 'processing' %}bg-blue-100 text-blue-700
+                        {% elseif order.status == 'shipped' %}bg-purple-100 text-purple-700
+                        {% elseif order.status == 'delivered' %}bg-green-100 text-green-700
+                        {% elseif order.status == 'cancelled' %}bg-red-100 text-red-700
+                        {% endif %}">
+                        {{ order.status|capitalize }}
+                    </span>
+                </div>
+                
+                <div class="space-y-2 text-sm mb-4">
+                    <p><strong>Payment Status:</strong> 
+                        <span class="px-2 py-1 rounded text-xs font-semibold
+                            {% if order.paymentStatus == 'completed' %}bg-green-100 text-green-700
+                            {% elseif order.paymentStatus == 'pending' %}bg-yellow-100 text-yellow-700
+                            {% elseif order.paymentStatus == 'failed' %}bg-red-100 text-red-700
+                            {% else %}bg-gray-100 text-gray-700
+                            {% endif %}">
+                            {{ order.paymentStatus ?? 'Pending' }}
+                        </span>
+                    </p>
+                    <p><strong>Payment Method:</strong> {{ order.paymentMethod ?? 'N/A' }}</p>
+                    <p><strong>Created By:</strong> {{ order.createdBy.email ?? 'N/A' }}</p>
+                </div>
+
+                <!-- Status Change Buttons -->
+                <div class="space-y-2">
+                    <p class="text-xs font-semibold text-gray-600 mb-2">Change Status:</p>
+                    {% for status in ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] %}
+                        {% if order.status != status %}
+                            <form method="post" action="{{ path('app_order_change_status', {'id': order.id, 'status': status}) }}" class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('status' ~ order.id) }}">
+                                <button type="submit" class="w-full px-3 py-1 rounded text-xs font-semibold transition-all duration-300 
+                                    {% if status == 'processing' %}bg-blue-100 text-blue-700 hover:bg-blue-200
+                                    {% elseif status == 'shipped' %}bg-purple-100 text-purple-700 hover:bg-purple-200
+                                    {% elseif status == 'delivered' %}bg-green-100 text-green-700 hover:bg-green-200
+                                    {% elseif status == 'cancelled' %}bg-red-100 text-red-700 hover:bg-red-200
+                                    {% else %}bg-yellow-100 text-yellow-700 hover:bg-yellow-200
+                                    {% endif %}">
+                                    Mark as {{ status|capitalize }}
+                                </button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Financial Summary -->
+            <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-[#5E0B15] mb-4">Order Total</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Subtotal:</span>
+                        <span class="font-semibold">₱{{ order.orderItems|map(attr='subtotal')|reduce((carry, item) => carry + item, 0) }}</span>
+                    </div>
+                    {% if order.shippingCost %}
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Shipping:</span>
+                            <span class="font-semibold">₱{{ order.shippingCost }}</span>
+                        </div>
+                    {% endif %}
+                    {% if order.taxAmount %}
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Tax:</span>
+                            <span class="font-semibold">₱{{ order.taxAmount }}</span>
+                        </div>
+                    {% endif %}
+                    {% if order.discountAmount %}
+                        <div class="flex justify-between text-red-600">
+                            <span>Discount:</span>
+                            <span class="font-semibold">-₱{{ order.discountAmount }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="border-t border-gray-300 pt-3 flex justify-between">
+                        <span class="font-bold text-[#5E0B15]">Total:</span>
+                        <span class="font-bold text-lg text-[#5E0B15]">₱{{ order.totalAmount }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Information -->
+        <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-6 mb-8">
+            <h3 class="text-xl font-bold text-[#5E0B15] mb-4">Customer Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Name</p>
+                    <p class="text-lg font-semibold text-gray-800">{{ order.customerName ?? 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Email</p>
+                    <p class="text-lg font-semibold text-gray-800">{{ order.customerEmail ?? 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Phone</p>
+                    <p class="text-lg font-semibold text-gray-800">{{ order.customerPhone ?? 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Payment Method</p>
+                    <p class="text-lg font-semibold text-gray-800">{{ order.paymentMethod ?? 'N/A' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping & Billing Addresses -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Shipping Address -->
+            <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-[#5E0B15] mb-4">Shipping Address</h3>
+                <p class="text-gray-700 whitespace-pre-wrap text-sm">
+                    {{ order.shippingAddress ?? 'Not specified' }}
+                </p>
+                {% if order.shippedAt %}
+                    <p class="text-xs text-gray-500 mt-3">Shipped: {{ order.shippedAt|date('M j, Y H:i') }}</p>
+                {% endif %}
+                {% if order.deliveredAt %}
+                    <p class="text-xs text-gray-500">Delivered: {{ order.deliveredAt|date('M j, Y H:i') }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Billing Address -->
+            <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-[#5E0B15] mb-4">Billing Address</h3>
+                <p class="text-gray-700 whitespace-pre-wrap text-sm">
+                    {{ order.billingAddress ?? 'Not specified' }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-6 mb-8">
+            <h3 class="text-xl font-bold text-[#5E0B15] mb-4">Order Items</h3>
+            
+            {% if order.orderItems|length > 0 %}
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-[#F8EAD8] border-b border-[#EFCFB4]">
+                                <th class="px-4 py-2 text-left text-sm font-semibold">Product</th>
+                                <th class="px-4 py-2 text-center text-sm font-semibold">Unit Price</th>
+                                <th class="px-4 py-2 text-center text-sm font-semibold">Quantity</th>
+                                <th class="px-4 py-2 text-right text-sm font-semibold">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.orderItems %}
+                                <tr class="border-t border-[#EFCFB4]/30">
+                                    <td class="px-4 py-3 text-sm text-gray-700">
+                                        {{ item.product.name }}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-center text-gray-700">
+                                        ₱{{ item.unitPrice }}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-center text-gray-700">
+                                        {{ item.quantity }}
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-right font-semibold text-gray-800">
+                                        ₱{{ item.subtotal }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-gray-600 text-center py-8">No items in this order.</p>
+            {% endif %}
+        </div>
+
+        <!-- Notes -->
+        {% if order.notes %}
+            <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-6 mb-8">
+                <h3 class="text-xl font-bold text-[#5E0B15] mb-4">Order Notes</h3>
+                <p class="text-gray-700 whitespace-pre-wrap">{{ order.notes }}</p>
+            </div>
+        {% endif %}
+
+        <!-- Delete Button -->
+        <div class="flex justify-between items-center">
+            <a href="{{ path('app_order_index') }}"
+                class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover">
+                ← Back to Orders
+            </a>
+            
+            <form method="post" action="{{ path('app_order_delete', {'id': order.id}) }}" onsubmit="return confirm('Are you sure you want to delete this order?');" class="inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
+                <button type="submit"
+                    class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-[#B6465F] text-[#F8EAD8] border-[#B6465F] hover:bg-[#9E2B47] btn-hover">
+                    🗑️ Delete Order
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Create New Order - CORK Admin{% endblock %}
+
+{% block admin_content %}
+
+<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-start gap-6 mb-8">
+            <div>
+                <h1 class="text-4xl font-extrabold text-[#5E0B15] tracking-tight mb-2">Create New Order</h1>
+                <p class="text-gray-600">Add a new order to the system.</p>
+            </div>
+            <a href="{{ path('app_order_index') }}"
+                class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover">
+                ← Back to Orders
+            </a>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-8">
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+            <!-- Customer Information Section -->
+            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
+                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Customer Information</legend>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        {{ form_row(form.customerName, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.customerEmail, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="md:col-span-2">
+                        {{ form_row(form.customerPhone, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Shipping & Billing Section -->
+            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
+                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Addresses</legend>
+                
+                <div class="space-y-6">
+                    <div>
+                        {{ form_row(form.shippingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.billingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Order Status Section -->
+            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
+                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Order Status</legend>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        {{ form_row(form.status, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.paymentStatus, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Payment Section -->
+            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
+                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Payment Information</legend>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        {{ form_row(form.paymentMethod, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.shippingCost, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.taxAmount, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.discountAmount, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Notes Section -->
+            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
+                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Additional Notes</legend>
+                
+                {{ form_row(form.notes, {'attr': {'rows': 5, 'class': 'form-control'}}) }}
+            </fieldset>
+
+            <!-- Form Actions -->
+            <div class="flex gap-4 pt-4 border-t border-gray-200">
+                <button type="submit"
+                    class="px-8 py-3 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-[#EFCFB4] text-[#7F1734] border-[#EFCFB4] hover:bg-[#7F1734] hover:text-white btn-hover">
+                    ✓ Create Order
+                </button>
+                <a href="{{ path('app_order_index') }}"
+                    class="px-8 py-3 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover text-center">
+                    Cancel
+                </a>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+
+        <style>
+            .form-control {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #EFCFB4;
+                border-radius: 0.5rem;
+                font-size: 1rem;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #7F1734;
+                box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1);
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+                color: #5E0B15;
+                font-size: 0.95rem;
+            }
+        </style>
+    </div>
+</div>
+
+{% endblock %}
