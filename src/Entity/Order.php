@@ -23,7 +23,7 @@ class Order
     private ?string $orderNumber = null;
 
     #[ORM\ManyToOne(targetEntity: Admin::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Admin $createdBy = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

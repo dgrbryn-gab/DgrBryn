@@ -86,7 +86,7 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
                         <span class="text-gray-600">Subtotal:</span>
-                        <span class="font-semibold">₱{{ order.orderItems|map(attr='subtotal')|reduce((carry, item) => carry + item, 0) }}</span>
+                        <span class="font-semibold">₱{{ order.orderItems|map(item => item.subtotal)|reduce((carry, item) => carry + item, 0) }}</span>
                     </div>
                     {% if order.shippingCost %}
                         <div class="flex justify-between">
@@ -170,27 +170,27 @@
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="bg-[#F8EAD8] border-b border-[#EFCFB4]">
-                                <th class="px-4 py-2 text-left text-sm font-semibold">Product</th>
-                                <th class="px-4 py-2 text-center text-sm font-semibold">Unit Price</th>
-                                <th class="px-4 py-2 text-center text-sm font-semibold">Quantity</th>
-                                <th class="px-4 py-2 text-right text-sm font-semibold">Subtotal</th>
+                            <tr class="bg-[#5E0B15] border-b-2 border-[#7F1734]">
+                                <th class="px-4 py-3 text-left text-sm font-bold text-white">Product</th>
+                                <th class="px-4 py-3 text-center text-sm font-bold text-white">Unit Price</th>
+                                <th class="px-4 py-3 text-center text-sm font-bold text-white">Quantity</th>
+                                <th class="px-4 py-3 text-right text-sm font-bold text-white">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for item in order.orderItems %}
-                                <tr class="border-t border-[#EFCFB4]/30">
-                                    <td class="px-4 py-3 text-sm text-gray-700">
+                                <tr class="border-b border-[#EFCFB4] hover:bg-[#FFF8F0] transition-colors">
+                                    <td class="px-4 py-3 text-sm font-medium text-gray-800">
                                         {{ item.product.name }}
                                     </td>
-                                    <td class="px-4 py-3 text-sm text-center text-gray-700">
-                                        ₱{{ item.unitPrice }}
+                                    <td class="px-4 py-3 text-sm text-center font-medium text-gray-800">
+                                        ₱{{ item.unitPrice|number_format(2) }}
                                     </td>
-                                    <td class="px-4 py-3 text-sm text-center text-gray-700">
+                                    <td class="px-4 py-3 text-sm text-center font-medium text-gray-800">
                                         {{ item.quantity }}
                                     </td>
-                                    <td class="px-4 py-3 text-sm text-right font-semibold text-gray-800">
-                                        ₱{{ item.subtotal }}
+                                    <td class="px-4 py-3 text-sm text-right font-bold text-[#7F1734]">
+                                        ₱{{ item.subtotal|number_format(2) }}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -209,22 +209,6 @@
                 <p class="text-gray-700 whitespace-pre-wrap">{{ order.notes }}</p>
             </div>
         {% endif %}
-
-        <!-- Delete Button -->
-        <div class="flex justify-between items-center">
-            <a href="{{ path('app_order_index') }}"
-                class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover">
-                ← Back to Orders
-            </a>
-            
-            <form method="post" action="{{ path('app_order_delete', {'id': order.id}) }}" onsubmit="return confirm('Are you sure you want to delete this order?');" class="inline">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ order.id) }}">
-                <button type="submit"
-                    class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-[#B6465F] text-[#F8EAD8] border-[#B6465F] hover:bg-[#9E2B47] btn-hover">
-                    🗑️ Delete Order
-                </button>
-            </form>
-        </div>
     </div>
 </div>
 

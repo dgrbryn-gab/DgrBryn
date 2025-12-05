@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order Confirmed - CORK{% endblock %}
+
+{% block body %}
+<main class="w-full min-h-screen pt-16 pb-20 bg-[#FDF6F0]">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+            <!-- Success Message -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                    <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-bold text-green-600 mb-2">Order Confirmed!</h1>
+                <p class="text-gray-600 text-lg">Thank you for your purchase. Your order has been successfully created.</p>
+            </div>
+
+            <!-- Order Details -->
+            <div class="border-t border-b border-gray-200 py-6 mb-6">
+                <div class="grid grid-cols-2 gap-4 md:gap-8">
+                    <div>
+                        <p class="text-sm text-gray-500 font-semibold mb-1">ORDER NUMBER</p>
+                        <p class="text-lg font-bold text-[#5E0B15]">{{ order.orderNumber }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-semibold mb-1">ORDER DATE</p>
+                        <p class="text-lg font-bold text-[#5E0B15]">{{ order.createdAt|date('M d, Y') }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-semibold mb-1">ORDER STATUS</p>
+                        <p class="text-lg font-bold text-orange-600 uppercase">{{ order.status }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-semibold mb-1">PAYMENT STATUS</p>
+                        <p class="text-lg font-bold text-orange-600 uppercase">{{ order.paymentStatus }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Information -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-[#5E0B15] mb-4">Customer Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500">Name</p>
+                        <p class="text-gray-700">{{ order.customerName }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500">Email</p>
+                        <p class="text-gray-700">{{ order.customerEmail }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500">Phone</p>
+                        <p class="text-gray-700">{{ order.customerPhone }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500">Payment Method</p>
+                        <p class="text-gray-700 capitalize">{{ order.paymentMethod|replace({'_': ' '}) }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Address -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-[#5E0B15] mb-4">Shipping Address</h2>
+                <p class="text-gray-700 whitespace-pre-wrap">{{ order.shippingAddress }}</p>
+            </div>
+
+            <!-- Order Items -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-[#5E0B15] mb-4">Order Items</h2>
+                <div class="bg-gray-50 rounded-lg p-6">
+                    {% for item in order.orderItems %}
+                        <div class="flex justify-between items-center py-4 {% if not loop.last %}border-b border-gray-200{% endif %}">
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ item.product.name }}</p>
+                                <p class="text-sm text-gray-500">Quantity: {{ item.quantity }} × ₱{{ item.unitPrice|number_format(2) }}</p>
+                            </div>
+                            <p class="font-semibold text-gray-900">₱{{ item.subtotal|number_format(2) }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="bg-[#FDF6F0] rounded-lg p-6 mb-8">
+                <div class="space-y-3">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Subtotal</span>
+                        <span>₱{{ (order.totalAmount - order.shippingCost - order.taxAmount - order.discountAmount)|number_format(2) }}</span>
+                    </div>
+                    {% if order.taxAmount > 0 %}
+                        <div class="flex justify-between text-gray-600">
+                            <span>Tax</span>
+                            <span>₱{{ order.taxAmount|number_format(2) }}</span>
+                        </div>
+                    {% endif %}
+                    {% if order.shippingCost > 0 %}
+                        <div class="flex justify-between text-gray-600">
+                            <span>Shipping</span>
+                            <span>₱{{ order.shippingCost|number_format(2) }}</span>
+                        </div>
+                    {% endif %}
+                    {% if order.discountAmount > 0 %}
+                        <div class="flex justify-between text-gray-600">
+                            <span>Discount</span>
+                            <span class="text-green-600">-₱{{ order.discountAmount|number_format(2) }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="flex justify-between text-xl font-bold text-[#5E0B15] pt-4 border-t-2 border-gray-300">
+                        <span>Total</span>
+                        <span>₱{{ order.totalAmount|number_format(2) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                <h3 class="font-bold text-blue-900 mb-3">What's Next?</h3>
+                <ul class="text-sm text-blue-800 space-y-2">
+                    <li>• We'll send a confirmation email to {{ order.customerEmail }}</li>
+                    <li>• Your order will be processed within 1–2 business days</li>
+                    <li>• Tracking info will be sent once shipped</li>
+                </ul>
+            </div>
+
+            <!-- Buttons -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="{{ path('app_home') }}" 
+                   class="px-6 py-4 text-center font-semibold text-[#7F1734] border-2 border-[#7F1734] rounded-lg hover:bg-[#7F1734]/5 transition">
+                    Continue Shopping
+                </a>
+                <a href="{{ path('app_wine') }}" 
+                   class="px-6 py-4 text-center font-semibold text-white bg-[#7F1734] rounded-lg hover:bg-[#5E0B15] transition">
+                    Browse More Wines
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
