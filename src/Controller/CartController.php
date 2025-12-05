@@ -12,53 +12,58 @@ class CartController extends AbstractController
     #[Route('/cart/add', name: 'app_cart_add')]
     public function add(Request $request): Response
     {
-        $id = $request->query->get('id');
-        $name = $request->query->get('name');
-        $price = $request->query->get('price');
-        $image = $request->query->get('image', '/assets/images/wine_images/placeholder.webp');
-
-        // Debug: Log query parameters
-        // dump($request->query->all());
+        $id = (int) $request->query->get('id');
+        $name = (string) $request->query->get('name');
+        $price = (float) $request->query->get('price');
+        $quantity = (int) $request->query->get('quantity', 1);
+        $image = (string) $request->query->get('image', '/assets/images/wine_images/placeholder.webp');
 
         // Validate inputs
-        if (!$id || !$name || !$price) {
+        if ($id <= 0 || empty($name) || $price < 0) {
             $this->addFlash('error', 'Invalid item data.');
             return $this->redirectToRoute('app_wine');
         }
 
-        // Get the current cart from session or initialize an empty array
-        $cart = $request->getSession()->get('cart', []);
+        // Ensure quantity is valid
+        if ($quantity < 1) {
+            $quantity = 1;
+        }
 
-        // Check if the item is already in the cart
-        $found = false;
-        foreach ($cart as &$item) {
-            if ($item['id'] == $id) {
-                $item['quantity'] += 1;
-                $item['image'] = $item['image'] ?? $image;
-                $found = true;
+        // Get session
+        $session = $request->getSession();
+        
+        // Get current cart
+        $cart = $session->get('cart', []);
+        
+        // Check if product already exists in cart
+        $productExists = false;
+        foreach ($cart as $key => $item) {
+            if ($item['id'] === $id) {
+                // Product exists, increment quantity
+                $cart[$key]['quantity'] = $item['quantity'] + $quantity;
+                $productExists = true;
                 break;
             }
         }
-
-        // If item not in cart, add it with quantity 1
-        if (!$found) {
+        
+        // If product doesn't exist, add it
+        if (!$productExists) {
             $cart[] = [
                 'id' => $id,
                 'name' => $name,
-                'price' => (float) $price,
-                'quantity' => 1,
+                'price' => $price,
+                'quantity' => $quantity,  // Set EXACTLY to the requested quantity
                 'image' => $image,
             ];
         }
-
-        // Debug: Log cart after update
-        // dump($cart);
-
-        // Save the updated cart to the session
-        $request->getSession()->set('cart', $cart);
+        
+        // Update session
+        $session->set('cart', $cart);
 
         // Add success message
         $this->addFlash('success', 'Item added to cart!');
+        
+        // Redirect to cart
         return $this->redirectToRoute('app_cart');
     }
 

@@ -96,7 +96,7 @@
                     {% endif %}
 
                     <p class="text-lg font-semibold mb-3 text-milky">
-                        €{{ store_product.price }}
+                        ₱{{ store_product.price }}
                     </p>
                     <p class="text-sm mb-4 opacity-85 text-milky">
                         Stock: {{ store_product.wineInventories|length > 0 ? store_product.wineInventories.first.quantity : 0 }}

@@ -1,0 +1,104 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Orders - CORK Admin{% endblock %}
+
+{% block admin_content %}
+
+<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-10">
+            <div class="text-center sm:text-left mb-4 sm:mb-0">
+                <h1 class="text-4xl font-extrabold text-[#5E0B15] tracking-tight mb-2">Orders Management</h1>
+                <p class="text-gray-600 text-sm italic">View and manage all customer orders.</p>
+            </div>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="mb-8 flex flex-wrap gap-3">
+            <a href="{{ path('app_order_index') }}"
+                class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 {% if not currentStatus %}bg-[#7F1734] text-white{% else %}bg-white text-[#7F1734] border border-[#EFCFB4]{% endif %}">
+                All Orders
+            </a>
+            {% for status in ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] %}
+                <a href="{{ path('app_order_index', {'status': status}) }}"
+                    class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 {% if currentStatus == status %}bg-[#7F1734] text-white{% else %}bg-white text-[#7F1734] border border-[#EFCFB4]{% endif %}">
+                    {{ status|capitalize }}
+                </a>
+            {% endfor %}
+        </div>
+
+        <!-- Orders Table -->
+        {% if orders|length > 0 %}
+            <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-[#7F1734] text-white">
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Order #</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Customer</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Date</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold">Total</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold">Status</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold">Payment</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr class="border-t border-[#EFCFB4]/30 hover:bg-[#F8EAD8]/50 transition-colors">
+                                    <td class="px-6 py-4 text-sm font-semibold text-[#5E0B15]">
+                                        {{ order.orderNumber }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        {{ order.customerName ?? 'N/A' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">
+                                        {{ order.createdAt ? order.createdAt|date('M j, Y H:i') : 'N/A' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-semibold text-right text-[#5E0B15]">
+                                        ₱{{ order.totalAmount }}
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                            {% if order.status == 'pending' %}bg-yellow-100 text-yellow-700
+                                            {% elseif order.status == 'processing' %}bg-blue-100 text-blue-700
+                                            {% elseif order.status == 'shipped' %}bg-purple-100 text-purple-700
+                                            {% elseif order.status == 'delivered' %}bg-green-100 text-green-700
+                                            {% elseif order.status == 'cancelled' %}bg-red-100 text-red-700
+                                            {% endif %}">
+                                            {{ order.status|capitalize }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                            {% if order.paymentStatus == 'completed' %}bg-green-100 text-green-700
+                                            {% elseif order.paymentStatus == 'pending' %}bg-yellow-100 text-yellow-700
+                                            {% elseif order.paymentStatus == 'failed' %}bg-red-100 text-red-700
+                                            {% else %}bg-gray-100 text-gray-700
+                                            {% endif %}">
+                                            {{ order.paymentStatus ?? 'Pending' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <a href="{{ path('app_order_show', {'id': order.id}) }}"
+                                            class="text-sm font-semibold px-3 py-1 rounded-lg border transition-all duration-300 bg-[#EFCFB4] text-[#7F1734] border-[#EFCFB4] hover:bg-[#E3B78E] btn-hover inline-block">
+                                            👁️ View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center py-24 bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl">
+                <p class="text-gray-600 text-lg">📦 No orders found.</p>
+                <p class="text-gray-500 text-sm mt-2">Start creating orders to manage them here.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
