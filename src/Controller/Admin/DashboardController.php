@@ -17,6 +17,9 @@ class DashboardController extends AbstractController
         StoreProductRepository $productRepository,
         WineInventoryRepository $inventoryRepository
     ): Response {
+
+        $this->denyAccessUnlessGranted('ROLE_ADMIN'); //  <-- IMPORTANT SECURITY CHECK
+
         // URLs for navigation
         $categoryUrl = $this->generateUrl('app_category_index');
         $productUrl = $this->generateUrl('app_store_product_index');
