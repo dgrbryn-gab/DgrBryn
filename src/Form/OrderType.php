@@ -91,6 +91,14 @@ class OrderType extends AbstractType
             ->add('notes', TextareaType::class, [
                 'label' => 'Order Notes',
                 'required' => false,
+            ])
+            ->add('orderItems', CollectionType::class, [
+                'entry_type' => OrderItemType::class,
+                'label' => 'Order Items',
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'required' => false,
             ]);
     }
 
@@ -98,6 +106,12 @@ class OrderType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Order::class,
+            'validation_groups' => ['Default'],
         ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'order';
     }
 }

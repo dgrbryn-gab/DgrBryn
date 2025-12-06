@@ -20,7 +20,7 @@ class Order
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ['api'])]
     private ?string $orderNumber = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -46,7 +46,7 @@ class Order
     #[Assert\Choice(choices: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])]
     private ?string $status = 'pending';
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $totalAmount = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
