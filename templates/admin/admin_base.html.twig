@@ -12,9 +12,19 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
+        /* Burgundy and Beige Color Scheme */
+        :root {
+            --burgundy-dark: #5E0B15;
+            --burgundy-main: #7F1734;
+            --burgundy-light: #9E2B47;
+            --beige-light: #FFFAF5;
+            --beige-main: #F8EAD8;
+            --beige-accent: #EFCFB4;
+        }
+
         /* Sidebar link styling */
         .sidebar-link {
-            color: #F8EAD8;
+            color: var(--beige-main);
             transition: all 0.3s ease;
             border: 1px solid transparent;
         }
@@ -22,12 +32,12 @@
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             color: #FFF6E8;
-            border-color: #EFCFB4;
+            border-color: var(--beige-accent);
         }
 
         .active-sidebar {
             background-color: rgba(255, 255, 255, 0.15);
-            border-left: 4px solid #EFCFB4;
+            border-left: 4px solid var(--beige-accent);
             font-weight: bold;
         }
 
@@ -36,7 +46,7 @@
         }
 
         .wine-gradient {
-            background: linear-gradient(180deg, #5E0B15 0%, #7B1E3A 100%);
+            background: linear-gradient(180deg, var(--burgundy-dark) 0%, var(--burgundy-light) 100%);
         }
 
         .hover-wine:hover {
@@ -44,7 +54,31 @@
         }
 
         .wine-shadow {
-            box-shadow: 0 4px 6px rgba(123, 30, 58, 0.2);
+            box-shadow: 0 4px 6px rgba(127, 23, 52, 0.2);
+        }
+
+        /* Admin Card Styling */
+        .admin-card {
+            background: white;
+            border-left: 4px solid var(--burgundy-main);
+            transition: all 0.3s ease;
+        }
+
+        .admin-card:hover {
+            box-shadow: 0 6px 15px rgba(127, 23, 52, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Admin Button Styling */
+        .admin-btn-burgundy {
+            background: linear-gradient(135deg, var(--burgundy-main) 0%, var(--burgundy-dark) 100%);
+            color: var(--beige-main);
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn-burgundy:hover {
+            box-shadow: 0 6px 20px rgba(127, 23, 52, 0.3);
+            transform: translateY(-2px);
         }
 
         body, main {
@@ -149,16 +183,15 @@
     <aside class="w-64 wine-gradient text-[#F8EAD8] fixed top-0 left-0 h-screen border-r border-[#6F0F26] flex flex-col z-50">
         <div class="px-6 py-8 border-b border-white/20 text-center">
             <div class="flex items-center justify-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                     style="color: #EFCFB4;">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#EFCFB4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zM5 22l7-7 7 7" />
                 </svg>
-                <h1 class="text-2xl font-extrabold tracking-wide" style="color: #F8EAD8;">
+                <h1 class="text-2xl font-extrabold tracking-wide text-[#F8EAD8]">
                     Wine Admin
                 </h1>
             </div>
-            <p class="text-sm mt-2" style="color: #EFCFB4; opacity: 0.9;">
+            <p class="text-sm mt-2 text-[#EFCFB4] opacity-90">
                 Fine Cellar Management
             </p>
         </div>
@@ -203,6 +236,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 <span>Orders</span>
+            </a>
+
+            <a href="{{ path('admin_users_index') }}"
+               class="flex items-center space-x-3 px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') starts with 'admin_users' ? 'active-sidebar' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 8.048M7 14H5a2 2 0 00-2 2v3h14v-3a2 2 0 00-2-2h-2M9 7a4 4 0 118 0" />
+                </svg>
+                <span>Users</span>
             </a>
 
         </nav>

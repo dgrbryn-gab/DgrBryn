@@ -1,0 +1,205 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Login - CORK{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Burgundy and Beige Color Scheme */
+        :root {
+            --burgundy-dark: #5E0B15;
+            --burgundy-main: #7F1734;
+            --burgundy-light: #9E2B47;
+            --beige-light: #FFFAF5;
+            --beige-main: #F8EAD8;
+            --beige-accent: #EFCFB4;
+        }
+
+        /* Login Card Styling */
+        .login-card {
+            background: linear-gradient(135deg, var(--beige-light) 0%, var(--beige-main) 100%);
+            border: 2px solid var(--beige-accent);
+            box-shadow: 0 20px 60px rgba(94, 11, 21, 0.25), 0 0 40px rgba(94, 11, 21, 0.15);
+        }
+
+        /* Input Focus States */
+        .login-input:focus {
+            border-color: var(--burgundy-main) !important;
+            box-shadow: 0 0 0 4px rgba(127, 23, 52, 0.1) !important;
+        }
+
+        /* Button Gradient */
+        .login-btn {
+            background: linear-gradient(135deg, var(--burgundy-main) 0%, var(--burgundy-dark) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            box-shadow: 0 8px 25px rgba(127, 23, 52, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* Text Colors */
+        .text-burgundy-dark {
+            color: var(--burgundy-dark);
+        }
+
+        .text-burgundy-light {
+            color: var(--burgundy-light);
+        }
+
+        .text-beige-main {
+            color: var(--beige-main);
+        }
+
+        /* Background Classes */
+        .bg-burgundy-gradient {
+            background: linear-gradient(135deg, var(--burgundy-dark) 0%, var(--burgundy-light) 100%);
+        }
+
+        .bg-beige-gradient {
+            background: linear-gradient(135deg, var(--beige-light) 0%, var(--beige-main) 100%);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="fixed inset-0 min-h-screen bg-gradient-to-br from-[#5E0B15] via-[#7F1734] to-[#9E2B47] flex items-center justify-center p-4 z-50">
+    <div class="w-full max-w-md">
+        <!-- Login Card -->
+        <div class="login-card rounded-2xl overflow-hidden relative">
+            
+            <!-- Decorative background element -->
+            <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-[#7F1734]/10 pointer-events-none"></div>
+            
+            <!-- Header -->
+            <div class="relative z-10 px-8 py-10 text-center bg-burgundy-gradient text-white">
+                <div class="text-5xl mb-3 inline-block">🍷</div>
+                <h1 class="text-2xl font-bold text-beige-main tracking-tight">Admin Portal</h1>
+                <p class="text-sm text-beige-accent mt-2 opacity-90">CORK Wine Management System</p>
+            </div>
+
+            <!-- Body -->
+            <div class="relative z-10 px-8 py-10">
+                
+                <!-- Error Alert -->
+                {% if error %}
+                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-600 rounded-lg">
+                        <p class="text-sm font-semibold text-red-800">Login Failed!</p>
+                        <p class="text-sm text-red-700 mt-1">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                    </div>
+                {% endif %}
+
+                <!-- Login Form -->
+                <form method="post" class="space-y-6">
+                    
+                    <!-- Email Field -->
+                    <div>
+                        <label for="inputEmail" class="block text-sm font-semibold text-[#4B164C] mb-2 uppercase tracking-wide">
+                            📧 Email Address
+                        </label>
+                        <input 
+                            type="email" 
+                            value="{{ last_username }}" 
+                            name="email" 
+                            id="inputEmail" 
+                            placeholder="admin@example.com"
+                            autocomplete="email" 
+                            required 
+                            autofocus
+                            class="w-full px-4 py-3 border-2 border-amber-200 rounded-xl bg-slate-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7F1734] focus:bg-white focus:ring-4 focus:ring-[#7F1734]/10 transition-all duration-300">
+                    </div>
+
+                    <!-- Password Field -->
+                    <div>
+                        <label for="inputPassword" class="block text-sm font-semibold text-[#4B164C] mb-2 uppercase tracking-wide">
+                            🔑 Password
+                        </label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="inputPassword" 
+                            placeholder="Enter your password"
+                            autocomplete="current-password" 
+                            required
+                            class="w-full px-4 py-3 border-2 border-amber-200 rounded-xl bg-slate-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#7F1734] focus:bg-white focus:ring-4 focus:ring-[#7F1734]/10 transition-all duration-300">
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center space-x-2">
+                        <input 
+                            type="checkbox" 
+                            name="_remember_me" 
+                            id="remember_me"
+                            class="w-4 h-4 accent-[#7F1734] cursor-pointer">
+                        <label for="remember_me" class="text-sm font-medium text-gray-600 cursor-pointer">
+                            Remember me for 7 days
+                        </label>
+                    </div>
+
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <!-- Login Button -->
+                    <button 
+                        type="submit"
+                        class="login-btn w-full py-3 px-4 mt-6 text-[#F8EAD8] font-bold uppercase tracking-wide rounded-lg shadow-lg active:translate-y-0">
+                        Sign in to Dashboard
+                    </button>
+
+                </form>
+
+                <!-- Divider -->
+                <div class="my-8 relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-3 bg-white text-gray-500 text-xs font-medium">SECURE ADMIN ACCESS</span>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <p class="text-center text-xs text-gray-400 font-medium">
+                    © 2024 CORK Wine Management. All rights reserved.
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Hide Main Navigation -->
+<style>
+    header, nav.navbar, .site-header, footer, .site-footer {
+        display: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Prevent browser back button from accessing cached authenticated pages
+        (function() {
+            // Replace current history state to prevent going back
+            window.history.replaceState({noBack: true}, '', location.href);
+            
+            // Listen for back button attempts
+            window.addEventListener('popstate', function(event) {
+                // Immediately push a new state to prevent navigation
+                window.history.pushState({noBack: true}, '', location.href);
+            });
+            
+            // Clear any browser cache-related data
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                    });
+                });
+            }
+        })();
+    </script>
+{% endblock %}

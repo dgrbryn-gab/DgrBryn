@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -22,9 +23,9 @@ class Order
     #[Assert\NotBlank]
     private ?string $orderNumber = null;
 
-    #[ORM\ManyToOne(targetEntity: Admin::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
-    private ?Admin $createdBy = null;
+    private ?User $createdBy = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $customerName = null;
@@ -107,12 +108,12 @@ class Order
         return $this;
     }
 
-    public function getCreatedBy(): ?Admin
+    public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
-    public function setCreatedBy(?Admin $createdBy): static
+    public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
         return $this;
