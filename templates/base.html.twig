@@ -2,6 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
@@ -10,6 +13,44 @@
             <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
             <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css">
+            <style>
+                /* Global Burgundy and Beige Theme */
+                :root {
+                    --burgundy-dark: #5E0B15;
+                    --burgundy-main: #7F1734;
+                    --burgundy-light: #9E2B47;
+                    --beige-light: #FFFAF5;
+                    --beige-main: #F8EAD8;
+                    --beige-accent: #EFCFB4;
+                }
+
+                /* Button Styles */
+                .btn-burgundy {
+                    background: linear-gradient(135deg, var(--burgundy-main) 0%, var(--burgundy-dark) 100%);
+                    color: var(--beige-main);
+                    transition: all 0.3s ease;
+                }
+
+                .btn-burgundy:hover {
+                    box-shadow: 0 6px 20px rgba(127, 23, 52, 0.3);
+                    transform: translateY(-2px);
+                }
+
+                /* Smooth Transitions */
+                .transition-smooth {
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                /* Card Styling */
+                .card-burgundy {
+                    border: 1px solid var(--beige-accent);
+                    background: linear-gradient(135deg, rgba(248, 234, 216, 0.5) 0%, rgba(239, 207, 180, 0.3) 100%);
+                }
+
+                .card-burgundy:hover {
+                    box-shadow: 0 4px 12px rgba(127, 23, 52, 0.15);
+                }
+            </style>
         {% endblock %}
 
         {% block javascripts %}

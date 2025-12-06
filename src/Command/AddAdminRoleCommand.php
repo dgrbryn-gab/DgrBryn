@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Repository\AdminRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -13,12 +13,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:add-admin-role',
-    description: 'Add ROLE_ADMIN to an admin user',
+    description: 'Add ROLE_ADMIN to a user',
 )]
 class AddAdminRoleCommand extends Command
 {
     public function __construct(
-        private AdminRepository $adminRepository,
+        private UserRepository $userRepository,
         private EntityManagerInterface $em,
     ) {
         parent::__construct();
@@ -27,8 +27,8 @@ class AddAdminRoleCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('email', InputArgument::REQUIRED, 'The email of the admin user')
-            ->setHelp('This command adds the ROLE_ADMIN role to an admin user.');
+            ->addArgument('email', InputArgument::REQUIRED, 'The email of the user')
+            ->setHelp('This command adds the ROLE_ADMIN role to a user.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -36,22 +36,22 @@ class AddAdminRoleCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $email = $input->getArgument('email');
 
-        $admin = $this->adminRepository->findOneBy(['email' => $email]);
+        $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        if (!$admin) {
-            $io->error(sprintf('Admin user with email "%s" not found.', $email));
+        if (!$user) {
+            $io->error(sprintf('User with email "%s" not found.', $email));
             return Command::FAILURE;
         }
 
-        $roles = $admin->getRoles();
+        $roles = $user->getRoles();
 
         if (in_array('ROLE_ADMIN', $roles)) {
-            $io->warning(sprintf('Admin user "%s" already has ROLE_ADMIN.', $email));
+            $io->warning(sprintf('User "%s" already has ROLE_ADMIN.', $email));
             return Command::SUCCESS;
         }
 
         $roles[] = 'ROLE_ADMIN';
-        $admin->setRoles($roles);
+        $user->setRoles($roles);
 
         $this->em->flush();
 

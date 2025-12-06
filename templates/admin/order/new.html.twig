@@ -22,6 +22,18 @@
         <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-8">
             {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
+            <!-- Form Errors -->
+            {% if form.vars.errors|length > 0 %}
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+                    <p class="font-semibold text-red-700 mb-2">Please fix the following errors:</p>
+                    <ul class="list-disc list-inside text-red-600 text-sm">
+                        {% for error in form.vars.errors %}
+                            <li>{{ error.message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
             <!-- Customer Information Section -->
             <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
                 <legend class="text-lg font-bold text-[#5E0B15] mb-4">Customer Information</legend>
@@ -37,6 +49,41 @@
                         {{ form_row(form.customerPhone, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
+            </fieldset>
+
+            <!-- Order Items Section -->
+            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
+                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Order Items</legend>
+                
+                <div id="orderItems" class="space-y-6">
+                    {% if form.orderItems|length > 0 %}
+                        {% for orderItemForm in form.orderItems %}
+                            <div class="order-item border border-[#EFCFB4] rounded-lg p-4 bg-gray-50">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        {{ form_row(orderItemForm.product, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <div>
+                                        {{ form_row(orderItemForm.quantity, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <div>
+                                        {{ form_row(orderItemForm.unitPrice, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <div>
+                                        {{ form_row(orderItemForm.discount, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <button type="button" class="mt-3 px-4 py-2 rounded-lg font-semibold text-xs bg-red-500 text-white hover:bg-red-600 remove-item-btn">
+                                    🗑 Remove Item
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                
+                <button type="button" id="addItemBtn" class="mt-4 px-6 py-2 rounded-lg font-semibold text-sm bg-[#EFCFB4] text-[#7F1734] border border-[#EFCFB4] hover:bg-[#E3B78E]">
+                    + Add Item
+                </button>
             </fieldset>
 
             <!-- Shipping & Billing Section -->
@@ -137,6 +184,124 @@
                 font-size: 0.95rem;
             }
         </style>
+
+        <script>
+            // Product price mapping
+            let productData = {};
+
+            // Fetch products from API
+            async function loadProducts() {
+                try {
+                    const response = await fetch('{{ path("app_order_api_products") }}');
+                    const products = await response.json();
+                    products.forEach(product => {
+                        productData[product.id] = product.price;
+                    });
+                } catch (error) {
+                    console.error('Error loading products:', error);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', async function() {
+                await loadProducts();
+
+                const addItemBtn = document.getElementById('addItemBtn');
+                const orderItemsContainer = document.getElementById('orderItems');
+                let itemCount = document.querySelectorAll('.order-item').length;
+
+                // Setup product select change listener
+                function setupProductSelect(selectElement, unitPriceField) {
+                    selectElement.addEventListener('change', function() {
+                        const productId = this.value;
+                        if (productId && productData[productId]) {
+                            unitPriceField.value = productData[productId].toFixed(2);
+                        }
+                    });
+                }
+
+                // Handle remove item buttons
+                function setupRemoveButtons() {
+                    document.querySelectorAll('.remove-item-btn').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            this.closest('.order-item').remove();
+                        });
+                    });
+                }
+
+                // Setup for existing items
+                document.querySelectorAll('.order-item').forEach(item => {
+                    const productSelect = item.querySelector('select');
+                    const unitPriceField = item.querySelector('input[type="number"][step="0.01"]');
+                    if (productSelect && unitPriceField && !unitPriceField.className.includes('discount')) {
+                        setupProductSelect(productSelect, unitPriceField);
+                        // Trigger change to populate price if product already selected
+                        if (productSelect.value) {
+                            productSelect.dispatchEvent(new Event('change'));
+                        }
+                    }
+                });
+
+                // Add new item
+                addItemBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get product select HTML from first existing item or create new one
+                    let productsHTML = '';
+                    const existingSelect = document.querySelector('.order-item select');
+                    
+                    if (existingSelect) {
+                        productsHTML = existingSelect.innerHTML;
+                    } else if (Object.keys(productData).length > 0) {
+                        // Build from productData if no existing select
+                        productsHTML = '<option value="">-- Select a product --</option>';
+                        Object.entries(productData).forEach(([id, price]) => {
+                            // Try to get the product name from API or use ID
+                            productsHTML += `<option value="${id}">Product ${id} (₱${price.toFixed(2)})</option>`;
+                        });
+                    }
+                    
+                    const newItem = document.createElement('div');
+                    newItem.className = 'order-item border border-[#EFCFB4] rounded-lg p-4 bg-gray-50';
+                    newItem.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Product</label>
+                                <select name="order[orderItems][${itemCount}][product]" class="form-control product-select" required>
+                                    ${productsHTML}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Quantity</label>
+                                <input type="number" name="order[orderItems][${itemCount}][quantity]" class="form-control" min="1" value="1" required />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Unit Price</label>
+                                <input type="number" name="order[orderItems][${itemCount}][unitPrice]" class="form-control unit-price-field" step="0.01" placeholder="0.00" required />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Discount</label>
+                                <input type="number" name="order[orderItems][${itemCount}][discount]" class="form-control discount-field" step="0.01" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <button type="button" class="mt-3 px-4 py-2 rounded-lg font-semibold text-xs bg-red-500 text-white hover:bg-red-600 remove-item-btn">
+                            🗑 Remove Item
+                        </button>
+                    `;
+                    orderItemsContainer.appendChild(newItem);
+                    
+                    // Setup the new product select
+                    const newProductSelect = newItem.querySelector('.product-select');
+                    const newUnitPriceField = newItem.querySelector('.unit-price-field');
+                    setupProductSelect(newProductSelect, newUnitPriceField);
+                    
+                    itemCount++;
+                    setupRemoveButtons();
+                });
+
+                setupRemoveButtons();
+            });
+        </script>
     </div>
 </div>
 

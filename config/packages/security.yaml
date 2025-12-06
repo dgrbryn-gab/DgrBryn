@@ -5,7 +5,7 @@ security:
     providers:
         app_user_provider:
             entity:
-                class: App\Entity\Admin
+                class: App\Entity\User
                 property: email
 
     firewalls:
@@ -17,19 +17,21 @@ security:
             pattern: ^/admin
             lazy: false
             provider: app_user_provider
-            custom_authenticator: App\Security\AdminLoginAuthenticator
             form_login:
-                login_path: admin_login
-                check_path: admin_login
+                login_path: app_login
+                check_path: app_login
+                username_parameter: email
+                password_parameter: password
             logout:
                 path: app_logout
-                target: admin_login
+                target: app_login
                 invalidate_session: true
+                delete_cookies:
+                    - PHPSESSID
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
-            entry_point: App\Security\AdminLoginAuthenticator
 
     access_control:
         - { path: ^/admin/login, roles: PUBLIC_ACCESS }

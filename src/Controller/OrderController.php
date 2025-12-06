@@ -41,6 +41,54 @@ class OrderController extends AbstractController
         ]);
     }
 
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    public function new(
+        Request $request,
+        EntityManagerInterface $em,
+        StoreProductRepository $productRepository,
+        OrderRepository $orderRepository
+    ): Response {
+        $order = new Order();
+        $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Generate order number if not set
+            if (!$order->getOrderNumber()) {
+                $order->setOrderNumber('ORD-' . date('YmdHis') . '-' . random_int(1000, 9999));
+            }
+            
+            $order->setStatus('pending');
+            $order->setCreatedAt(new \DateTimeImmutable());
+            $order->setUpdatedAt(new \DateTimeImmutable());
+            $order->setCreatedBy($this->getUser());
+
+            // Process order items - calculate subtotal for each and associate with order
+            foreach ($order->getOrderItems() as $item) {
+                // Ensure item is associated with order
+                $item->setOrder($order);
+                
+                $unitPrice = (float)$item->getUnitPrice();
+                $quantity = $item->getQuantity();
+                $subtotal = $unitPrice * $quantity;
+                $item->setSubtotal((string)$subtotal);
+            }
+
+            // Recalculate total
+            $this->calculateOrderTotal($order);
+
+            $em->persist($order);
+            $em->flush();
+
+            $this->addFlash('success', 'Order created successfully!');
+            return $this->redirectToRoute('app_order_show', ['id' => $order->getId()]);
+        }
+
+        return $this->render('admin/order/new.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Order $order): Response
     {
@@ -76,22 +124,6 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
-    public function delete(
-        Request $request,
-        Order $order,
-        EntityManagerInterface $em
-    ): Response {
-        if ($this->isCsrfTokenValid('delete' . $order->getId(), $request->request->get('_token'))) {
-            $em->remove($order);
-            $em->flush();
-
-            $this->addFlash('success', 'Order deleted successfully!');
-        }
-
-        return $this->redirectToRoute('app_order_index');
-    }
-
     #[Route('/{id}/status/{status}', name: 'change_status', methods: ['POST'])]
     public function changeStatus(
         Request $request,
@@ -122,6 +154,26 @@ class OrderController extends AbstractController
         }
 
         return $this->redirectToRoute('app_order_show', ['id' => $order->getId()]);
+    }
+
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
+    public function delete(
+        Request $request,
+        Order $order,
+        EntityManagerInterface $em
+    ): Response {
+        if ($this->isCsrfTokenValid('delete' . $order->getId(), $request->request->get('_token'))) {
+            $orderNumber = $order->getOrderNumber();
+            
+            $em->remove($order);
+            $em->flush();
+
+            $this->addFlash('success', sprintf('Order %s has been deleted successfully!', $orderNumber));
+        } else {
+            $this->addFlash('error', 'Invalid security token!');
+        }
+
+        return $this->redirectToRoute('app_order_index');
     }
 
     #[Route('/{id}/add-item', name: 'add_item', methods: ['POST'])]
@@ -187,6 +239,24 @@ class OrderController extends AbstractController
         }
 
         return $this->redirectToRoute('app_order_edit', ['id' => $order->getId()]);
+    }
+
+    #[Route('/api/products', name: 'api_products', methods: ['GET'])]
+    public function getProductsApi(StoreProductRepository $productRepository): Response
+    {
+        $products = $productRepository->findAll();
+        
+        $data = [];
+        foreach ($products as $product) {
+            $data[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'price' => $product->getPrice(),
+                'label' => sprintf('%s (₱%.2f)', $product->getName(), $product->getPrice()),
+            ];
+        }
+
+        return $this->json($data);
     }
 
     private function calculateOrderTotal(Order $order): void

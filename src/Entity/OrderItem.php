@@ -35,7 +35,7 @@ class OrderItem
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $discount = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $subtotal = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]

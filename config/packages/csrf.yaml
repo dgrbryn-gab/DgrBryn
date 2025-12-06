@@ -1,11 +1,10 @@
-# Enable stateless CSRF protection for forms and logins/logouts
+# Enable CSRF protection with session-based token storage
 framework:
     form:
         csrf_protection:
-            token_id: submit
+            enabled: true
 
     csrf_protection:
-        stateless_token_ids:
-            - submit
-            - authenticate
-            - logout
+        enabled: true
+        # Use session storage instead of stateless tokens
+
