@@ -30,18 +30,49 @@
             </a>
         </div>
 
-        <!-- Status Filter -->
-        <div class="mb-8 flex flex-wrap gap-3">
-            <a href="{{ path('app_order_index') }}"
-                class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 {% if not currentStatus %}bg-[#7F1734] text-white{% else %}bg-white text-[#7F1734] border border-[#EFCFB4]{% endif %}">
-                All Orders
-            </a>
-            {% for status in ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] %}
-                <a href="{{ path('app_order_index', {'status': status}) }}"
-                    class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 {% if currentStatus == status %}bg-[#7F1734] text-white{% else %}bg-white text-[#7F1734] border border-[#EFCFB4]{% endif %}">
-                    {{ status|capitalize }}
-                </a>
-            {% endfor %}
+        <!-- Status Filter - Dropdown Version -->
+        <div class="mb-8">
+            <form method="get" action="{{ path('app_order_index') }}" class="max-w-xs">
+                <label for="status_filter" class="block text-sm font-semibold text-[#7F1734] mb-2">
+                    Filter by Status
+                </label>
+                <select 
+                    id="status_filter"
+                    name="status"
+                    onchange="this.form.submit()"
+                    class="w-full px-5 py-3 rounded-xl border border-[#EFCFB4] bg-white/90 backdrop-blur-sm text-[#7F1734] font-medium focus:outline-none focus:ring-4 focus:ring-[#7F1734]/30 focus:border-[#7F1734] transition-all duration-300 shadow-sm">
+                    
+                    <option value="" 
+                        {% if not currentStatus %}selected{% endif %}>
+                        All Orders
+                    </option>
+                    
+                    <option value="pending" 
+                        {% if currentStatus == 'pending' %}selected{% endif %}>
+                        Pending
+                    </option>
+                    
+                    <option value="processing" 
+                        {% if currentStatus == 'processing' %}selected{% endif %}>
+                        Processing
+                    </option>
+                    
+                    <option value="shipped" 
+                        {% if currentStatus == 'shipped' %}selected{% endif %}>
+                        Shipped
+                    </option>
+                    
+                    <option value="delivered" 
+                        {% if currentStatus == 'delivered' %}selected{% endif %}>
+                        Delivered
+                    </option>
+                    
+                    <option value="cancelled" 
+                        {% if currentStatus == 'cancelled' %}selected{% endif %}>
+                        Cancelled
+                    </option>
+                </select>
+            </form>
         </div>
 
         <!-- Orders Table -->

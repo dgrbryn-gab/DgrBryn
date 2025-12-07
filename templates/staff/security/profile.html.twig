@@ -1,0 +1,138 @@
+{% extends 'staff/staff_base.html.twig' %}
+
+{% block title %}My Profile - Staff Dashboard - CORK{% endblock %}
+
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <!-- Profile Card -->
+    <div style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #7F1734, #9E2B47);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: bold;
+                font-size: 40px;
+                margin: 0 auto 20px;
+            ">
+                {{ user.email|slice(0, 1)|upper }}
+            </div>
+            <h2 style="font-size: 24px; font-weight: 700; color: #7F1734; margin-bottom: 8px;">
+                {{ user.email }}
+            </h2>
+            <p style="font-size: 14px; color: #888;">Staff Member</p>
+        </div>
+
+        <!-- Profile Information -->
+        <div style="border-top: 1px solid #eee; padding-top: 24px;">
+            <h3 style="font-size: 18px; font-weight: 700; color: #7F1734; margin-bottom: 20px;">Profile Information</h3>
+            
+            <div style="display: grid; gap: 20px;">
+                <!-- Email -->
+                <div>
+                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                        Email Address
+                    </label>
+                    <div style="
+                        padding: 12px 16px;
+                        background: #f8f9fa;
+                        border: 1px solid #e9ecef;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        color: #333;
+                    ">
+                        {{ user.email }}
+                    </div>
+                </div>
+
+                <!-- Role -->
+                <div>
+                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                        Role
+                    </label>
+                    <div style="
+                        padding: 12px 16px;
+                        background: #f8f9fa;
+                        border: 1px solid #e9ecef;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        color: #333;
+                    ">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            Administrator
+                        {% elseif 'ROLE_STAFF' in user.roles %}
+                            Staff Member
+                        {% else %}
+                            User
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Account Status -->
+                <div>
+                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                        Account Status
+                    </label>
+                    <div style="
+                        padding: 12px 16px;
+                        background: #f8f9fa;
+                        border: 1px solid #e9ecef;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        color: #333;
+                    ">
+                        {% if user.isActive %}
+                            <span style="color: #4CAF50; font-weight: 600;">✓ Active</span>
+                        {% else %}
+                            <span style="color: #FFA500; font-weight: 600;">⚠ Inactive</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="border-top: 1px solid #eee; padding-top: 24px; margin-top: 24px; display: flex; gap: 12px;">
+            <a href="{{ path('staff_profile_edit') }}" style="
+                flex: 1;
+                padding: 12px 20px;
+                text-align: center;
+                background: linear-gradient(135deg, #7F1734, #9E2B47);
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+                font-size: 14px;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(127, 23, 52, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                ✏️ Edit Profile
+            </a>
+            <a href="{{ path('staff_dashboard') }}" style="
+                flex: 1;
+                padding: 12px 20px;
+                text-align: center;
+                background: #f0f0f0;
+                color: #333;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+                font-size: 14px;
+            " onmouseover="this.style.background='#e0e0e0'" onmouseout="this.style.background='#f0f0f0'">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

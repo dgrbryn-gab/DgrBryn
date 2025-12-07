@@ -13,8 +13,15 @@ class SecurityController extends AbstractController
     #[Route('/admin/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->getUser()) {
-            return $this->redirectToRoute('admin_dashboard');
+        $user = $this->getUser();
+        
+        if ($user) {
+            // Redirect based on user role
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                return $this->redirectToRoute('admin_dashboard');
+            } elseif (in_array('ROLE_STAFF', $user->getRoles())) {
+                return $this->redirectToRoute('staff_dashboard');
+            }
         }
 
         // get the login error if there is one
@@ -37,6 +44,12 @@ class SecurityController extends AbstractController
 
     #[Route('/admin/logout', name: 'app_logout')]
     public function logout(): void
+    {
+        // This method can be blank - it will be intercepted by the logout key on your firewall
+    }
+
+    #[Route('/staff/logout', name: 'staff_logout')]
+    public function staffLogout(): void
     {
         // This method can be blank - it will be intercepted by the logout key on your firewall
     }

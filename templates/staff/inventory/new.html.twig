@@ -1,0 +1,75 @@
+{% extends 'staff/staff_base.html.twig' %}
+
+{% block title %}Add Inventory Record - CORK Staff{% endblock %}
+
+{% block page_title %}Add Inventory Record{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #7F1734;">
+        
+        <!-- Form Errors -->
+        {% if form.vars.errors|length > 0 %}
+            <div style="margin-bottom: 20px; padding: 15px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; color: #721c24;">
+                <p style="font-weight: 600; margin: 0 0 10px 0;">Form Errors:</p>
+                {% for error in form.vars.errors %}
+                    <p style="margin: 5px 0;">- {{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        <!-- Product Field -->
+        <div style="margin-bottom: 20px;">
+            {{ form_label(form.product, 'Select Product', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+            {{ form_widget(form.product, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;'}}) }}
+            {% if form_errors(form.product) %}
+                <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">
+                    {% for error in form_errors(form.product) %}
+                        {{ error.message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Quantity Field -->
+        <div style="margin-bottom: 20px;">
+            {{ form_label(form.quantity, 'Quantity', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+            {{ form_widget(form.quantity, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'type': 'number', 'min': '0'}}) }}
+            {% if form_errors(form.quantity) %}
+                <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">
+                    {% for error in form_errors(form.quantity) %}
+                        {{ error.message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Acquired Date Field -->
+        <div style="margin-bottom: 20px;">
+            {{ form_label(form.acquiredDate, 'Acquired Date', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+            {{ form_widget(form.acquiredDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;'}}) }}
+            {% if form_errors(form.acquiredDate) %}
+                <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">
+                    {% for error in form_errors(form.acquiredDate) %}
+                        {{ error.message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-top: 30px;">
+            <button type="submit" style="flex: 1; padding: 12px; background: #7F1734; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#5E0B15'" onmouseout="this.style.background='#7F1734'">
+                ✓ Save Inventory Record
+            </button>
+            <a href="{{ path('staff_inventory_index') }}" style="flex: 1; padding: 12px; background: #EFCFB4; color: #7F1734; text-decoration: none; border-radius: 6px; font-weight: 600; text-align: center; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#D4AF9A'" onmouseout="this.style.background='#EFCFB4'">
+                ✕ Cancel
+            </a>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

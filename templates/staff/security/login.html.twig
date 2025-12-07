@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin Login - CORK{% endblock %}
+{% block title %}Staff Login - CORK{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -74,9 +74,9 @@
             
             <!-- Header -->
             <div class="relative z-10 px-8 py-10 text-center bg-burgundy-gradient text-white">
-                <div class="text-5xl mb-3 inline-block">🍷</div>
-                <h1 class="text-2xl font-bold text-beige-main tracking-tight">CORK Dashboard</h1>
-                <p class="text-sm text-beige-accent mt-2 opacity-90">Admin & Staff Management Portal</p>
+                <div class="text-5xl mb-3 inline-block">👨‍💼</div>
+                <h1 class="text-2xl font-bold text-beige-main tracking-tight">Staff Portal</h1>
+                <p class="text-sm text-beige-accent mt-2 opacity-90">CORK Wine Management System</p>
             </div>
 
             <!-- Body -->
@@ -103,7 +103,7 @@
                             value="{{ last_username }}" 
                             name="email" 
                             id="inputEmail" 
-                            placeholder="admin@example.com"
+                            placeholder="staff@example.com"
                             autocomplete="email" 
                             required 
                             autofocus
@@ -144,62 +144,21 @@
                     <button 
                         type="submit"
                         class="login-btn w-full py-3 px-4 mt-6 text-[#F8EAD8] font-bold uppercase tracking-wide rounded-lg shadow-lg active:translate-y-0">
-                        Sign in to Dashboard
+                        Sign in to Staff Panel
                     </button>
 
                 </form>
 
-                <!-- Divider -->
-                <div class="my-8 relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-3 bg-white text-gray-500 text-xs font-medium">SECURE ADMIN ACCESS</span>
-                    </div>
+                <!-- Back to Home -->
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        <a href="{{ path('app_home') }}" class="text-[#7F1734] hover:text-[#9E2B47] font-semibold transition-colors">
+                            ← Back to Home
+                        </a>
+                    </p>
                 </div>
-
-                <!-- Footer -->
-                <p class="text-center text-xs text-gray-400 font-medium">
-                    © 2024 CORK Wine Management. All rights reserved.
-                </p>
-
             </div>
-
         </div>
     </div>
 </div>
-
-<!-- Hide Main Navigation -->
-<style>
-    header, nav.navbar, .site-header, footer, .site-footer {
-        display: none !important;
-    }
-</style>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        // Prevent browser back button from accessing cached authenticated pages
-        (function() {
-            // Replace current history state to prevent going back
-            window.history.replaceState({noBack: true}, '', location.href);
-            
-            // Listen for back button attempts
-            window.addEventListener('popstate', function(event) {
-                // Immediately push a new state to prevent navigation
-                window.history.pushState({noBack: true}, '', location.href);
-            });
-            
-            // Clear any browser cache-related data
-            if ('caches' in window) {
-                caches.keys().then(names => {
-                    names.forEach(name => {
-                        caches.delete(name);
-                    });
-                });
-            }
-        })();
-    </script>
 {% endblock %}
