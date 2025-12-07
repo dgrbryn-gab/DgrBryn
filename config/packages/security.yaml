@@ -14,7 +14,7 @@ security:
             security: false
 
         admin:
-            pattern: ^/admin
+            pattern: ^/(admin|staff)
             lazy: false
             provider: app_user_provider
             form_login:
@@ -37,3 +37,4 @@ security:
         - { path: ^/admin/login, roles: PUBLIC_ACCESS }
         - { path: ^/admin/order, roles: ROLE_ADMIN }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/staff, roles: ROLE_STAFF }

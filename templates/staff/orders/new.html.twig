@@ -1,0 +1,144 @@
+{% extends 'staff/staff_base.html.twig' %}
+
+{% block title %}Create Order - CORK Staff{% endblock %}
+
+{% block page_title %}Create New Order{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #7F1734;">
+        
+        <!-- Form Errors -->
+        {% if form.vars.errors|length > 0 %}
+            <div style="margin-bottom: 20px; padding: 15px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; color: #721c24;">
+                <p style="font-weight: 600; margin: 0 0 10px 0;">Form Errors:</p>
+                {% for error in form.vars.errors %}
+                    <p style="margin: 5px 0;">- {{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'order-form'}}) }}
+
+        <!-- Customer Information Section -->
+        <fieldset style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+            <legend style="padding: 0 10px; font-weight: 700; color: #7F1734; font-size: 14px; text-transform: uppercase;">📋 Customer Information</legend>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <!-- Customer Name -->
+                <div>
+                    {{ form_label(form.customerName, 'Customer Name', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.customerName, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': 'Enter customer name'}}) }}
+                    {% if form_errors(form.customerName) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.customerName) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Customer Email -->
+                <div>
+                    {{ form_label(form.customerEmail, 'Email', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.customerEmail, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': 'customer@email.com'}}) }}
+                    {% if form_errors(form.customerEmail) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.customerEmail) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Customer Phone -->
+                <div>
+                    {{ form_label(form.customerPhone, 'Phone', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.customerPhone, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': 'Contact number'}}) }}
+                    {% if form_errors(form.customerPhone) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.customerPhone) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Shipping & Billing Information -->
+        <fieldset style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+            <legend style="padding: 0 10px; font-weight: 700; color: #7F1734; font-size: 14px; text-transform: uppercase;">🏠 Address Information</legend>
+
+            <div style="display: grid; gap: 20px;">
+                <!-- Shipping Address -->
+                <div>
+                    {{ form_label(form.shippingAddress, 'Shipping Address', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.shippingAddress, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; min-height: 80px;', 'placeholder': 'Enter full shipping address'}}) }}
+                    {% if form_errors(form.shippingAddress) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.shippingAddress) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Billing Address -->
+                <div>
+                    {{ form_label(form.billingAddress, 'Billing Address', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.billingAddress, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; min-height: 80px;', 'placeholder': 'Enter full billing address'}}) }}
+                    {% if form_errors(form.billingAddress) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.billingAddress) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Order Items -->
+        <fieldset style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+            <legend style="padding: 0 10px; font-weight: 700; color: #7F1734; font-size: 14px; text-transform: uppercase;">📦 Order Items</legend>
+            
+            <div id="order-items" style="display: grid; gap: 20px;">
+                {% for itemForm in form.orderItems %}
+                    <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                            {{ form_widget(itemForm, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <!-- Order Costs -->
+        <fieldset style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+            <legend style="padding: 0 10px; font-weight: 700; color: #7F1734; font-size: 14px; text-transform: uppercase;">💰 Order Costs</legend>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <!-- Shipping Cost -->
+                <div>
+                    {{ form_label(form.shippingCost, 'Shipping Cost (₱)', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.shippingCost, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'type': 'number', 'step': '0.01'}}) }}
+                    {% if form_errors(form.shippingCost) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.shippingCost) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Tax Amount -->
+                <div>
+                    {{ form_label(form.taxAmount, 'Tax Amount (₱)', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.taxAmount, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'type': 'number', 'step': '0.01'}}) }}
+                    {% if form_errors(form.taxAmount) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.taxAmount) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Discount Amount -->
+                <div>
+                    {{ form_label(form.discountAmount, 'Discount (₱)', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
+                    {{ form_widget(form.discountAmount, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'type': 'number', 'step': '0.01'}}) }}
+                    {% if form_errors(form.discountAmount) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.discountAmount) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-top: 30px;">
+            <button type="submit" style="flex: 1; padding: 12px; background: #7F1734; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#5E0B15'" onmouseout="this.style.background='#7F1734'">
+                ✓ Create Order
+            </button>
+            <a href="{{ path('staff_orders_index') }}" style="flex: 1; padding: 12px; background: #EFCFB4; color: #7F1734; text-decoration: none; border-radius: 6px; font-weight: 600; text-align: center; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#D4AF9A'" onmouseout="this.style.background='#EFCFB4'">
+                ✕ Cancel
+            </a>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

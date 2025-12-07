@@ -1,0 +1,118 @@
+{% extends 'staff/staff_base.html.twig' %}
+
+{% block title %}Inventory Details - CORK Staff{% endblock %}
+
+{% block page_title %}Inventory Details{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #7F1734;">
+        
+        <div style="margin-bottom: 30px;">
+            <h2 style="font-size: 24px; font-weight: 700; color: #7F1734; margin-bottom: 20px;">
+                📦 {{ wine_inventory.product.name }}
+            </h2>
+
+            <div style="display: grid; gap: 20px;">
+                <!-- Product Info -->
+                <div style="padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h3 style="font-size: 14px; font-weight: 700; color: #333; text-transform: uppercase; margin-bottom: 12px;">Product Information</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; font-size: 14px;">
+                        <div>
+                            <strong>Product Name:</strong><br>
+                            {{ wine_inventory.product.name }}
+                        </div>
+                        <div>
+                            <strong>Price:</strong><br>
+                            ₱{{ wine_inventory.product.price|number_format(2) }}
+                        </div>
+                        <div>
+                            <strong>Category:</strong><br>
+                            {{ wine_inventory.product.category.name ?? 'N/A' }}
+                        </div>
+                        <div>
+                            <strong>Status:</strong><br>
+                            {% if wine_inventory.product.isAvailable %}
+                                <span style="color: #4CAF50; font-weight: 600;">✓ Available</span>
+                            {% else %}
+                                <span style="color: #dc3545; font-weight: 600;">✗ Unavailable</span>
+                            {% endif %}
+                        </div>
+                        {% if not is_own_product %}
+                            <div style="grid-column: 1 / -1; padding: 12px; background: #e8f4f8; border-left: 4px solid #0099cc; border-radius: 4px;">
+                                <strong style="color: #0099cc;">📌 Created by Admin</strong>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Inventory Info -->
+                <div style="padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h3 style="font-size: 14px; font-weight: 700; color: #333; text-transform: uppercase; margin-bottom: 12px;">Inventory Information</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; font-size: 14px;">
+                        <div>
+                            <strong>Quantity:</strong><br>
+                            <span style="font-size: 20px; font-weight: 700; color: #7F1734;">{{ wine_inventory.quantity }}</span> units
+                        </div>
+                        <div>
+                            <strong>Acquired Date:</strong><br>
+                            {{ wine_inventory.acquiredDate ? wine_inventory.acquiredDate|date('M d, Y') : 'N/A' }}
+                        </div>
+                        <div>
+                            <strong>Last Updated:</strong><br>
+                            {{ wine_inventory.lastUpdated|date('M d, Y H:i') }}
+                        </div>
+                        <div>
+                            <strong>Status:</strong><br>
+                            {% if wine_inventory.quantity < 10 %}
+                                <span style="background: #FFF3CD; color: #856404; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 12px;">⚠️ LOW STOCK</span>
+                            {% else %}
+                                <span style="background: #D4EDDA; color: #155724; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 12px;">✓ IN STOCK</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                {% if wine_inventory.product.description %}
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                        <h3 style="font-size: 14px; font-weight: 700; color: #333; text-transform: uppercase; margin-bottom: 12px;">Description</h3>
+                        <p style="color: #666; line-height: 1.6; margin: 0;">
+                            {{ wine_inventory.product.description }}
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        {% if is_own_product %}
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="{{ path('staff_inventory_edit', {'id': wine_inventory.id}) }}" style="padding: 12px 24px; background: #7F1734; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='#5E0B15'" onmouseout="this.style.background='#7F1734'">
+                    ✏️ Edit
+                </a>
+                <form method="POST" action="{{ path('staff_inventory_delete', {'id': wine_inventory.id}) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this inventory record?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ wine_inventory.id) }}"/>
+                    <button type="submit" style="padding: 12px 24px; background: #FFA500; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#FF8C00'" onmouseout="this.style.background='#FFA500'">
+                        🗑️ Delete
+                    </button>
+                </form>
+                <a href="{{ path('staff_inventory_index') }}" style="padding: 12px 24px; background: #EFCFB4; color: #7F1734; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='#D4AF9A'" onmouseout="this.style.background='#EFCFB4'">
+                    ← Back to Inventory
+                </a>
+            </div>
+        {% else %}
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <div style="padding: 12px 24px; background: #f0f0f0; border-radius: 6px; color: #666; font-weight: 500;">
+                    🔒 View Only - This inventory was created by the admin
+                </div>
+                <a href="{{ path('staff_inventory_index') }}" style="padding: 12px 24px; background: #EFCFB4; color: #7F1734; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='#D4AF9A'" onmouseout="this.style.background='#EFCFB4'">
+                    ← Back to Inventory
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

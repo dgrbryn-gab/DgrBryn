@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\StoreProduct;
 use App\Entity\WineInventory;
+use App\Entity\OrderItem;
 use App\Form\StoreProductType;
 use App\Repository\StoreProductRepository;
 use App\Repository\CategoryRepository;
@@ -18,7 +19,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class StoreProductController extends AbstractController
 {
-    #[Route('admin/store/product', name: 'app_store_product_index', methods: ['GET'])]
+    #[Route('/admin/store/product', name: 'app_store_product_index', methods: ['GET'])]
     public function index(Request $request, StoreProductRepository $storeProductRepository, CategoryRepository $categoryRepository): Response
     {
         $categories = $categoryRepository->findAll();
@@ -49,7 +50,7 @@ class StoreProductController extends AbstractController
         ]);
     }
 
-    #[Route('admin/store/product/new', name: 'app_store_product_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/store/product/new', name: 'app_store_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $storeProduct = new StoreProduct();
@@ -99,7 +100,7 @@ class StoreProductController extends AbstractController
         ]);
     }
 
-    #[Route('admin/store/product/{id}', name: 'app_store_product_show', methods: ['GET'])]
+    #[Route('/admin/store/product/{id}', name: 'app_store_product_show', methods: ['GET'])]
     public function show(StoreProduct $storeProduct): Response
     {
         return $this->render('admin/store_product/show.html.twig', [
@@ -107,7 +108,7 @@ class StoreProductController extends AbstractController
         ]);
     }
 
-    #[Route('admin/store/product/{id}/edit', name: 'app_store_product_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/store/product/{id}/edit', name: 'app_store_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, StoreProduct $storeProduct, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         // --- Pre-load imageFile for preview ---
@@ -175,10 +176,17 @@ class StoreProductController extends AbstractController
         ]);
     }
 
-    #[Route('admin/store/product/{id}', name: 'app_store_product_delete', methods: ['POST'])]
+    #[Route('/admin/store/product/{id}', name: 'app_store_product_delete', methods: ['POST'])]
     public function delete(Request $request, StoreProduct $storeProduct, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $storeProduct->getId(), $request->request->get('_token'))) {
+            // Check if product has order items
+            $orderItems = $entityManager->getRepository(OrderItem::class)->findBy(['product' => $storeProduct]);
+            if (!empty($orderItems)) {
+                $this->addFlash('error', '❌ Cannot delete this product because it has associated orders. Please contact an administrator.');
+                return $this->redirectToRoute('app_store_product_show', ['id' => $storeProduct->getId()]);
+            }
+
             // Delete associated image
             if ($storeProduct->getImage()) {
                 $imagePath = $this->getParameter('wine_images_directory') . '/' . $storeProduct->getImage();
@@ -195,6 +203,7 @@ class StoreProductController extends AbstractController
 
             $entityManager->remove($storeProduct);
             $entityManager->flush();
+            $this->addFlash('success', '✅ Product deleted successfully!');
         }
 
         return $this->redirectToRoute('app_store_product_index');
