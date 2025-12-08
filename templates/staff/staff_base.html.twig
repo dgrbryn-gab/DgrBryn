@@ -253,7 +253,7 @@
                     <div class="staff-user-avatar">
                         {{ app.user.email|slice(0, 1)|upper }}
                     </div>
-                    <form method="post" action="{{ path('staff_logout') }}" style="margin: 0;">
+                    <form method="post" action="{{ path('app_logout') }}" style="margin: 0;">
                         <button type="submit" class="staff-logout-btn">🚪 Logout</button>
                     </form>
                 </div>

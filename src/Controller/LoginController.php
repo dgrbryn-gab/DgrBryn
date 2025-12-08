@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends AbstractController
+class LoginController extends AbstractController
 {
     #[Route('/admin/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -29,7 +28,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        $response = $this->render('admin/security/login.html.twig', [
+        $response = $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
@@ -44,12 +43,6 @@ class SecurityController extends AbstractController
 
     #[Route('/admin/logout', name: 'app_logout')]
     public function logout(): void
-    {
-        // This method can be blank - it will be intercepted by the logout key on your firewall
-    }
-
-    #[Route('/staff/logout', name: 'staff_logout')]
-    public function staffLogout(): void
     {
         // This method can be blank - it will be intercepted by the logout key on your firewall
     }

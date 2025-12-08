@@ -3,7 +3,7 @@
 namespace App\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -16,13 +16,13 @@ class LoginSuccessListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            InteractiveLoginEvent::class => 'onSecurityInteractiveLogin',
+            LoginSuccessEvent::class => 'onLoginSuccess',
         ];
     }
 
-    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
+    public function onLoginSuccess(LoginSuccessEvent $event): void
     {
-        $user = $event->getAuthenticationToken()->getUser();
+        $user = $event->getUser();
         $request = $event->getRequest();
 
         // Only redirect if we're on the login page
@@ -42,7 +42,8 @@ class LoginSuccessListener implements EventSubscriberInterface
             return;
         }
 
-        // Set the response to redirect
-        $event->getRequest()->attributes->set('_redirect_target', $redirectUrl);
+        // Set the response to redirect immediately
+        $response = new RedirectResponse($redirectUrl, 302);
+        $event->setResponse($response);
     }
 }
