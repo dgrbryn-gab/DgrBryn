@@ -3,187 +3,170 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block admin_content %}
-<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-8 px-6">
-    <div class="max-w-7xl mx-auto">
+<div class="mb-8">
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-burgundy-main mb-2">Admin Dashboard</h1>
+        <p class="text-burgundy-main text-sm">Manage categories, products, inventory, and orders — your digital wine cellar at a glance.</p>
+    </div>
 
-        <!-- Header Section -->
-        <div class="mb-10">
-            <h1 class="text-4xl font-extrabold text-[#5E0B15] tracking-tight mb-2">Admin Dashboard</h1>
-            <p class="text-[#7F1734] text-sm italic">Manage categories, products, inventory, and orders — your digital wine cellar at a glance.</p>
+    <!-- Statistics Cards -->
+    <div class="dashboard-grid grid-cols-5 mb-8">
+        <!-- Total Categories -->
+        <div class="stat-card burgundy">
+            <span class="stat-label">Total Categories</span>
+            <h3 class="stat-value">{{ totalCategories }}</h3>
+            <span class="stat-description">Active categories</span>
         </div>
 
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
-
-            <!-- Total Categories -->
-            <div class="bg-white/90 backdrop-blur-sm rounded-xl border border-[#EFCFB4]/50 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-gray-500 text-xs uppercase font-semibold tracking-wide">Total Categories</p>
-                <h3 class="text-3xl font-bold text-[#7F1734] mt-2">{{ totalCategories }}</h3>
-                <p class="text-[#7F1734] text-xs font-medium mt-2">Active categories</p>
-            </div>
-
-            <!-- Total Products -->
-            <div class="bg-white/90 backdrop-blur-sm rounded-xl border border-[#EFCFB4]/50 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-gray-500 text-xs uppercase font-semibold tracking-wide">Total Products</p>
-                <h3 class="text-3xl font-bold text-[#7F1734] mt-2">{{ totalProducts }}</h3>
-                <p class="text-[#7F1734] text-xs font-medium mt-2">Wine products</p>
-            </div>
-
-            <!-- Total Inventory -->
-            <div class="bg-white/90 backdrop-blur-sm rounded-xl border border-[#EFCFB4]/50 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-gray-500 text-xs uppercase font-semibold tracking-wide">Inventory Items</p>
-                <h3 class="text-3xl font-bold text-[#7F1734] mt-2">{{ totalInventory }}</h3>
-                <p class="text-[#7F1734] text-xs font-medium mt-2">Total stock</p>
-            </div>
-
-            <!-- Total Orders -->
-            <div class="bg-white/90 backdrop-blur-sm rounded-xl border border-orange-300 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-gray-500 text-xs uppercase font-semibold tracking-wide">Total Orders</p>
-                <h3 class="text-3xl font-bold text-orange-600 mt-2">{{ totalOrders }}</h3>
-                <p class="text-orange-600 text-xs font-medium mt-2">All orders</p>
-            </div>
-
-            <!-- Low Stock Alerts -->
-            <div class="bg-white/90 backdrop-blur-sm rounded-xl border border-red-300 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-gray-500 text-xs uppercase font-semibold tracking-wide">Low Stock Alerts</p>
-                <h3 class="text-3xl font-bold text-red-600 mt-2">{{ lowStockItems }}</h3>
-                <p class="text-red-600 text-xs font-medium mt-2">Need attention</p>
-            </div>
+        <!-- Total Products -->
+        <div class="stat-card burgundy">
+            <span class="stat-label">Total Products</span>
+            <h3 class="stat-value">{{ totalProducts }}</h3>
+            <span class="stat-description">Wine products</span>
         </div>
 
-        <!-- Order Statistics + Revenue -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <!-- Total Inventory -->
+        <div class="stat-card burgundy">
+            <span class="stat-label">Inventory Items</span>
+            <h3 class="stat-value">{{ totalInventory }}</h3>
+            <span class="stat-description">Total stock</span>
+        </div>
 
-            <!-- Order Status Breakdown -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300">
-                <div class="px-8 py-6 bg-gradient-to-r from-[#7F1734] to-[#5E0B15] text-white">
-                    <h2 class="text-2xl font-extrabold tracking-tight">Order Status Breakdown</h2>
-                </div>
-                <div class="p-8 space-y-4">
-                    <div class="flex items-center justify-between p-4 rounded-lg bg-yellow-50 border border-yellow-200">
-                        <span class="font-semibold text-yellow-800">Pending</span>
-                        <span class="text-2xl font-bold text-yellow-700">{{ pendingOrders }}</span>
-                    </div>
-                    <div class="flex items-center justify-between p-4 rounded-lg bg-blue-50 border border-blue-200">
-                        <span class="font-semibold text-blue-800">Processing</span>
-                        <span class="text-2xl font-bold text-blue-700">{{ processingOrders }}</span>
-                    </div>
-                    <div class="flex items-center justify-between p-4 rounded-lg bg-purple-50 border border-purple-200">
-                        <span class="font-semibold text-purple-800">Shipped</span>
-                        <span class="text-2xl font-bold text-purple-700">{{ shippedOrders }}</span>
-                    </div>
-                    <div class="flex items-center justify-between p-4 rounded-lg bg-green-50 border border-green-200">
-                        <span class="font-semibold text-green-800">Delivered</span>
-                        <span class="text-2xl font-bold text-green-700">{{ deliveredOrders }}</span>
-                    </div>
-                </div>
+        <!-- Total Orders -->
+        <div class="stat-card orange">
+            <span class="stat-label">Total Orders</span>
+            <h3 class="stat-value">{{ totalOrders }}</h3>
+            <span class="stat-description">All orders</span>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="stat-card red">
+            <span class="stat-label">Low Stock Alerts</span>
+            <h3 class="stat-value">{{ lowStockItems }}</h3>
+            <span class="stat-description">Need attention</span>
+        </div>
+    </div>
+
+    <!-- Order Status + Revenue -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Order Status Breakdown -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Order Status Breakdown
             </div>
-
-            <!-- Revenue Summary -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300">
-                <div class="px-8 py-6 bg-gradient-to-r from-[#9E2B47] to-[#7F1734] text-white">
-                    <h2 class="text-2xl font-extrabold tracking-tight">Revenue Summary</h2>
+            <div class="dashboard-card-body">
+                <div class="status-badge status-pending">
+                    <span class="status-label">Pending</span>
+                    <span class="status-value">{{ pendingOrders }}</span>
                 </div>
-                <div class="p-8 text-center">
-                    <p class="text-[#7F1734] text-sm uppercase font-semibold tracking-wide mb-2">Total Revenue</p>
-                    <h3 class="text-5xl font-extrabold text-[#7F1734] mb-6">₱{{ totalRevenue|number_format(2) }}</h3>
-                    <div class="text-left max-w-xs mx-auto">
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <p class="text-xs text-[#7F1734] uppercase font-semibold">From Active Orders</p>
-                            <p class="text-lg font-bold text-[#7F1734] mt-1">{{ totalOrders }} Orders</p>
-                        </div>
-                    </div>
+                <div class="status-badge status-processing">
+                    <span class="status-label">Processing</span>
+                    <span class="status-value">{{ processingOrders }}</span>
+                </div>
+                <div class="status-badge status-shipped">
+                    <span class="status-label">Shipped</span>
+                    <span class="status-value">{{ shippedOrders }}</span>
+                </div>
+                <div class="status-badge status-delivered">
+                    <span class="status-label">Delivered</span>
+                    <span class="status-value">{{ deliveredOrders }}</span>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 mb-10 hover:shadow-2xl transition-all duration-300">
-            <div class="px-8 py-6 bg-gradient-to-r from-[#7F1734] to-[#5E0B15] text-white">
-                <h2 class="text-2xl font-extrabold tracking-tight">Quick Actions</h2>
+        <!-- Revenue Summary -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Revenue Summary
             </div>
-            <div class="p-8">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <a href="{{ path('app_category_new') }}"
-                    class="p-4 text-center bg-gradient-to-br from-[#EFCFB4] to-[#D4AF9A] text-[#7F1734] rounded-xl font-semibold hover:shadow-lg hover:from-[#D4AF9A] hover:to-[#B89480] transition-all duration-300 border border-[#D4AF9A]">
-                        Add Category
-                    </a>
-                    <a href="{{ path('app_store_product_new') }}"
-                    class="p-4 text-center bg-gradient-to-br from-[#EFCFB4] to-[#D4AF9A] text-[#7F1734] rounded-xl font-semibold hover:shadow-lg hover:from-[#D4AF9A] hover:to-[#B89480] transition-all duration-300 border border-[#D4AF9A]">
-                        Add Product
-                    </a>
-                    <a href="{{ path('app_wine_inventory_new') }}"
-                    class="p-4 text-center bg-gradient-to-br from-[#EFCFB4] to-[#D4AF9A] text-[#7F1734] rounded-xl font-semibold hover:shadow-lg hover:from-[#D4AF9A] hover:to-[#B89480] transition-all duration-300 border border-[#D4AF9A]">
-                        Add Inventory
-                    </a>
-                    <a href="{{ path('app_order_new') }}"
-                    class="p-4 text-center bg-gradient-to-br from-[#7F1734] to-[#5E0B15] text-[#7F1734] rounded-xl font-semibold hover:shadow-lg hover:from-[#5E0B15] hover:to-[#3D0A0C] transition-all duration-300 border border-[#5E0B15]">
-                        Create Order
-                    </a>
+            <div class="dashboard-card-body">
+                <div style="text-align: center;">
+                    <p class="stat-label">Total Revenue</p>
+                    <h3 class="stat-value" style="margin: 16px 0;">₱{{ totalRevenue|number_format(2) }}</h3>
+                    <div class="welcome-box" style="max-width: 300px; margin: 0 auto;">
+                        <p style="margin: 0;">
+                            <strong>From Active Orders</strong><br>
+                            {{ totalOrders }} Orders
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Management Sections -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            <!-- Categories -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300">
-                <div class="px-8 py-6 bg-gradient-to-r from-[#7F1734] to-[#9E2B47] text-white">
-                    <h3 class="text-2xl font-extrabold tracking-tight">Categories</h3>
-                </div>
-                <div class="p-8">
-                    <p class="text-[#7F1734] mb-6 font-medium">Create and organize wine categories for better product management.</p>
-                    <a href="{{ categoryUrl }}"
-                    class="block text-center px-6 py-3 text-[#7F1734] rounded-xl font-semibold bg-gradient-to-r from-[#EFCFB4] to-[#D4AF9A] hover:from-[#D4AF9A] hover:to-[#B89480] hover:shadow-lg transition-all duration-300 border border-[#D4AF9A]">
-                        Manage Categories
-                    </a>
-                </div>
+    <!-- Quick Actions -->
+    <div class="dashboard-card mb-8">
+        <div class="dashboard-card-header">
+            ⚡ Quick Actions
+        </div>
+        <div class="dashboard-card-body">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="{{ path('app_category_new') }}" class="action-link beige">
+                    <span class="action-icon">📁</span>
+                    <span>Add Category</span>
+                </a>
+                <a href="{{ path('app_store_product_new') }}" class="action-link beige">
+                    <span class="action-icon">🍷</span>
+                    <span>Add Product</span>
+                </a>
+                <a href="{{ path('app_wine_inventory_new') }}" class="action-link beige">
+                    <span class="action-icon">📦</span>
+                    <span>Add Inventory</span>
+                </a>
+                <a href="{{ path('app_order_new') }}" class="action-link burgundy">
+                    <span class="action-icon">🛒</span>
+                    <span>Create Order</span>
+                </a>
             </div>
+        </div>
+    </div>
 
-            <!-- Products -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300">
-                <div class="px-8 py-6 bg-gradient-to-r from-[#9E2B47] to-[#7F1734] text-white">
-                    <h3 class="text-2xl font-extrabold tracking-tight">Products</h3>
-                </div>
-                <div class="p-8">
-                    <p class="text-[#7F1734] mb-6 font-medium">Manage wine products, pricing, descriptions, and availability.</p>
-                    <a href="{{ productUrl }}"
-                    class="block text-center px-6 py-3 text-[#7F1734] rounded-xl font-semibold bg-gradient-to-r from-[#EFCFB4] to-[#D4AF9A] hover:from-[#D4AF9A] hover:to-[#B89480] hover:shadow-lg transition-all duration-300 border border-[#D4AF9A]">
-                        Manage Products
-                    </a>
-                </div>
+    <!-- Management Sections -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Categories -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Categories
             </div>
-
-            <!-- Inventory -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300">
-                <div class="px-8 py-6 bg-gradient-to-r from-[#7F1734] to-[#5E0B15] text-white">
-                    <h3 class="text-2xl font-extrabold tracking-tight">Inventory</h3>
-                </div>
-                <div class="p-8">
-                    <p class="text-[#7F1734] mb-6 font-medium">Track stock quantities, acquisition dates, and inventory levels.</p>
-                    <a href="{{ inventoryUrl }}"
-                    class="block text-center px-6 py-3 text-[#7F1734] rounded-xl font-semibold bg-gradient-to-r from-[#EFCFB4] to-[#D4AF9A] hover:from-[#D4AF9A] hover:to-[#B89480] hover:shadow-lg transition-all duration-300 border border-[#D4AF9A]">
-                        Manage Inventory
-                    </a>
-                </div>
-            </div>
-
-            <!-- Orders -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300">
-                <div class="px-8 py-6 bg-gradient-to-r from-[#5E0B15] to-[#7F1734] text-white">
-                    <h3 class="text-2xl font-extrabold tracking-tight">Orders</h3>
-                </div>
-                <div class="p-8">
-                    <p class="text-[#7F1734] mb-6 font-medium">Manage customer orders, shipping, and order status updates.</p>
-                    <a href="{{ orderUrl }}"
-                    class="block text-center px-6 py-3 text-[#7F1734] rounded-xl font-semibold bg-gradient-to-r from-[#EFCFB4] to-[#D4AF9A] hover:from-[#D4AF9A] hover:to-[#B89480] hover:shadow-lg transition-all duration-300 border border-[#D4AF9A]">
-                        Manage Orders
-                    </a>
-                </div>
+            <div class="dashboard-card-body">
+                <p class="content-description">Create and organize wine categories for better product management.</p>
+                <a href="{{ categoryUrl }}" class="btn-beige" style="display: block; text-align: center;">Manage Categories</a>
             </div>
         </div>
 
+        <!-- Products -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Products
+            </div>
+            <div class="dashboard-card-body">
+                <p class="content-description">Manage wine products, pricing, descriptions, and availability.</p>
+                <a href="{{ productUrl }}" class="btn-beige" style="display: block; text-align: center;">Manage Products</a>
+            </div>
+        </div>
+
+        <!-- Inventory -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Inventory
+            </div>
+            <div class="dashboard-card-body">
+                <p class="content-description">Track stock quantities, acquisition dates, and inventory levels.</p>
+                <a href="{{ inventoryUrl }}" class="btn-beige" style="display: block; text-align: center;">Manage Inventory</a>
+            </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Orders
+            </div>
+            <div class="dashboard-card-body">
+                <p class="content-description">Manage customer orders, shipping, and order status updates.</p>
+                <a href="{{ orderUrl }}" class="btn-beige" style="display: block; text-align: center;">Manage Orders</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -10,6 +10,7 @@
     <meta http-equiv="Expires" content="0">
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard-design.css') }}?v={{ random() }}">
 
     <style>
         /* Burgundy and Beige Color Scheme */
@@ -194,7 +195,7 @@
 <div class="min-h-screen flex text-gray-900">
 
     <!-- Sidebar -->
-    <aside class="w-64 wine-gradient text-[#F8EAD8] fixed top-0 left-0 h-screen border-r border-[#6F0F26] flex flex-col z-50">
+    <aside class="w-64 text-[#F8EAD8] fixed top-0 left-0 h-screen border-r border-[#6F0F26] flex flex-col z-50" style="background: linear-gradient(135deg, #7F1734 0%, #4B164C 100%);">
         <div class="px-6 py-8 border-b border-white/20 text-center">
             <div class="flex items-center justify-center space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#EFCFB4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -279,6 +280,18 @@
 
     <!-- Main Content -->
     <main class="flex-1 ml-64 p-8 admin-main">
+        <!-- Header with User Info -->
+        <div class="bg-white rounded-lg shadow-md mb-8 p-6 flex justify-between items-center" style="border-left: 4px solid #7F1734; {% block admin_header_display %}display: flex;{% endblock %}">
+            <h1 class="text-3xl font-bold text-burgundy-main">{% block page_title %}Admin Dashboard{% endblock %}</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 14px; font-weight: 500; color: #333;">
+                    Welcome, <strong>{{ app.user.email }}</strong>
+                </div>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7F1734, #9E2B47); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
+                    {{ app.user.email|slice(0, 1)|upper }}
+                </div>
+            </div>
+        </div>
         {% block admin_content %}{% endblock %}
     </main>
 </div>
