@@ -261,6 +261,14 @@
                 <span>Users</span>
             </a>
 
+            <a href="{{ path('admin_profile') }}"
+               class="flex items-center space-x-3 px-4 py-3 rounded-md font-semibold sidebar-link {{ app.request.get('_route') == 'admin_profile' ? 'active-sidebar' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>My Profile</span>
+            </a>
+
         </nav>
 
         {# Logout Button at Bottom #}
@@ -287,9 +295,9 @@
                 <div style="font-size: 14px; font-weight: 500; color: #333;">
                     Welcome, <strong>{{ app.user.email }}</strong>
                 </div>
-                <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7F1734, #9E2B47); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
+                <a href="{{ path('admin_profile') }}" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7F1734, #9E2B47); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; text-decoration: none; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.2)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
                     {{ app.user.email|slice(0, 1)|upper }}
-                </div>
+                </a>
             </div>
         </div>
         {% block admin_content %}{% endblock %}

@@ -27,6 +27,7 @@
             <h2 style="font-size: 24px; font-weight: 700; color: #7F1734; margin-bottom: 8px;">
                 {{ user.email }}
             </h2>
+            <p style="font-size: 14px; color: #666; margin-bottom: 4px;">@{{ user.username }}</p>
             <p style="font-size: 14px; color: #888;">Staff Member</p>
         </div>
 
@@ -35,6 +36,23 @@
             <h3 style="font-size: 18px; font-weight: 700; color: #7F1734; margin-bottom: 20px;">Profile Information</h3>
             
             <div style="display: grid; gap: 20px;">
+                <!-- Username -->
+                <div>
+                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                        Username
+                    </label>
+                    <div style="
+                        padding: 12px 16px;
+                        background: #f8f9fa;
+                        border: 1px solid #e9ecef;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        color: #333;
+                    ">
+                        @{{ user.username }}
+                    </div>
+                </div>
+
                 <!-- Email -->
                 <div>
                     <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">

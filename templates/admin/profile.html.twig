@@ -1,0 +1,139 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}My Profile - CORK Admin{% endblock %}
+
+{% block admin_content %}
+<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="{{ path('admin_dashboard') }}"
+               class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold shadow-md transition-all duration-300 bg-gray-300 text-gray-700 border border-gray-300 hover:bg-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>Back to Dashboard</span>
+            </a>
+        </div>
+
+        <!-- Profile Header Card -->
+        <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-8 mb-8">
+            <!-- Profile Header -->
+            <div class="flex flex-col sm:flex-row items-center gap-8 mb-8">
+                <!-- Avatar -->
+                <div class="flex-shrink-0">
+                    <div class="w-32 h-32 rounded-full" style="background: linear-gradient(135deg, #7F1734, #9E2B47); display: flex; align-items: center; justify-content: center; color: white; font-size: 56px; font-weight: bold;">
+                        {{ user.email|slice(0, 1)|upper }}
+                    </div>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex-1 text-center sm:text-left">
+                    <h1 class="text-4xl font-extrabold text-[#5E0B15] mb-2">👤 My Profile</h1>
+                    <p class="text-lg text-gray-600 mb-4">{{ user.email }}</p>
+                    <p class="text-sm text-gray-500 mb-4">@{{ user.username }}</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            <span class="inline-block px-4 py-2 bg-[#7F1734] text-white rounded-full font-semibold text-sm">
+                                🛡️ Administrator
+                            </span>
+                        {% elseif 'ROLE_STAFF' in user.roles %}
+                            <span class="inline-block px-4 py-2 bg-[#9E2B47] text-white rounded-full font-semibold text-sm">
+                                👔 Staff Member
+                            </span>
+                        {% else %}
+                            <span class="inline-block px-4 py-2 bg-gray-500 text-white rounded-full font-semibold text-sm">
+                                👤 User
+                            </span>
+                        {% endif %}
+                        
+                        {% if user.isActive %}
+                            <span class="inline-block px-4 py-2 bg-green-500 text-white rounded-full font-semibold text-sm">
+                                ✓ Active
+                            </span>
+                        {% else %}
+                            <span class="inline-block px-4 py-2 bg-red-500 text-white rounded-full font-semibold text-sm">
+                                ✕ Inactive
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-[#EFCFB4] my-8">
+
+            <!-- Account Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Username Section -->
+                <div class="bg-gradient-to-br from-[#FFFAF5] to-[#F8EAD8] rounded-xl p-6 border border-[#EFCFB4]">
+                    <label class="block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide">Username</label>
+                    <p class="text-lg font-semibold text-[#5E0B15]">@{{ user.username }}</p>
+                </div>
+
+                <!-- Email Section -->
+                <div class="bg-gradient-to-br from-[#FFFAF5] to-[#F8EAD8] rounded-xl p-6 border border-[#EFCFB4]">
+                    <label class="block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide">Email Address</label>
+                    <p class="text-lg font-semibold text-[#5E0B15] break-all">{{ user.email }}</p>
+                </div>
+
+                <!-- Role Section -->
+                <div class="bg-gradient-to-br from-[#FFFAF5] to-[#F8EAD8] rounded-xl p-6 border border-[#EFCFB4]">
+                    <label class="block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide">Account Role</label>
+                    <p class="text-lg font-semibold text-[#5E0B15]">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            Administrator
+                        {% elseif 'ROLE_STAFF' in user.roles %}
+                            Staff Member
+                        {% else %}
+                            User
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Account Status -->
+                <div class="bg-gradient-to-br from-[#FFFAF5] to-[#F8EAD8] rounded-xl p-6 border border-[#EFCFB4]">
+                    <label class="block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide">Account Status</label>
+                    <p class="text-lg font-semibold text-[#5E0B15]">
+                        {% if user.isActive %}
+                            <span class="text-green-600">✓ Active</span>
+                        {% else %}
+                            <span class="text-red-600">✕ Inactive</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Account Created -->
+                <div class="bg-gradient-to-br from-[#FFFAF5] to-[#F8EAD8] rounded-xl p-6 border border-[#EFCFB4]">
+                    <label class="block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide">Member Since</label>
+                    <p class="text-lg font-semibold text-[#5E0B15]">{{ user.createdAt|date('F j, Y') }}</p>
+                </div>
+
+                <!-- Last Updated -->
+                {% if user.updatedAt %}
+                    <div class="bg-gradient-to-br from-[#FFFAF5] to-[#F8EAD8] rounded-xl p-6 border border-[#EFCFB4]">
+                        <label class="block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide">Last Updated</label>
+                        <p class="text-lg font-semibold text-[#5E0B15]">{{ user.updatedAt|date('F j, Y H:i:s') }}</p>
+                    </div>
+                {% else %}
+                    <div class="bg-gradient-to-br from-[#FFFAF5] to-[#F8EAD8] rounded-xl p-6 border border-[#EFCFB4]">
+                        <label class="block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide">Last Updated</label>
+                        <p class="text-lg font-semibold text-gray-400">Never</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ path('admin_users_edit', {'id': user.id}) }}"
+               class="px-6 py-3 rounded-xl font-semibold shadow-md transition-all duration-300 border text-center bg-[#EFCFB4] text-[#7F1734] border-[#EFCFB4] hover:bg-[#7F1734] hover:text-white btn-hover">
+                ✏️ Edit Profile
+            </a>
+            <a href="{{ path('admin_dashboard') }}"
+               class="px-6 py-3 rounded-xl font-semibold shadow-md transition-all duration-300 border text-center bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

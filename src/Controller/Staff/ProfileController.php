@@ -36,21 +36,9 @@ class ProfileController extends AbstractController
         $error = null;
 
         if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
             $currentPassword = $request->request->get('current_password');
             $newPassword = $request->request->get('new_password');
             $confirmPassword = $request->request->get('confirm_password');
-
-            // Validate email
-            if (empty($email)) {
-                $error = 'Email is required';
-            } elseif ($email !== $user->getEmail()) {
-                // Check if email already exists
-                $existingUser = $em->getRepository('App:User')->findOneBy(['email' => $email]);
-                if ($existingUser) {
-                    $error = 'This email is already in use';
-                }
-            }
 
             // Handle password change
             if (!empty($newPassword) || !empty($currentPassword)) {
@@ -70,16 +58,16 @@ class ProfileController extends AbstractController
                     $user->setPassword(
                         $passwordHasher->hashPassword($user, $newPassword)
                     );
+                    $user->setUpdatedAt(new \DateTimeImmutable());
+                    $em->persist($user);
+                    $em->flush();
+
+                    $this->addFlash('success', 'Your password has been updated successfully!');
+                    return $this->redirectToRoute('staff_profile_index');
                 }
-            }
-
-            // Update email if no errors
-            if (!$error) {
-                $user->setEmail($email);
-                $em->persist($user);
-                $em->flush();
-
-                $this->addFlash('success', 'Your profile has been updated successfully!');
+            } else {
+                // If no password change attempted, still show message but redirect
+                $this->addFlash('info', 'No changes were made.');
                 return $this->redirectToRoute('staff_profile_index');
             }
         }

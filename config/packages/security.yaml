@@ -4,9 +4,8 @@ security:
 
     providers:
         app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
+            id: App\Security\UsernameOrEmailUserProvider
+
 
     firewalls:
         dev:
@@ -17,10 +16,11 @@ security:
             pattern: ^/(admin|staff)
             lazy: false
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
             form_login:
                 login_path: app_login
                 check_path: app_login
-                username_parameter: email
+                username_parameter: identifier
                 password_parameter: password
             logout:
                 path: app_logout

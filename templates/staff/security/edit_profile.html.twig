@@ -6,6 +6,24 @@
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
+    <!-- Info Alert -->
+    <div style="
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    ">
+        <span style="font-size: 18px;">ℹ️</span>
+        <div>
+            <strong>Note:</strong> Your username and email are set by the administrator and cannot be changed. You can only update your password below.
+        </div>
+    </div>
+
     <!-- Error Alert -->
     {% if error %}
         <div style="
@@ -25,49 +43,69 @@
     {% endif %}
 
     <!-- Edit Form Card -->
-    <div style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-        <form method="POST" action="{{ path('staff_profile_edit') }}">
-            <!-- Email Section -->
-            <fieldset style="border: none; padding: 0; margin-bottom: 30px;">
-                <legend style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px; padding: 0;">
-                    Email Address
-                </legend>
-                <div>
-                    <label for="email" style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
-                        Email
-                    </label>
-                    <input 
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ user.email }}"
-                        required
-                        style="
-                            width: 100%;
-                            padding: 12px 16px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 16px;
-                            font-family: inherit;
-                            transition: border-color 0.3s ease;
-                        "
-                        onfocus="this.style.borderColor='#7F1734'"
-                        onblur="this.style.borderColor='#e9ecef'"
-                    />
+    <div style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px;">
+        <!-- Account Information (Read-only) -->
+        <fieldset style="border: none; padding: 0; margin-bottom: 30px;">
+            <legend style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px; padding: 0;">
+                Account Information
+            </legend>
+            
+            <!-- Username -->
+            <div style="margin-bottom: 16px;">
+                <label style="
+                    display: block;
+                    font-size: 13px;
+                    color: #888;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    margin-bottom: 8px;
+                ">
+                    Username
+                </label>
+                <div style="
+                    width: 100%;
+                    padding: 12px 16px;
+                    border: 2px solid #e9ecef;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    background: #f8f9fa;
+                    color: #666;
+                ">
+                    @{{ user.username }}
                 </div>
-            </fieldset>
+            </div>
 
-            <!-- Password Change Section -->
+            <!-- Email -->
+            <div>
+                <label style="
+                    display: block;
+                    font-size: 13px;
+                    color: #888;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    margin-bottom: 8px;
+                ">
+                    Email Address
+                </label>
+                <div style="
+                    width: 100%;
+                    padding: 12px 16px;
+                    border: 2px solid #e9ecef;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    background: #f8f9fa;
+                    color: #666;
+                ">
+                    {{ user.email }}
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Password Change Form -->
+        <form method="POST" action="{{ path('staff_profile_edit') }}">
             <fieldset style="border: none; padding: 0; margin-bottom: 30px; padding-top: 20px; border-top: 1px solid #eee;">
                 <legend style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px; padding: 0; margin-top: 10px;">
-                    Change Password (Optional)
+                    Change Password
                 </legend>
                 
                 <p style="font-size: 13px; color: #888; margin-bottom: 20px;">
@@ -188,7 +226,7 @@
                     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(127, 23, 52, 0.3)'"
                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
                 >
-                    💾 Save Changes
+                    💾 Update Password
                 </button>
                 <a href="{{ path('staff_profile_index') }}" style="
                     flex: 1;

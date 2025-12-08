@@ -66,4 +66,16 @@ class DashboardController extends AbstractController
             'totalRevenue' => $totalRevenue,
         ]);
     }
+
+    #[Route('/admin/profile', name: 'admin_profile')]
+    public function profile(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $user = $this->getUser();
+
+        return $this->render('admin/profile.html.twig', [
+            'user' => $user,
+        ]);
+    }
 }
