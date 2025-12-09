@@ -77,19 +77,36 @@ class StaffProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Image Upload
             $imageFile = $form->get('imageFile')->getData();
+            
+            error_log('=== PRODUCT CREATION DEBUG ===');
+            error_log('Image file: ' . ($imageFile ? get_class($imageFile) : 'null'));
+            
             if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
-
                 try {
-                    $imageFile->move(
-                        $this->getParameter('wine_images_directory'),
-                        $newFilename
-                    );
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+                    $uploadDir = $this->getParameter('wine_images_directory');
+                    
+                    error_log('Original: ' . $imageFile->getClientOriginalName());
+                    error_log('Safe name: ' . $safeFilename);
+                    error_log('New filename: ' . $newFilename);
+                    error_log('Upload dir param: ' . $uploadDir);
+                    error_log('File temp path: ' . $imageFile->getPathname());
+                    error_log('File size: ' . $imageFile->getSize());
+                    
+                    $imageFile->move($uploadDir, $newFilename);
+                    
+                    error_log('File successfully moved to: ' . $uploadDir . '/' . $newFilename);
                     $storeProduct->setImage($newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', '❌ Failed to upload image.');
+                    error_log('FileException: ' . $e->getMessage() . ' | Code: ' . $e->getCode());
+                    $this->addFlash('error', '❌ Failed to upload image: ' . $e->getMessage());
+                    return $this->redirectToRoute('staff_products_new');
+                } catch (\Exception $e) {
+                    error_log('Exception: ' . get_class($e) . ' | ' . $e->getMessage());
+                    $this->addFlash('error', '❌ Error: ' . $e->getMessage());
                     return $this->redirectToRoute('staff_products_new');
                 }
             }
@@ -154,21 +171,33 @@ class StaffProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Image Upload
-            $imageFile = $form->get('imageFile')->getData();
-            if ($imageFile) {
+            // Image Upload - Get file from request files
+            $uploadedFiles = $request->files->get($form->getName());
+            $imageFile = null;
+            
+            if (isset($uploadedFiles['imageFile'])) {
+                $imageFile = $uploadedFiles['imageFile'];
+            } else {
+                // Try alternate method
+                $imageFile = $form->get('imageFile')->getData();
+            }
+            
+            if ($imageFile && $imageFile->getSize() > 0) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
 
                 try {
+                    $uploadDir = $this->getParameter('wine_images_directory');
+                    // Normalize path for Windows/Linux compatibility
+                    $uploadDir = str_replace('/', DIRECTORY_SEPARATOR, $uploadDir);
                     $imageFile->move(
-                        $this->getParameter('wine_images_directory'),
+                        $uploadDir,
                         $newFilename
                     );
                     $product->setImage($newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', '❌ Failed to upload image.');
+                    $this->addFlash('error', '❌ Failed to upload image: ' . $e->getMessage());
                     return $this->redirectToRoute('staff_products_edit', ['id' => $product->getId()]);
                 }
             }
