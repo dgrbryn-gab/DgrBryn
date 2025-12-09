@@ -28,20 +28,24 @@ class OrderItemType extends AbstractType
                 'choice_label' => function(StoreProduct $product) {
                     return sprintf('%s (₱%.2f)', $product->getName(), $product->getPrice());
                 },
+                'choice_attr' => function(StoreProduct $product) {
+                    return ['data-price' => number_format($product->getPrice(), 2, '.', '')];
+                },
                 'placeholder' => '-- Select a product --',
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control product-select',
+                    'style' => 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;',
                 ],
             ])
             ->add('quantity', IntegerType::class, [
                 'label' => 'Quantity',
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Quantity',
+                    'class' => 'form-control quantity-field',
+                    'style' => 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;',
+                    'placeholder' => 'Qty',
                     'min' => 1,
-                    'value' => 1,
                 ],
             ])
             ->add('unitPrice', MoneyType::class, [
@@ -50,6 +54,7 @@ class OrderItemType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control unit-price-field',
+                    'style' => 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;',
                     'placeholder' => '0.00',
                     'step' => '0.01',
                 ],
@@ -59,7 +64,8 @@ class OrderItemType extends AbstractType
                 'currency' => 'PHP',
                 'required' => false,
                 'attr' => [
-                    'class' => 'form-control',
+                    'class' => 'form-control discount-field',
+                    'style' => 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;',
                     'placeholder' => '0.00',
                     'step' => '0.01',
                 ],

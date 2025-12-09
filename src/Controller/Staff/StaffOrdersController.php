@@ -100,8 +100,11 @@ class StaffOrdersController extends AbstractController
             return $this->redirectToRoute('staff_orders_show', ['id' => $order->getId()]);
         }
 
+        $products = $productRepository->findAll();
+        
         return $this->render('staff/orders/new.html.twig', [
             'form' => $form,
+            'products' => $products,
         ]);
     }
 

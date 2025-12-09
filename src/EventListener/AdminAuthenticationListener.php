@@ -25,6 +25,11 @@ class AdminAuthenticationListener implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event): void
     {
+        // Only process main requests, not subrequests
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
         $request = $event->getRequest();
         $pathInfo = $request->getPathInfo();
 
@@ -33,7 +38,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
             // Get the current user token
             $token = $this->tokenStorage->getToken();
             
-            // If no token or user is null/not authenticated, redirect to login
+            // If no token or user is null, redirect to login
             if (!$token || !$token->getUser()) {
                 $loginUrl = $this->router->generate('app_login');
                 $event->setResponse(new RedirectResponse($loginUrl, 302));
