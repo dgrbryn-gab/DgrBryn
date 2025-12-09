@@ -283,13 +283,18 @@
                 </svg>
                 <span>Logout</span>
             </a>
+            
+            <!-- Email below logout -->
+            <div style="padding: 12px 16px; margin-top: 12px; text-center; font-size: 12px; color: #EFCFB4;">
+                {{ app.user.email }}
+            </div>
         </div>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 ml-64 p-8 admin-main">
-        <!-- Header with User Info -->
-        <div class="bg-white rounded-lg shadow-md mb-8 p-6 flex justify-between items-center" style="border-left: 4px solid #7F1734; {% block admin_header_display %}display: flex;{% endblock %}">
+        <!-- Header with User Info - HIDDEN -->
+        <div style="display: none;" class="bg-white rounded-lg shadow-md mb-8 p-6 flex justify-between items-center" style="border-left: 4px solid #7F1734;">
             <h1 class="text-3xl font-bold text-burgundy-main">{% block page_title %}Admin Dashboard{% endblock %}</h1>
             <div style="display: flex; align-items: center; gap: 15px;">
                 <div style="font-size: 14px; font-weight: 500; color: #333;">
