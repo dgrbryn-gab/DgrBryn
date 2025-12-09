@@ -83,9 +83,11 @@ class WineInventory
         return $this->lastUpdated;
     }
 
-    public function setLastUpdated(\DateTime $lastUpdated): static
+    public function setLastUpdated(?\DateTime $lastUpdated): static
     {
-        $this->lastUpdated = $lastUpdated;
+        if ($lastUpdated !== null) {
+            $this->lastUpdated = $lastUpdated;
+        }
         return $this;
     }
 

@@ -146,9 +146,10 @@ class StaffInventoryController extends AbstractController
         }
 
         $user = $this->getUser();
-        if ($wineInventory->getProduct()?->getCreatedBy() !== $user) {
+        // Check if the inventory has a product and if it belongs to the user
+        if (!$wineInventory->getProduct() || $wineInventory->getProduct()->getCreatedBy() !== $user) {
             $this->addFlash('error', '❌ You can only edit inventory for your own products!');
-            return $this->redirectToRoute('staff_inventory_show', ['id' => $wineInventory->getId()]);
+            return $this->redirectToRoute('staff_inventory_index');
         }
 
         $form = $this->createForm(WineInventoryType::class, $wineInventory);
@@ -183,7 +184,8 @@ class StaffInventoryController extends AbstractController
         }
 
         $user = $this->getUser();
-        if ($wineInventory->getProduct()?->getCreatedBy() !== $user) {
+        // Check if the inventory has a product and if it belongs to the user
+        if (!$wineInventory->getProduct() || $wineInventory->getProduct()->getCreatedBy() !== $user) {
             $this->addFlash('error', '❌ You can only delete inventory for your own products!');
             return $this->redirectToRoute('staff_inventory_index');
         }

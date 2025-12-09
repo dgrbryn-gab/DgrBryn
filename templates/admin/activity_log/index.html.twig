@@ -1,0 +1,238 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Activity Logs - Admin{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEQxiZt+QV8DbFJKq7O8y2sSt7QH+nXs47GbSt+GUoftheJc4VUYvncd9M19b91t8bZJWfow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block admin_content %}
+<style>
+    .activity-table-row { background: white; border-bottom: 1px solid #e0e0e0; }
+    .activity-table-row:hover { background: #f9f9f9; }
+    .activity-cell { padding: 12px 16px; color: #333; }
+    .activity-header { background: #7F1734; color: white; padding: 16px; font-weight: 600; }
+</style>
+<div class="mb-8">
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-burgundy-main mb-2">Activity Logs</h1>
+        <p class="text-burgundy-main text-sm">Monitor all user activities including logins, logouts, and data modifications.</p>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="admin-card rounded-lg p-6 mb-8">
+        <h2 class="text-xl font-bold text-burgundy-main mb-4">Filters</h2>
+        
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Username Filter -->
+            <div>
+                <label class="block text-sm font-medium text-burgundy-main mb-2">Username</label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    value="{{ username_filter | default('') }}"
+                    placeholder="Search username..."
+                    class="w-full px-4 py-2 border border-burgundy-light rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-main"
+                >
+            </div>
+
+            <!-- Action Filter -->
+            <div>
+                <label class="block text-sm font-medium text-burgundy-main mb-2">Action</label>
+                <select name="action" class="w-full px-4 py-2 border border-burgundy-light rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-main">
+                    <option value="">All Actions</option>
+                    <optgroup label="User Actions">
+                        <option value="USER_LOGIN" {% if action_filter == 'USER_LOGIN' %}selected{% endif %}>User Login</option>
+                        <option value="USER_LOGOUT" {% if action_filter == 'USER_LOGOUT' %}selected{% endif %}>User Logout</option>
+                    </optgroup>
+                    <optgroup label="Order Actions">
+                        <option value="ORDER_CREATED" {% if action_filter == 'ORDER_CREATED' %}selected{% endif %}>Order Created</option>
+                        <option value="ORDER_UPDATED" {% if action_filter == 'ORDER_UPDATED' %}selected{% endif %}>Order Updated</option>
+                        <option value="ORDER_DELETED" {% if action_filter == 'ORDER_DELETED' %}selected{% endif %}>Order Deleted</option>
+                    </optgroup>
+                    <optgroup label="Product Actions">
+                        <option value="PRODUCT_CREATED" {% if action_filter == 'PRODUCT_CREATED' %}selected{% endif %}>Product Created</option>
+                        <option value="PRODUCT_UPDATED" {% if action_filter == 'PRODUCT_UPDATED' %}selected{% endif %}>Product Updated</option>
+                        <option value="PRODUCT_DELETED" {% if action_filter == 'PRODUCT_DELETED' %}selected{% endif %}>Product Deleted</option>
+                    </optgroup>
+                    <optgroup label="Inventory Actions">
+                        <option value="INVENTORY_CREATED" {% if action_filter == 'INVENTORY_CREATED' %}selected{% endif %}>Inventory Created</option>
+                        <option value="INVENTORY_UPDATED" {% if action_filter == 'INVENTORY_UPDATED' %}selected{% endif %}>Inventory Updated</option>
+                        <option value="INVENTORY_DELETED" {% if action_filter == 'INVENTORY_DELETED' %}selected{% endif %}>Inventory Deleted</option>
+                    </optgroup>
+                    <optgroup label="Category Actions">
+                        <option value="CATEGORY_CREATED" {% if action_filter == 'CATEGORY_CREATED' %}selected{% endif %}>Category Created</option>
+                        <option value="CATEGORY_UPDATED" {% if action_filter == 'CATEGORY_UPDATED' %}selected{% endif %}>Category Updated</option>
+                        <option value="CATEGORY_DELETED" {% if action_filter == 'CATEGORY_DELETED' %}selected{% endif %}>Category Deleted</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- Start Date Filter -->
+            <div>
+                <label class="block text-sm font-medium text-burgundy-main mb-2">From</label>
+                <input 
+                    type="date" 
+                    name="startDate"
+                    class="w-full px-4 py-2 border border-burgundy-light rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-main"
+                >
+            </div>
+
+            <!-- End Date Filter -->
+            <div>
+                <label class="block text-sm font-medium text-burgundy-main mb-2">To</label>
+                <input 
+                    type="date" 
+                    name="endDate"
+                    class="w-full px-4 py-2 border border-burgundy-light rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-main"
+                >
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex items-end gap-2">
+                <button type="submit" class="flex-1 admin-btn-burgundy px-6 py-2 rounded-lg text-white font-semibold">
+                    <i class="fas fa-search mr-2"></i>Filter
+                </button>
+                <a href="{{ path('admin_activity_logs_index') }}" class="flex-1 px-6 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg text-gray-800 font-semibold text-center">
+                    <i class="fas fa-redo mr-2"></i>Reset
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Activity Logs Table -->
+    <div class="admin-card rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead style="background: #7F1734; color: white;">
+                    <tr>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">ID</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Username</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Role</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Action</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Target Data</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">IP Address</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if activity_logs | length > 0 %}
+                        {% for log in activity_logs %}
+                        <tr style="background: white; border-bottom: 1px solid #e0e0e0;">
+                            <td style="padding: 12px 16px; color: #333; font-weight: 500;">{{ log.id }}</td>
+                            <td style="padding: 12px 16px; color: #333;">
+                                <a href="{{ path('admin_activity_logs_by_user', {userId: log.userId}) }}" style="color: #333; text-decoration: none; font-weight: 500;">
+                                    {{ log.username }}
+                                </a>
+                            </td>
+                            <td style="padding: 12px 16px;">
+                                <span style="display: inline-block; width: 180px; text-align: center; padding: 8px 0; background-color: #7F1734; color: #ffffff; font-size: 12px; font-weight: 600; border-radius: 4px; white-space: nowrap;">
+                                    {{ log.role is iterable ? log.role | join(', ') : log.role }}
+                                </span>
+                            </td>
+                            <td style="padding: 12px 16px;">
+                                <span style="display: inline-block; width: 140px; text-align: center; padding: 8px 0; font-size: 12px; font-weight: 600; border-radius: 4px; color: white; white-space: nowrap;
+                                    {% if 'LOGIN' in log.action or 'LOGOUT' in log.action %}
+                                        background-color: #0066cc;
+                                    {% elseif 'CREATED' in log.action %}
+                                        background-color: #28a745;
+                                    {% elseif 'UPDATED' in log.action %}
+                                        background-color: #ffc107; color: #333;
+                                    {% elseif 'DELETED' in log.action %}
+                                        background-color: #dc3545;
+                                    {% else %}
+                                        background-color: #6c757d;
+                                    {% endif %}
+                                ">
+                                    {{ log.actionLabel }}
+                                </span>
+                            </td>
+                            <td style="padding: 12px 16px; font-size: 12px; font-family: monospace; color: #333;">
+                                {% if log.targetData %}
+                                    {% if log.targetData is iterable %}
+                                        {{ log.targetData | json_encode(constant('JSON_PRETTY_PRINT')) | nl2br }}
+                                    {% else %}
+                                        {{ log.targetData }}
+                                    {% endif %}
+                                {% else %}
+                                    <span style="color: #999;">—</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 12px 16px; font-family: monospace; font-size: 12px;">
+                                {% if log.ipAddress %}
+                                    <span style="display: inline-block; padding: 4px 8px; background: #f0f0f0; border-radius: 4px; color: #333;">
+                                        {{ log.ipAddress }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: #999;">—</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 12px 16px; color: #666; font-size: 13px;">{{ log.createdAtFormatted }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-4xl mb-4 block opacity-50"></i>
+                                No activity logs found
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {% if pages > 1 %}
+    <div class="mt-8 flex items-center justify-between">
+        <div class="text-gray-600">
+            Showing page <strong>{{ page }}</strong> of <strong>{{ pages }}</strong> 
+            (<strong>{{ total }}</strong> total records)
+        </div>
+        
+        <div class="flex gap-2">
+            {% if page > 1 %}
+                <a href="{{ path('admin_activity_logs_index') }}?page=1" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    <i class="fas fa-chevron-left mr-1"></i>First
+                </a>
+                <a href="{{ path('admin_activity_logs_index') }}?page={{ page - 1 }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    <i class="fas fa-chevron-left mr-1"></i>Previous
+                </a>
+            {% endif %}
+
+            {% for p in 1..pages %}
+                {% if p == page %}
+                    <span class="px-4 py-2 bg-burgundy-light text-white rounded font-bold">{{ p }}</span>
+                {% elseif p <= page + 2 and p >= page - 2 %}
+                    <a href="{{ path('admin_activity_logs_index') }}?page={{ p }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                        {{ p }}
+                    </a>
+                {% elseif p == page - 3 or p == page + 3 %}
+                    <span class="px-4 py-2">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < pages %}
+                <a href="{{ path('admin_activity_logs_index') }}?page={{ page + 1 }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    Next<i class="fas fa-chevron-right ml-1"></i>
+                </a>
+                <a href="{{ path('admin_activity_logs_index') }}?page={{ pages }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    Last<i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+function showTargetData(button) {
+    const dataDiv = button.nextElementSibling;
+    dataDiv.classList.toggle('hidden');
+}
+</script>
+{% endblock %}
