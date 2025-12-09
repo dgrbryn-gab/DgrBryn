@@ -39,19 +39,37 @@
 
         .staff-sidebar-header {
             margin-bottom: 30px;
-            padding-bottom: 20px;
+            padding: 16px 0 20px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .staff-sidebar-header h2 {
-            font-size: 24px;
+        .staff-sidebar-header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .staff-sidebar-header-logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .staff-sidebar-header-logo h2 {
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin: 0;
+            color: #EFCFB4;
+            letter-spacing: 0.5px;
         }
 
         .staff-sidebar-header p {
-            font-size: 12px;
-            opacity: 0.8;
+            font-size: 11px;
+            opacity: 0.75;
+            text-align: center;
+            margin: 0;
+            letter-spacing: 0.3px;
         }
 
         .staff-nav {
@@ -97,6 +115,9 @@
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .staff-sidebar-logout {
@@ -124,6 +145,14 @@
         .staff-sidebar-logout svg {
             width: 20px;
             height: 20px;
+        }
+
+        .staff-sidebar-email {
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.8;
+            color: white;
+            word-break: break-word;
         }
 
         /* Main Content */
@@ -227,14 +256,14 @@
         <!-- Sidebar -->
         <aside class="staff-sidebar">
             <div class="staff-sidebar-header">
-                <div class="flex items-center justify-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#EFCFB4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="staff-sidebar-header-logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-[#EFCFB4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zM5 22l7-7 7 7" />
                     </svg>
-                    <h2 style="font-size: 24px; font-weight: 700; margin: 0; color: white;">CORK</h2>
+                    <h2>CORK</h2>
                 </div>
-                <p style="font-size: 12px; opacity: 0.8; margin-top: 8px; color: white;">Staff Panel</p>
+                <p>Staff Panel</p>
             </div>
 
             <nav>
@@ -295,26 +324,14 @@
                         Logout
                     </button>
                 </form>
+                <div class="staff-sidebar-email">
+                    {{ app.user.email }}
+                </div>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="staff-main">
-            <!-- Header with User Info -->
-            <div class="staff-header">
-                <h1>{% block page_title %}Staff Dashboard{% endblock %}</h1>
-                <div class="staff-user-info">
-                    <div>
-                        <div style="font-size: 14px; font-weight: 500; color: #333;">
-                            Welcome, <strong>{{ app.user.email }}</strong>
-                        </div>
-                    </div>
-                    <div class="staff-user-avatar">
-                        {{ app.user.email|slice(0, 1)|upper }}
-                    </div>
-                </div>
-            </div>
-
             <!-- Flash Messages -->
             {% for message in app.flashes('success') %}
                 <div class="alert alert-success">

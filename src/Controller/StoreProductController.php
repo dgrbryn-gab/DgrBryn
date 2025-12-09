@@ -66,13 +66,16 @@ class StoreProductController extends AbstractController
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
                 try {
+                    $uploadDir = $this->getParameter('wine_images_directory');
+                    // Normalize path for Windows/Linux compatibility
+                    $uploadDir = str_replace('/', DIRECTORY_SEPARATOR, $uploadDir);
                     $imageFile->move(
-                        $this->getParameter('wine_images_directory'),
+                        $uploadDir,
                         $newFilename
                     );
                     $storeProduct->setImage($newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'Failed to upload image.');
+                    $this->addFlash('error', 'Failed to upload image: ' . $e->getMessage());
                     return $this->redirectToRoute('app_store_product_new');
                 }
             }
@@ -126,21 +129,32 @@ class StoreProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // --- Image Upload (replace old) ---
-            $imageFile = $form->get('imageFile')->getData();
-            if ($imageFile) {
+            $uploadedFiles = $request->files->get($form->getName());
+            $imageFile = null;
+            
+            if (isset($uploadedFiles['imageFile'])) {
+                $imageFile = $uploadedFiles['imageFile'];
+            } else {
+                $imageFile = $form->get('imageFile')->getData();
+            }
+            
+            if ($imageFile && $imageFile->getSize() > 0) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
                 try {
+                    $uploadDir = $this->getParameter('wine_images_directory');
+                    // Normalize path for Windows/Linux compatibility
+                    $uploadDir = str_replace('/', DIRECTORY_SEPARATOR, $uploadDir);
                     $imageFile->move(
-                        $this->getParameter('wine_images_directory'),
+                        $uploadDir,
                         $newFilename
                     );
 
                     // Delete old image
                     if ($storeProduct->getImage()) {
-                        $oldFile = $this->getParameter('wine_images_directory') . '/' . $storeProduct->getImage();
+                        $oldFile = $uploadDir . DIRECTORY_SEPARATOR . $storeProduct->getImage();
                         if (file_exists($oldFile)) {
                             @unlink($oldFile);
                         }
@@ -148,7 +162,7 @@ class StoreProductController extends AbstractController
 
                     $storeProduct->setImage($newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'Failed to upload new image.');
+                    $this->addFlash('error', 'Failed to upload new image: ' . $e->getMessage());
                 }
             }
 

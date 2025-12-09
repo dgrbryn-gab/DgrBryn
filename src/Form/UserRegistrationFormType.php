@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
@@ -18,7 +19,31 @@ class UserRegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // Determine default role: ROLE_STAFF for new users, first role for existing users
+        $defaultRole = 'ROLE_STAFF';
+        if ($options['data'] instanceof User && $options['data']->getId()) {
+            $roles = $options['data']->getRoles();
+            $defaultRole = !empty($roles) ? $roles[0] : 'ROLE_STAFF';
+        }
+        
         $builder
+            // Username field
+            ->add('username', TextType::class, [
+                'label' => 'Username',
+                'constraints' => [
+                    new NotBlank(['message' => 'Please enter a username']),
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'Username must be at least {{ limit }} characters',
+                        'max' => 180,
+                    ]),
+                ],
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'username',
+                ],
+            ])
+
             // Email field
             ->add('email', EmailType::class, [
                 'label' => 'Email Address',
@@ -42,7 +67,7 @@ class UserRegistrationFormType extends AbstractType
                 'expanded' => false,
                 'multiple' => false,
                 'mapped' => false,            
-                'data' => 'ROLE_STAFF',     
+                'data' => $defaultRole,
                 'attr' => [
                     'class' => 'form-control',
                 ],
