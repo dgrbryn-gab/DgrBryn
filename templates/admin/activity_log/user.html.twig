@@ -1,0 +1,163 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}User Activity - Admin{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEQxiZt+QV8DbFJKq7O8y2sSt7QH+nXs47GbSt+GUoftheJc4VUYvncd9M19b91t8bZJWfow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block admin_content %}
+<div class="mb-8">
+    <!-- Header Section -->
+    <div class="mb-8 flex justify-between items-start">
+        <div>
+            <h1 class="text-4xl font-bold text-burgundy-main mb-2">User Activity</h1>
+            <p class="text-burgundy-main text-sm">All activities performed by this user</p>
+        </div>
+        <a href="{{ path('admin_activity_logs_index') }}" class="text-burgundy-main hover:text-burgundy-dark">
+            <i class="fas fa-arrow-left mr-2"></i>Back to All Logs
+        </a>
+    </div>
+
+    <!-- User Info Card -->
+    <div class="admin-card rounded-lg p-6 mb-8 border-l-4 border-burgundy-main">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <span class="block text-gray-600 text-sm font-semibold mb-1">User ID</span>
+                <span class="block text-2xl font-bold text-burgundy-main">{{ user_id }}</span>
+            </div>
+            <div>
+                <span class="block text-gray-600 text-sm font-semibold mb-1">Total Activities</span>
+                <span class="block text-2xl font-bold text-burgundy-main">{{ total }}</span>
+            </div>
+            <div>
+                <span class="block text-gray-600 text-sm font-semibold mb-1">Activities on this page</span>
+                <span class="block text-2xl font-bold text-burgundy-main">{{ activity_logs | length }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Logs Table -->
+    <div class="admin-card rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead style="background: #7F1734; color: white;">
+                    <tr>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">ID</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Username</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Role</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Action</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Target Data</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">IP Address</th>
+                        <th style="padding: 16px; text-align: left; font-weight: 600;">Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if activity_logs | length > 0 %}
+                        {% for log in activity_logs %}
+                        <tr style="background: white; border-bottom: 1px solid #e0e0e0;">
+                            <td style="padding: 12px 16px; color: #333; font-weight: 500;">{{ log.id }}</td>
+                            <td style="padding: 12px 16px; font-weight: 500; color: #333;">{{ log.username }}</td>
+                            <td style="padding: 12px 16px;">
+                                <span style="display: inline-block; width: 180px; text-align: center; padding: 8px 0; background-color: #7F1734; color: #ffffff; font-size: 12px; font-weight: 600; border-radius: 4px; white-space: nowrap;">
+                                    {{ log.role is iterable ? log.role | join(', ') : log.role }}
+                                </span>
+                            </td>
+                            <td style="padding: 12px 16px;">
+                                <span style="display: inline-block; width: 140px; text-align: center; padding: 8px 0; font-size: 12px; font-weight: 600; border-radius: 4px; color: white; white-space: nowrap;
+                                    {% if 'LOGIN' in log.action or 'LOGOUT' in log.action %}
+                                        background-color: #0066cc;
+                                    {% elseif 'CREATED' in log.action %}
+                                        background-color: #28a745;
+                                    {% elseif 'UPDATED' in log.action %}
+                                        background-color: #ffc107; color: #333;
+                                    {% elseif 'DELETED' in log.action %}
+                                        background-color: #dc3545;
+                                    {% else %}
+                                        background-color: #6c757d;
+                                    {% endif %}
+                                ">
+                                    {{ log.actionLabel }}
+                                </span>
+                            </td>
+                            <td style="padding: 12px 16px; font-size: 12px; font-family: monospace; color: #333;">
+                                {% if log.targetData %}
+                                    {% if log.targetData is iterable %}
+                                        {{ log.targetData | json_encode(constant('JSON_PRETTY_PRINT')) | nl2br }}
+                                    {% else %}
+                                        {{ log.targetData }}
+                                    {% endif %}
+                                {% else %}
+                                    <span style="color: #999;">—</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 12px 16px; font-family: monospace; font-size: 12px;">
+                                {% if log.ipAddress %}
+                                    <span style="display: inline-block; padding: 4px 8px; background: #f0f0f0; border-radius: 4px; color: #333;">
+                                        {{ log.ipAddress }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: #999;">—</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 12px 16px; color: #666; font-size: 13px;">{{ log.createdAtFormatted }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-4xl mb-4 block opacity-50"></i>
+                                No activity logs found for this user
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {% if pages > 1 %}
+    <div class="mt-8 flex items-center justify-between">
+        <div class="text-gray-600">
+            Showing page <strong>{{ page }}</strong> of <strong>{{ pages }}</strong> 
+            (<strong>{{ total }}</strong> total records)
+        </div>
+        
+        <div class="flex gap-2">
+            {% if page > 1 %}
+                <a href="{{ path('admin_activity_logs_by_user', {userId: user_id}) }}?page=1" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    <i class="fas fa-chevron-left mr-1"></i>First
+                </a>
+                <a href="{{ path('admin_activity_logs_by_user', {userId: user_id}) }}?page={{ page - 1 }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    <i class="fas fa-chevron-left mr-1"></i>Previous
+                </a>
+            {% endif %}
+
+            {% for p in 1..pages %}
+                {% if p == page %}
+                    <span class="px-4 py-2 bg-burgundy-light text-white rounded font-bold">{{ p }}</span>
+                {% elseif p <= page + 2 and p >= page - 2 %}
+                    <a href="{{ path('admin_activity_logs_by_user', {userId: user_id}) }}?page={{ p }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                        {{ p }}
+                    </a>
+                {% elseif p == page - 3 or p == page + 3 %}
+                    <span class="px-4 py-2">...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < pages %}
+                <a href="{{ path('admin_activity_logs_by_user', {userId: user_id}) }}?page={{ page + 1 }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    Next<i class="fas fa-chevron-right ml-1"></i>
+                </a>
+                <a href="{{ path('admin_activity_logs_by_user', {userId: user_id}) }}?page={{ pages }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
+                    Last<i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
