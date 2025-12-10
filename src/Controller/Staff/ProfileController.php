@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Service\ActivityLogger;
 
 #[Route('/staff/profile', name: 'staff_profile_')]
 class ProfileController extends AbstractController
@@ -28,7 +29,8 @@ class ProfileController extends AbstractController
     public function edit(
         Request $request,
         EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        ActivityLogger $activityLogger
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_STAFF');
         
@@ -61,6 +63,12 @@ class ProfileController extends AbstractController
                     $user->setUpdatedAt(new \DateTimeImmutable());
                     $em->persist($user);
                     $em->flush();
+
+                    // Log password change activity
+                    $activityLogger->logActivity(
+                        'PASSWORD_CHANGED',
+                        json_encode(['userId' => $user->getId(), 'email' => $user->getEmail()])
+                    );
 
                     $this->addFlash('success', 'Your password has been updated successfully!');
                     return $this->redirectToRoute('staff_profile_index');

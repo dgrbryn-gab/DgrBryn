@@ -22,6 +22,15 @@ class ActivityLogFormatter
             }
         }
         
+        // Get the created date and ensure it's in the correct timezone
+        $createdAt = $activityLog->getCreatedAt();
+        $formattedDate = null;
+        if ($createdAt) {
+            // Convert to Asia/Manila timezone for display
+            $createdAt->setTimezone(new \DateTimeZone('Asia/Manila'));
+            $formattedDate = $createdAt->format('Y-m-d H:i:s');
+        }
+        
         return [
             'id' => $activityLog->getId(),
             'username' => $activityLog->getUsername(),
@@ -31,8 +40,8 @@ class ActivityLogFormatter
             'actionLabel' => $this->getActionLabel($activityLog->getAction()),
             'targetData' => $decodedTargetData,
             'ipAddress' => $activityLog->getIpAddress(),
-            'createdAt' => $activityLog->getCreatedAt(),
-            'createdAtFormatted' => $activityLog->getCreatedAt()?->format('Y-m-d H:i:s'),
+            'createdAt' => $createdAt,
+            'createdAtFormatted' => $formattedDate,
         ];
     }
 
@@ -44,6 +53,11 @@ class ActivityLogFormatter
         $labels = [
             'USER_LOGIN' => 'User Login',
             'USER_LOGOUT' => 'User Logout',
+            'USER_CREATED' => 'User Created',
+            'USER_UPDATED' => 'User Updated',
+            'USER_DELETED' => 'User Deleted',
+            'USER_STATUS_CHANGED' => 'User Status Changed',
+            'PASSWORD_CHANGED' => 'Password Changed',
             'ORDER_CREATED' => 'Order Created',
             'ORDER_UPDATED' => 'Order Updated',
             'ORDER_DELETED' => 'Order Deleted',

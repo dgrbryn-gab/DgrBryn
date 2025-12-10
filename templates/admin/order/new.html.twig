@@ -1,308 +1,558 @@
 {% extends 'admin/admin_base.html.twig' %}
 
-{% block title %}Create New Order - CORK Admin{% endblock %}
+{% block title %}Create Order - CORK Admin{% endblock %}
 
 {% block admin_content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #7F1734;">
+        
+        <h2 style="font-size: 24px; font-weight: 700; color: #7F1734; margin: 0 0 30px 0;">
+            ➕ Create New Order
+        </h2>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
-    <div class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <div class="flex justify-between items-start gap-6 mb-8">
-            <div>
-                <h1 class="text-4xl font-extrabold text-[#5E0B15] tracking-tight mb-2">Create New Order</h1>
-                <p class="text-gray-600">Add a new order to the system.</p>
+        <!-- Form Errors -->
+        {% if form.vars.errors|length > 0 %}
+            <div style="margin-bottom: 20px; padding: 15px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; color: #721c24;">
+                <p style="font-weight: 600; margin: 0 0 10px 0;">⚠️ Form Errors:</p>
+                {% for error in form.vars.errors %}
+                    <p style="margin: 5px 0;">- {{ error.message }}</p>
+                {% endfor %}
             </div>
-            <a href="{{ path('app_order_index') }}"
-                class="px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover">
-                ← Back to Orders
+        {% endif %}
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'order-form'}}) }}
+
+        <!-- Customer Information Section -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #7F1734; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #EFCFB4;">📋 Customer Information</h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <!-- Customer Name -->
+                <div>
+                    {{ form_label(form.customerName, 'Customer Name', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.customerName, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': 'Full name'}}) }}
+                    {% if form_errors(form.customerName) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.customerName) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Customer Email -->
+                <div>
+                    {{ form_label(form.customerEmail, 'Email Address', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.customerEmail, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': 'customer@email.com', 'type': 'email'}}) }}
+                    {% if form_errors(form.customerEmail) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.customerEmail) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Customer Phone -->
+                <div>
+                    {{ form_label(form.customerPhone, 'Phone Number', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.customerPhone, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': '+63 9XX XXX XXXX'}}) }}
+                    {% if form_errors(form.customerPhone) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.customerPhone) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Information -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #7F1734; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #EFCFB4;">🏠 Address Information</h3>
+
+            <div style="display: grid; gap: 20px;">
+                <!-- Shipping Address -->
+                <div>
+                    {{ form_label(form.shippingAddress, 'Shipping Address', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.shippingAddress, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; min-height: 90px;', 'placeholder': 'Street address, barangay, city, postal code'}}) }}
+                    {% if form_errors(form.shippingAddress) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.shippingAddress) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Billing Address -->
+                <div>
+                    {{ form_label(form.billingAddress, 'Billing Address (Optional)', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.billingAddress, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; min-height: 90px;', 'placeholder': 'Leave blank if same as shipping'}}) }}
+                    {% if form_errors(form.billingAddress) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.billingAddress) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #7F1734; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #EFCFB4;">📦 Order Items</h3>
+            
+            <div id="order-items" style="display: grid; gap: 12px; margin-bottom: 20px;" data-prototype="{{ form_widget(form.orderItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.orderItems|length }}">
+                {% if form.orderItems|length > 0 %}
+                    {% for itemForm in form.orderItems %}
+                        <div style="padding: 18px; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; transition: all 0.3s ease;">
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 15px; align-items: flex-start;">
+                                <!-- Product Selection -->
+                                <div>
+                                    {{ form_label(itemForm.product, 'Product', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase;'}}) }}
+                                    {{ form_widget(itemForm.product, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;'}}) }}
+                                    {% if form_errors(itemForm.product) %}
+                                        <div style="color: #dc3545; font-size: 11px; margin-top: 4px;">{{ form_errors(itemForm.product) }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Quantity -->
+                                <div>
+                                    {{ form_label(itemForm.quantity, 'Qty', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase;'}}) }}
+                                    {{ form_widget(itemForm.quantity, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; text-align: center;', 'type': 'number', 'min': '1'}}) }}
+                                    {% if form_errors(itemForm.quantity) %}
+                                        <div style="color: #dc3545; font-size: 11px; margin-top: 4px;">{{ form_errors(itemForm.quantity) }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Unit Price -->
+                                <div>
+                                    {{ form_label(itemForm.unitPrice, 'Unit Price (₱)', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase;'}}) }}
+                                    {{ form_widget(itemForm.unitPrice, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; text-align: right;', 'placeholder': '0.00', 'step': '0.01'}}) }}
+                                    {% if form_errors(itemForm.unitPrice) %}
+                                        <div style="color: #dc3545; font-size: 11px; margin-top: 4px;">{{ form_errors(itemForm.unitPrice) }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div id="empty-state" style="padding: 30px; background: #fff8e1; border: 2px dashed #ffc107; border-radius: 8px; text-align: center; color: #856404;">
+                        <p style="margin: 0; font-weight: 600; font-size: 14px;">📭 No items added yet</p>
+                        <p style="margin: 5px 0 0 0; font-size: 13px;">Select a product from the dropdown below to add items</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Add Item Dropdown -->
+            <div style="padding: 18px; background: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: flex-end;">
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;">Select Product to Add</label>
+                        <select id="product-select" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white;">
+                            <option value="">-- Choose a product --</option>
+                            {% for product in products %}
+                                <option value="{{ product.id }}" data-price="{{ product.price }}">
+                                    {{ product.name }} (₱{{ product.price|number_format(2) }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="button" id="add-item-btn" style="padding: 12px 24px; background: #7F1734; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease; width: 100%;" onmouseover="this.style.background='#5E0B15'" onmouseout="this.style.background='#7F1734'">
+                        ➕ Add Item
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Costs & Summary -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #7F1734; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #EFCFB4;">💰 Order Costs & Summary</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Cost Input Section -->
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #333; margin: 0 0 15px 0;">Cost Details</h4>
+                    
+                    <div style="display: grid; gap: 15px;">
+                        <!-- Shipping Cost -->
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 13px;">Shipping Cost (₱)</label>
+                            {{ form_widget(form.shippingCost, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': '0.00', 'data-cost-type': 'shipping'}}) }}
+                        </div>
+
+                        <!-- Tax Amount -->
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 13px;">Tax Amount (₱)</label>
+                            {{ form_widget(form.taxAmount, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': '0.00', 'data-cost-type': 'tax'}}) }}
+                        </div>
+
+                        <!-- Discount Amount -->
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 13px;">Discount Amount (₱)</label>
+                            {{ form_widget(form.discountAmount, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'placeholder': '0.00', 'data-cost-type': 'discount'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #333; margin: 0 0 15px 0;">Order Summary</h4>
+                    
+                    <div style="padding: 18px; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; display: grid; gap: 12px;">
+                        <!-- Items Subtotal -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <span style="font-weight: 600; color: #666; font-size: 13px;">Items Subtotal:</span>
+                            <span id="items-subtotal" style="font-weight: 600; color: #333; font-size: 14px;">₱0.00</span>
+                        </div>
+
+                        <!-- Shipping Cost -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <span style="color: #666; font-size: 13px;">Shipping:</span>
+                            <span id="display-shipping" style="color: #333; font-size: 13px;">₱0.00</span>
+                        </div>
+
+                        <!-- Tax -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <span style="color: #666; font-size: 13px;">Tax:</span>
+                            <span id="display-tax" style="color: #333; font-size: 13px;">₱0.00</span>
+                        </div>
+
+                        <!-- Discount -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <span style="color: #666; font-size: 13px;">Discount:</span>
+                            <span id="display-discount" style="color: #d32f2f; font-size: 13px;">-₱0.00</span>
+                        </div>
+
+                        <!-- Total Amount -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px;">
+                            <span style="font-weight: 700; color: #7F1734; font-size: 15px;">Total Amount:</span>
+                            <span id="total-amount" style="font-weight: 700; color: #7F1734; font-size: 18px;">₱0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status & Payment Information -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #7F1734; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #EFCFB4;">⚙️ Order Status & Payment</h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <!-- Order Status -->
+                <div>
+                    {{ form_label(form.status, 'Order Status', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.status, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white; cursor: pointer;'}}) }}
+                    {% if form_errors(form.status) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.status) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Payment Method -->
+                <div>
+                    {{ form_label(form.paymentMethod, 'Payment Method', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.paymentMethod, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white; cursor: pointer;'}}) }}
+                    {% if form_errors(form.paymentMethod) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.paymentMethod) }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Payment Status -->
+                <div>
+                    {{ form_label(form.paymentStatus, 'Payment Status', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                    {{ form_widget(form.paymentStatus, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white; cursor: pointer;'}}) }}
+                    {% if form_errors(form.paymentStatus) %}
+                        <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.paymentStatus) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Notes -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #7F1734; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #EFCFB4;">📝 Order Notes</h3>
+
+            <div>
+                {{ form_label(form.notes, 'Notes', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px;'}}) }}
+                {{ form_widget(form.notes, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; min-height: 120px; resize: vertical; font-family: inherit;'}}) }}
+                {% if form_errors(form.notes) %}
+                    <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">{{ form_errors(form.notes) }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-top: 40px; padding-top: 20px; border-top: 2px solid #EFCFB4;">
+            <button type="submit" style="flex: 1; padding: 14px 20px; background: linear-gradient(135deg, #7F1734 0%, #5E0B15 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(127, 23, 52, 0.2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(127, 23, 52, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(127, 23, 52, 0.2)'">
+                ✓ Create Order
+            </button>
+            <a href="{{ path('app_order_index') }}" style="flex: 1; padding: 14px 20px; background: #f5f5f5; color: #666; text-decoration: none; border-radius: 8px; font-weight: 600; text-align: center; font-size: 15px; transition: all 0.3s ease; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#EFCFB4'; this.style.color='#7F1734';" onmouseout="this.style.background='#f5f5f5'; this.style.color='#666';">
+                ✕ Cancel
             </a>
         </div>
 
-        <!-- Form -->
-        <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md p-8">
-            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
-
-            <!-- Form Errors -->
-            {% if form.vars.errors|length > 0 %}
-                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-                    <p class="font-semibold text-red-700 mb-2">Please fix the following errors:</p>
-                    <ul class="list-disc list-inside text-red-600 text-sm">
-                        {% for error in form.vars.errors %}
-                            <li>{{ error.message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-
-            <!-- Customer Information Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Customer Information</legend>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        {{ form_row(form.customerName, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.customerEmail, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="md:col-span-2">
-                        {{ form_row(form.customerPhone, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                </div>
-            </fieldset>
-
-            <!-- Order Items Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Order Items</legend>
-                
-                <div id="orderItems" class="space-y-6">
-                    {% if form.orderItems|length > 0 %}
-                        {% for orderItemForm in form.orderItems %}
-                            <div class="order-item border border-[#EFCFB4] rounded-lg p-4 bg-gray-50">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        {{ form_row(orderItemForm.product, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <div>
-                                        {{ form_row(orderItemForm.quantity, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <div>
-                                        {{ form_row(orderItemForm.unitPrice, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <div>
-                                        {{ form_row(orderItemForm.discount, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
-                                <button type="button" class="mt-3 px-4 py-2 rounded-lg font-semibold text-xs bg-red-500 text-white hover:bg-red-600 remove-item-btn">
-                                    🗑 Remove Item
-                                </button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                
-                <button type="button" id="addItemBtn" class="mt-4 px-6 py-2 rounded-lg font-semibold text-sm bg-[#EFCFB4] text-[#7F1734] border border-[#EFCFB4] hover:bg-[#E3B78E]">
-                    + Add Item
-                </button>
-            </fieldset>
-
-            <!-- Shipping & Billing Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Addresses</legend>
-                
-                <div class="space-y-6">
-                    <div>
-                        {{ form_row(form.shippingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.billingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
-                    </div>
-                </div>
-            </fieldset>
-
-            <!-- Order Status Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Order Status</legend>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        {{ form_row(form.status, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.paymentStatus, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                </div>
-            </fieldset>
-
-            <!-- Payment Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Payment Information</legend>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        {{ form_row(form.paymentMethod, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.shippingCost, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.taxAmount, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.discountAmount, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                </div>
-            </fieldset>
-
-            <!-- Notes Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Additional Notes</legend>
-                
-                {{ form_row(form.notes, {'attr': {'rows': 5, 'class': 'form-control'}}) }}
-            </fieldset>
-
-            <!-- Form Actions -->
-            <div class="flex gap-4 pt-4 border-t border-gray-200">
-                <button type="submit"
-                    class="px-8 py-3 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-[#EFCFB4] text-[#7F1734] border-[#EFCFB4] hover:bg-[#7F1734] hover:text-white btn-hover">
-                    ✓ Create Order
-                </button>
-                <a href="{{ path('app_order_index') }}"
-                    class="px-8 py-3 rounded-xl font-semibold shadow-md transition-all duration-300 border bg-gray-300 text-gray-700 border-gray-300 hover:bg-gray-400 btn-hover text-center">
-                    Cancel
-                </a>
-            </div>
-
-            {{ form_end(form) }}
-        </div>
-
-        <style>
-            .form-control {
-                width: 100%;
-                padding: 0.75rem;
-                border: 1px solid #EFCFB4;
-                border-radius: 0.5rem;
-                font-size: 1rem;
-                transition: border-color 0.3s, box-shadow 0.3s;
-            }
-
-            .form-control:focus {
-                outline: none;
-                border-color: #7F1734;
-                box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1);
-            }
-
-            .form-group {
-                margin-bottom: 1.5rem;
-            }
-
-            .form-group label {
-                display: block;
-                margin-bottom: 0.5rem;
-                font-weight: 600;
-                color: #5E0B15;
-                font-size: 0.95rem;
-            }
-        </style>
-
-        <script>
-            // Product price mapping
-            let productData = {};
-
-            // Fetch products from API
-            async function loadProducts() {
-                try {
-                    const response = await fetch('{{ path("app_order_api_products") }}');
-                    const products = await response.json();
-                    products.forEach(product => {
-                        productData[product.id] = product.price;
-                    });
-                } catch (error) {
-                    console.error('Error loading products:', error);
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', async function() {
-                await loadProducts();
-
-                const addItemBtn = document.getElementById('addItemBtn');
-                const orderItemsContainer = document.getElementById('orderItems');
-                let itemCount = document.querySelectorAll('.order-item').length;
-
-                // Setup product select change listener
-                function setupProductSelect(selectElement, unitPriceField) {
-                    selectElement.addEventListener('change', function() {
-                        const productId = this.value;
-                        if (productId && productData[productId]) {
-                            unitPriceField.value = productData[productId].toFixed(2);
-                        }
-                    });
-                }
-
-                // Handle remove item buttons
-                function setupRemoveButtons() {
-                    document.querySelectorAll('.remove-item-btn').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            this.closest('.order-item').remove();
-                        });
-                    });
-                }
-
-                // Setup for existing items
-                document.querySelectorAll('.order-item').forEach(item => {
-                    const productSelect = item.querySelector('select');
-                    const unitPriceField = item.querySelector('input[type="number"][step="0.01"]');
-                    if (productSelect && unitPriceField && !unitPriceField.className.includes('discount')) {
-                        setupProductSelect(productSelect, unitPriceField);
-                        // Trigger change to populate price if product already selected
-                        if (productSelect.value) {
-                            productSelect.dispatchEvent(new Event('change'));
-                        }
-                    }
-                });
-
-                // Add new item
-                addItemBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Get product select HTML from first existing item or create new one
-                    let productsHTML = '';
-                    const existingSelect = document.querySelector('.order-item select');
-                    
-                    if (existingSelect) {
-                        productsHTML = existingSelect.innerHTML;
-                    } else if (Object.keys(productData).length > 0) {
-                        // Build from productData if no existing select
-                        productsHTML = '<option value="">-- Select a product --</option>';
-                        Object.entries(productData).forEach(([id, price]) => {
-                            // Try to get the product name from API or use ID
-                            productsHTML += `<option value="${id}">Product ${id} (₱${price.toFixed(2)})</option>`;
-                        });
-                    }
-                    
-                    const newItem = document.createElement('div');
-                    newItem.className = 'order-item border border-[#EFCFB4] rounded-lg p-4 bg-gray-50';
-                    newItem.innerHTML = `
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Product</label>
-                                <select name="order[orderItems][${itemCount}][product]" class="form-control product-select" required>
-                                    ${productsHTML}
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Quantity</label>
-                                <input type="number" name="order[orderItems][${itemCount}][quantity]" class="form-control" min="1" value="1" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Unit Price</label>
-                                <input type="number" name="order[orderItems][${itemCount}][unitPrice]" class="form-control unit-price-field" step="0.01" placeholder="0.00" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Discount</label>
-                                <input type="number" name="order[orderItems][${itemCount}][discount]" class="form-control discount-field" step="0.01" placeholder="0.00" />
-                            </div>
-                        </div>
-                        <button type="button" class="mt-3 px-4 py-2 rounded-lg font-semibold text-xs bg-red-500 text-white hover:bg-red-600 remove-item-btn">
-                            🗑 Remove Item
-                        </button>
-                    `;
-                    orderItemsContainer.appendChild(newItem);
-                    
-                    // Setup the new product select
-                    const newProductSelect = newItem.querySelector('.product-select');
-                    const newUnitPriceField = newItem.querySelector('.unit-price-field');
-                    setupProductSelect(newProductSelect, newUnitPriceField);
-                    
-                    itemCount++;
-                    setupRemoveButtons();
-                });
-
-                setupRemoveButtons();
-            });
-        </script>
+        {{ form_end(form) }}
     </div>
 </div>
 
+<style>
+    .order-form .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .order-form .form-control:focus {
+        outline: none;
+        border-color: #7F1734;
+        box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1);
+    }
+
+    .order-form input[type="number"]::-webkit-outer-spin-button,
+    .order-form input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .order-form input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    /* Hide Order Items label */
+    #order_orderItems_label,
+    label[for="order_orderItems"] {
+        display: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        #order-items > div {
+            padding: 15px;
+        }
+
+        #order-items > div > div {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+
+<script>
+    // Configuration
+    const orderItemsContainer = document.getElementById('order-items');
+    const addItemBtn = document.getElementById('add-item-btn');
+    const productSelect = document.getElementById('product-select');
+    let itemIndex = parseInt(orderItemsContainer?.getAttribute('data-index') || '0');
+
+    // Get all available products from the dropdown
+    function getProductsData() {
+        const productsData = {};
+        const options = productSelect.querySelectorAll('option');
+        options.forEach(opt => {
+            if (opt.value) {
+                productsData[opt.value] = {
+                    name: opt.textContent,
+                    price: parseFloat(opt.getAttribute('data-price') || '0')
+                };
+            }
+        });
+        return productsData;
+    }
+
+    // Update order totals
+    function updateOrderTotals() {
+        const orderItemsContainer = document.getElementById('order-items');
+        const itemsSubtotalEl = document.getElementById('items-subtotal');
+        const displayShippingEl = document.getElementById('display-shipping');
+        const displayTaxEl = document.getElementById('display-tax');
+        const displayDiscountEl = document.getElementById('display-discount');
+        const totalAmountEl = document.getElementById('total-amount');
+
+        let itemsSubtotal = 0;
+
+        // Calculate items subtotal
+        const quantityInputs = orderItemsContainer.querySelectorAll('input[name*="[quantity]"]');
+        const priceInputs = orderItemsContainer.querySelectorAll('input[name*="[unitPrice]"]');
+
+        quantityInputs.forEach((qtyInput, idx) => {
+            const qty = parseFloat(qtyInput.value) || 0;
+            const price = parseFloat(priceInputs[idx]?.value) || 0;
+            itemsSubtotal += qty * price;
+        });
+
+        // Get cost values
+        const shippingCostField = document.querySelector('input[name="order[shippingCost]"]') || document.querySelector('input[data-cost-type="shipping"]');
+        const taxAmountField = document.querySelector('input[name="order[taxAmount]"]') || document.querySelector('input[data-cost-type="tax"]');
+        const discountAmountField = document.querySelector('input[name="order[discountAmount]"]') || document.querySelector('input[data-cost-type="discount"]');
+
+        const shippingCost = parseFloat(shippingCostField?.value) || 0;
+        const taxAmount = parseFloat(taxAmountField?.value) || 0;
+        const discountAmount = parseFloat(discountAmountField?.value) || 0;
+
+        const totalAmount = itemsSubtotal + shippingCost + taxAmount - discountAmount;
+
+        if (itemsSubtotalEl) itemsSubtotalEl.textContent = '₱' + itemsSubtotal.toFixed(2);
+        if (displayShippingEl) displayShippingEl.textContent = '₱' + shippingCost.toFixed(2);
+        if (displayTaxEl) displayTaxEl.textContent = '₱' + taxAmount.toFixed(2);
+        if (displayDiscountEl) displayDiscountEl.textContent = '-₱' + discountAmount.toFixed(2);
+        if (totalAmountEl) totalAmountEl.textContent = '₱' + Math.max(0, totalAmount).toFixed(2);
+
+        console.log(`Items Subtotal: ₱${itemsSubtotal.toFixed(2)}, Shipping: ₱${shippingCost.toFixed(2)}, Tax: ₱${taxAmount.toFixed(2)}, Discount: -₱${discountAmount.toFixed(2)}, Total: ₱${Math.max(0, totalAmount).toFixed(2)}`);
+    }
+
+    // Add item button click handler
+    if (addItemBtn && productSelect) {
+        addItemBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const selectedProductId = productSelect.value;
+            if (!selectedProductId) {
+                alert('Please select a product');
+                return;
+            }
+
+            const productsData = getProductsData();
+            const productPrice = productsData[selectedProductId]?.price || 0;
+            const productName = productsData[selectedProductId]?.name || '';
+
+            // Create the item HTML
+            const itemHTML = `
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 15px; align-items: flex-start;">
+                    <!-- Product Selection -->
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase;">Product</label>
+                        <select name="order[orderItems][${itemIndex}][product]" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white;" required>
+                            <option value="">-- Select a product --</option>
+                            ${Array.from(productSelect.options).map(opt => 
+                                `<option value="${opt.value}" data-price="${opt.getAttribute('data-price')}" ${opt.value === selectedProductId ? 'selected' : ''}>${opt.textContent}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase;">Qty</label>
+                        <input type="number" name="order[orderItems][${itemIndex}][quantity]" value="1" min="1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; text-align: center;" required />
+                    </div>
+
+                    <!-- Unit Price -->
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #333; font-size: 12px; text-transform: uppercase;">Unit Price (₱)</label>
+                        <input type="number" name="order[orderItems][${itemIndex}][unitPrice]" value="${productPrice.toFixed(2)}" step="0.01" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; text-align: right;" required />
+                    </div>
+                </div>
+            `;
+
+            // Create container for the item
+            const newItemDiv = document.createElement('div');
+            newItemDiv.style.cssText = 'padding: 18px; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; transition: all 0.3s ease; animation: slideIn 0.3s ease;';
+            newItemDiv.innerHTML = itemHTML;
+
+            // Hide empty state if visible
+            const emptyState = document.getElementById('empty-state');
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+
+            // Append to container
+            if (orderItemsContainer) {
+                orderItemsContainer.appendChild(newItemDiv);
+                itemIndex++;
+                console.log('Item added successfully. Total items:', itemIndex);
+                
+                // Update totals after adding item
+                updateOrderTotals();
+            }
+
+            // Reset the dropdown
+            productSelect.value = '';
+        });
+
+        // Allow adding item with Enter key
+        productSelect.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addItemBtn.click();
+            }
+        });
+    } else {
+        console.warn('Add item button or product select not found');
+    }
+
+    // Handle product selection to auto-fill unit price
+    document.addEventListener('change', function(e) {
+        if (e.target.name && e.target.name.includes('[product]') && e.target !== productSelect) {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                const price = parseFloat(selectedOption.getAttribute('data-price') || '0');
+                
+                // Find the corresponding unit price field in the same item row
+                const itemRow = e.target.closest('[style*="grid"]')?.parentElement;
+                if (itemRow) {
+                    const priceInputs = itemRow.querySelectorAll('input[name*="[unitPrice]"]');
+                    if (priceInputs.length > 0) {
+                        priceInputs[0].value = price.toFixed(2);
+                        console.log('Price auto-filled:', price);
+                        updateOrderTotals();
+                    }
+                }
+            }
+        }
+
+        // Update totals when cost fields change
+        if (e.target.getAttribute('data-cost-type') === 'shipping' || e.target.getAttribute('data-cost-type') === 'tax' || e.target.getAttribute('data-cost-type') === 'discount') {
+            console.log('Cost field changed:', e.target.name, '=', e.target.value);
+            updateOrderTotals();
+        }
+    });
+
+    // Auto-calculate subtotal when quantity or price changes
+    document.addEventListener('input', function(e) {
+        if (e.target.name && (e.target.name.includes('[quantity]') || e.target.name.includes('[unitPrice]'))) {
+            const itemRow = e.target.closest('[style*="grid"]')?.parentElement;
+            if (itemRow) {
+                const qtyInput = itemRow.querySelector('input[name*="[quantity]"]');
+                const priceInput = itemRow.querySelector('input[name*="[unitPrice]"]');
+                
+                if (qtyInput && priceInput) {
+                    const qty = parseFloat(qtyInput.value) || 0;
+                    const price = parseFloat(priceInput.value) || 0;
+                    const subtotal = qty * price;
+                    
+                    if (subtotal > 0) {
+                        console.log(`Item subtotal: ₱${subtotal.toFixed(2)}`);
+                    }
+                }
+            }
+            
+            updateOrderTotals();
+        }
+
+        // Update totals when cost fields change
+        if (e.target.getAttribute('data-cost-type') === 'shipping' || e.target.getAttribute('data-cost-type') === 'tax' || e.target.getAttribute('data-cost-type') === 'discount') {
+            console.log('Cost field input changed:', e.target.name, '=', e.target.value);
+            updateOrderTotals();
+        }
+    });
+
+    // Set up direct listeners for cost input fields to ensure real-time updates
+    const costFields = document.querySelectorAll('input[data-cost-type]');
+    costFields.forEach(field => {
+        if (field) {
+            // Add input event listener for real-time updates
+            field.addEventListener('input', function(e) {
+                console.log('Cost field input changed:', this.getAttribute('data-cost-type'), '=', this.value);
+                updateOrderTotals();
+            });
+            
+            // Add change event listener as backup
+            field.addEventListener('change', function(e) {
+                console.log('Cost field changed:', this.getAttribute('data-cost-type'), '=', this.value);
+                updateOrderTotals();
+            });
+        }
+    });
+
+    // Initial totals calculation
+    console.log('Order form script loaded. Initial item index:', itemIndex);
+    updateOrderTotals();
+</script>
+
+<style>
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
 {% endblock %}

@@ -24,6 +24,9 @@
 
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
+        <!-- CSRF Token -->
+        {{ form_widget(form._token) }}
+
         <!-- Customer Information Section -->
         <fieldset style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
             <legend style="padding: 0 10px; font-weight: 700; color: #7F1734; font-size: 14px; text-transform: uppercase;">📋 Customer Information</legend>
@@ -110,6 +113,8 @@
             </a>
         </div>
 
+        {{ form_end(form) }}
+
         <!-- Delete Option -->
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
             <form method="POST" action="{{ path('staff_orders_delete', {'id': order.id}) }}" onsubmit="return confirm('Are you sure you want to delete this order?');">
@@ -119,8 +124,6 @@
                 </button>
             </form>
         </div>
-
-        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

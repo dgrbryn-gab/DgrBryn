@@ -51,6 +51,7 @@ class OrderType extends AbstractType
                     'Delivered' => 'delivered',
                     'Cancelled' => 'cancelled',
                 ],
+                'required' => true,
             ])
             ->add('paymentMethod', ChoiceType::class, [
                 'label' => 'Payment Method',
@@ -107,6 +108,8 @@ class OrderType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Order::class,
             'validation_groups' => ['Default'],
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
         ]);
     }
 
