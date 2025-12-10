@@ -19,7 +19,7 @@ class WineInventoryType extends AbstractType
             ->add('lastUpdated')
             ->add('product', EntityType::class, [
                 'class' => StoreProduct::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
         ;
     }

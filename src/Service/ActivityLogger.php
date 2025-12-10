@@ -37,7 +37,8 @@ class ActivityLogger
         $activityLog->setAction($action);
         $activityLog->setTargetData($targetData);
         $activityLog->setIpAddress($ipAddress);
-        $activityLog->setCreatedAt(new \DateTime());
+        // Set the creation date with Asia/Manila timezone (Philippines)
+        $activityLog->setCreatedAt(new \DateTime('now', new \DateTimeZone('Asia/Manila')));
 
         $this->em->persist($activityLog);
         $this->em->flush();

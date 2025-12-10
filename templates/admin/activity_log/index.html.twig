@@ -47,6 +47,13 @@
                         <option value="USER_LOGIN" {% if action_filter == 'USER_LOGIN' %}selected{% endif %}>User Login</option>
                         <option value="USER_LOGOUT" {% if action_filter == 'USER_LOGOUT' %}selected{% endif %}>User Logout</option>
                     </optgroup>
+                    <optgroup label="User Management">
+                        <option value="USER_CREATED" {% if action_filter == 'USER_CREATED' %}selected{% endif %}>User Created</option>
+                        <option value="USER_UPDATED" {% if action_filter == 'USER_UPDATED' %}selected{% endif %}>User Updated</option>
+                        <option value="USER_DELETED" {% if action_filter == 'USER_DELETED' %}selected{% endif %}>User Deleted</option>
+                        <option value="USER_STATUS_CHANGED" {% if action_filter == 'USER_STATUS_CHANGED' %}selected{% endif %}>User Status Changed</option>
+                        <option value="PASSWORD_CHANGED" {% if action_filter == 'PASSWORD_CHANGED' %}selected{% endif %}>Password Changed</option>
+                    </optgroup>
                     <optgroup label="Order Actions">
                         <option value="ORDER_CREATED" {% if action_filter == 'ORDER_CREATED' %}selected{% endif %}>Order Created</option>
                         <option value="ORDER_UPDATED" {% if action_filter == 'ORDER_UPDATED' %}selected{% endif %}>Order Updated</option>

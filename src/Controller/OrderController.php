@@ -53,6 +53,21 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Validate that all products in the order are available
+            $unavailableProducts = [];
+            foreach ($order->getOrderItems() as $item) {
+                $product = $item->getProduct();
+                if (!$product || !$product->isAvailable()) {
+                    $unavailableProducts[] = $product ? $product->getName() : 'Unknown Product';
+                }
+            }
+
+            // If there are unavailable products, show error and prevent order creation
+            if (!empty($unavailableProducts)) {
+                $this->addFlash('error', '❌ Cannot create order: The following products are not available: ' . implode(', ', $unavailableProducts));
+                return $this->redirectToRoute('app_order_new');
+            }
+
             // Generate order number if not set
             if (!$order->getOrderNumber()) {
                 $order->setOrderNumber('ORD-' . date('YmdHis') . '-' . random_int(1000, 9999));
@@ -84,8 +99,12 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('app_order_show', ['id' => $order->getId()]);
         }
 
+        // Only show available products in the dropdown
+        $products = $productRepository->findBy(['isAvailable' => true]);
+
         return $this->render('admin/order/new.html.twig', [
             'form' => $form,
+            'products' => $products,
         ]);
     }
 

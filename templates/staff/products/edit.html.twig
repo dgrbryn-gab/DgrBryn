@@ -5,217 +5,177 @@
 {% block page_title %}Edit Product{% endblock %}
 
 {% block content %}
-<div style="max-width: 800px; margin: 0 auto;">
-    <div style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-        {{ form_start(form, {
-            'attr': {
-                'enctype': 'multipart/form-data',
-                'method': 'POST'
-            }
-        }) }}
+<div class="min-h-screen py-8 px-6">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white/98 backdrop-blur-sm py-8 px-8 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden">
 
-            <!-- Current Image Preview -->
-            {% if product.image %}
-                <div style="margin-bottom: 24px; text-align: center;">
-                    <label style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 12px;
-                    ">
-                        Current Image
-                    </label>
-                    <img 
-                        src="{{ asset('assets/images/wine_images/' ~ product.image) }}" 
-                        alt="{{ product.name }}"
-                        style="
-                            max-width: 200px;
-                            max-height: 200px;
-                            border-radius: 8px;
-                            border: 1px solid #e9ecef;
-                        "
-                    />
-                </div>
-            {% endif %}
+            <!-- Top Accent Line -->
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#EFCFB4] via-[#9E2B47] to-[#7F1734] rounded-t-3xl"></div>
 
-            <!-- Product Name -->
-            <div style="margin-bottom: 24px;">
-                <label style="
-                    display: block;
-                    font-size: 13px;
-                    color: #888;
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    margin-bottom: 8px;
-                ">
-                    Product Name *
-                </label>
-                {{ form_widget(form.name, {
-                    attr: {
-                        style: 'width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 16px; font-family: inherit; transition: border-color 0.3s ease;',
-                        class: 'form-input'
-                    }
-                }) }}
-            </div>
+            <!-- Header -->
+            <h1 class="text-4xl font-extrabold text-center text-[#7F1734] tracking-tight mb-8">
+                🛍️ Edit {{ product.name }}
+            </h1>
 
-            <!-- Description -->
-            <div style="margin-bottom: 24px;">
-                <label style="
-                    display: block;
-                    font-size: 13px;
-                    color: #888;
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    margin-bottom: 8px;
-                ">
-                    Description
-                </label>
-                {{ form_widget(form.description, {
-                    attr: {
-                        style: 'width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 16px; font-family: inherit; transition: border-color 0.3s ease; min-height: 100px;',
-                        class: 'form-input'
-                    }
-                }) }}
-            </div>
-
-            <!-- Grid: Price and Category -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
-                <!-- Price -->
-                <div>
-                    <label style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
-                        Price *
-                    </label>
-                    {{ form_widget(form.price, {
-                        attr: {
-                            style: 'width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 16px; font-family: inherit; transition: border-color 0.3s ease;',
-                            class: 'form-input'
-                        }
-                    }) }}
-                </div>
+            {{ form_start(form, {
+                'attr': {'class': 'grid grid-cols-1 md:grid-cols-2 gap-6'},
+                'multipart': true
+            }) }}
 
                 <!-- Category -->
-                <div>
-                    <label style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
-                        Category *
-                    </label>
-                    {{ form_widget(form.category, {
-                        attr: {
-                            style: 'width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 16px; font-family: inherit; transition: border-color 0.3s ease;',
-                            class: 'form-input'
-                        }
-                    }) }}
+                {% if form.category is defined %}
+                    <div class="col-span-1 md:col-span-1">
+                        {{ form_label(form.category, 'Category', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                        }) }}
+                        {{ form_widget(form.category, {
+                            'attr': {
+                                'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                            }
+                        }) }}
+                        {% if form_errors(form.category) %}
+                            <p class="text-sm text-red-600 mt-1">{{ form_errors(form.category) }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Product Name (Full Width) -->
+                {% if form.name is defined %}
+                    <div class="col-span-1 md:col-span-2">
+                        {{ form_label(form.name, 'Product Name', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                        }) }}
+                        {{ form_widget(form.name, {
+                            'attr': {
+                                'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                            }
+                        }) }}
+                        {% if form_errors(form.name) %}
+                            <p class="text-sm text-red-600 mt-1">{{ form_errors(form.name) }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Description (Full Width) -->
+                {% if form.description is defined %}
+                    <div class="col-span-1 md:col-span-2">
+                        {{ form_label(form.description, 'Description', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                        }) }}
+                        {{ form_widget(form.description, {
+                            'attr': {
+                                'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300 min-h-[120px]'
+                            }
+                        }) }}
+                        {% if form_errors(form.description) %}
+                            <p class="text-sm text-red-600 mt-1">{{ form_errors(form.description) }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Price -->
+                {% if form.price is defined %}
+                    <div class="col-span-1">
+                        {{ form_label(form.price, 'Price', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                        }) }}
+                        {{ form_widget(form.price, {
+                            'attr': {
+                                'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                            }
+                        }) }}
+                        {% if form_errors(form.price) %}
+                            <p class="text-sm text-red-600 mt-1">{{ form_errors(form.price) }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Initial Stock Quantity -->
+                {% if form.quantity is defined %}
+                    <div class="col-span-1">
+                        {{ form_label(form.quantity, 'Initial Stock', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                        }) }}
+                        {{ form_widget(form.quantity, {
+                            'attr': {
+                                'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                            }
+                        }) }}
+                        {% if form_errors(form.quantity) %}
+                            <p class="text-sm text-red-600 mt-1">{{ form_errors(form.quantity) }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Image Upload with Preview -->
+                {% if form.imageFile is defined %}
+                    <div class="col-span-1 md:col-span-2">
+                        {{ form_label(form.imageFile, 'Product Image', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-3 tracking-wide'}
+                        }) }}
+
+                        <div class="flex items-center gap-6">
+                            <!-- Current Image Preview -->
+                            {% if product.image %}
+                                <div class="flex flex-col items-center">
+                                    <span class="text-xs font-medium text-[#4B164C] mb-2">Current:</span>
+                                    <div class="bg-white p-1 rounded-lg border border-amber-200 shadow-sm">
+                                        <img src="{{ asset('assets/images/wine_images/' ~ product.image) }}"
+                                             alt="{{ product.name }}"
+                                             class="h-24 w-auto rounded object-contain">
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- File Input -->
+                            <div class="flex-1">
+                                {{ form_widget(form.imageFile, {
+                                    'attr': {
+                                        'class': 'block w-full text-sm text-gray-700 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#7F1734] file:text-[#F8EAD8] hover:file:bg-[#9E2B47] focus:ring-2 focus:ring-[#9E2B47]/40 cursor-pointer'
+                                    }
+                                }) }}
+                                <p class="text-xs text-gray-500 mt-2">Max 5 MB – JPEG, PNG, WebP (optional)</p>
+                            </div>
+                        </div>
+
+                        {% if form_errors(form.imageFile) %}
+                            <p class="text-sm text-red-600 mt-2">{{ form_errors(form.imageFile) }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Is Available Checkbox -->
+                {% if form.isAvailable is defined %}
+                    <div class="col-span-1 md:col-span-2 flex items-center space-x-3 bg-[#F8EAD8]/20 px-5 py-4 rounded-2xl border border-amber-100">
+                        {{ form_widget(form.isAvailable, {
+                            'attr': {
+                                'class': 'h-5 w-5 text-[#7F1734] border-gray-300 rounded focus:ring-[#9E2B47]'
+                            }
+                        }) }}
+                        {{ form_label(form.isAvailable, 'Available for Sale', {
+                            'label_attr': {'class': 'text-sm font-semibold text-[#4B164C] cursor-pointer'}
+                        }) }}
+                    </div>
+                {% endif %}
+
+                {{ form_widget(form._token) }}
+
+                <!-- Buttons Section -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex justify-center gap-4 mt-8 pt-8 border-t border-amber-100">
+                        <button type="submit"
+                                class="px-10 py-4 rounded-xl shadow-lg font-semibold text-lg border transition-all duration-300 transform hover:scale-105 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47] focus:ring-4 focus:ring-[#9E2B47]/40">
+                            💾 Save Changes
+                        </button>
+                        <a href="{{ path('staff_products_show', {'id': product.id}) }}"
+                           class="px-10 py-4 rounded-xl shadow-md font-semibold text-lg border transition-all duration-300 transform hover:scale-105 bg-gray-200 text-gray-800 border-gray-300 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400/40">
+                            ← Cancel
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Image Upload -->
-            <div style="margin-bottom: 24px;">
-                <label style="
-                    display: block;
-                    font-size: 13px;
-                    color: #888;
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    margin-bottom: 8px;
-                ">
-                    Update Product Image
-                </label>
-                {{ form_widget(form.imageFile, {
-                    attr: {
-                        style: 'padding: 12px 16px; border: 2px dashed #e9ecef; border-radius: 8px; font-size: 14px;',
-                        class: 'form-input',
-                        accept: 'image/*'
-                    }
-                }) }}
-                <p style="font-size: 12px; color: #999; margin-top: 6px;">
-                    Leave empty to keep current image
-                </p>
-            </div>
-
-            <!-- Form Errors -->
-            {% if form.vars.errors %}
-                <div style="
-                    background: #f8d7da;
-                    border: 1px solid #f5c6cb;
-                    color: #721c24;
-                    padding: 16px 20px;
-                    border-radius: 8px;
-                    margin-bottom: 20px;
-                ">
-                    <strong>Form Errors:</strong>
-                    {{ form_errors(form) }}
-                </div>
-            {% endif %}
-
-            <!-- Submit Buttons -->
-            <div style="display: flex; gap: 12px; margin-top: 32px; border-top: 1px solid #eee; padding-top: 24px;">
-                <button 
-                    type="submit"
-                    style="
-                        flex: 1;
-                        padding: 12px 20px;
-                        background: linear-gradient(135deg, #7F1734, #9E2B47);
-                        color: white;
-                        border: none;
-                        border-radius: 8px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        font-size: 14px;
-                    "
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(127, 23, 52, 0.3)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
-                >
-                    💾 Save Changes
-                </button>
-                <a 
-                    href="{{ path('staff_products_show', {'id': product.id}) }}"
-                    style="
-                        flex: 1;
-                        padding: 12px 20px;
-                        text-align: center;
-                        background: #f0f0f0;
-                        color: #333;
-                        text-decoration: none;
-                        border-radius: 8px;
-                        font-weight: 600;
-                        transition: all 0.3s ease;
-                        font-size: 14px;
-                    "
-                    onmouseover="this.style.background='#e0e0e0'"
-                    onmouseout="this.style.background='#f0f0f0'"
-                >
-                    ← Cancel
-                </a>
-            </div>
 
             {{ form_end(form) }}
         </div>
     </div>
-
-<script>
-    document.querySelectorAll('.form-input').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.style.borderColor = '#7F1734';
-        });
-        input.addEventListener('blur', function() {
-            this.style.borderColor = '#e9ecef';
-        });
-    });
-</script>
+</div>
 {% endblock %}

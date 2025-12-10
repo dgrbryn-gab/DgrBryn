@@ -5,71 +5,85 @@
 {% block page_title %}Add Inventory Record{% endblock %}
 
 {% block content %}
-<div style="max-width: 700px; margin: 0 auto;">
-    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #7F1734;">
-        
-        <!-- Form Errors -->
-        {% if form.vars.errors|length > 0 %}
-            <div style="margin-bottom: 20px; padding: 15px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px; color: #721c24;">
-                <p style="font-weight: 600; margin: 0 0 10px 0;">Form Errors:</p>
-                {% for error in form.vars.errors %}
-                    <p style="margin: 5px 0;">- {{ error.message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+<div class="fixed top-0 left-64 right-0 bottom-0 flex items-center justify-center bg-slate-200/50 z-50">
+    <div class="w-11/12 max-w-6xl bg-white/98 backdrop-blur-sm py-8 px-8 rounded-3xl shadow-2xl border border-[#EFCFB4] relative overflow-hidden max-h-[90vh] overflow-y-auto">
 
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <!-- Top Accent Line -->
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#EFCFB4] via-[#9E2B47] to-[#7F1734] rounded-t-3xl"></div>
 
-        <!-- Product Field -->
-        <div style="margin-bottom: 20px;">
-            {{ form_label(form.product, 'Select Product', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
-            {{ form_widget(form.product, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;'}}) }}
-            {% if form_errors(form.product) %}
-                <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">
-                    {% for error in form_errors(form.product) %}
-                        {{ error.message }}
-                    {% endfor %}
+            <!-- Header -->
+            <h1 class="text-4xl font-extrabold text-center text-[#7F1734] tracking-tight mb-8">
+                📦 Add Inventory Record
+            </h1>
+
+            {{ form_start(form, {
+                'attr': {'class': 'grid grid-cols-1 gap-6'}
+            }) }}
+
+                <!-- Product Field -->
+                <div>
+                    {{ form_label(form.product, 'Select Product', {
+                        'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                    }) }}
+                    {{ form_widget(form.product, {
+                        'attr': {
+                            'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                        }
+                    }) }}
+                    {% if form_errors(form.product) %}
+                        <p class="text-sm text-red-600 mt-1">{{ form_errors(form.product) }}</p>
+                    {% endif %}
                 </div>
-            {% endif %}
-        </div>
 
-        <!-- Quantity Field -->
-        <div style="margin-bottom: 20px;">
-            {{ form_label(form.quantity, 'Quantity', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
-            {{ form_widget(form.quantity, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;', 'type': 'number', 'min': '0'}}) }}
-            {% if form_errors(form.quantity) %}
-                <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">
-                    {% for error in form_errors(form.quantity) %}
-                        {{ error.message }}
-                    {% endfor %}
+                <!-- Quantity Field -->
+                <div>
+                    {{ form_label(form.quantity, 'Quantity', {
+                        'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                    }) }}
+                    {{ form_widget(form.quantity, {
+                        'attr': {
+                            'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300',
+                            'type': 'number',
+                            'min': '0',
+                            'placeholder': '0'
+                        }
+                    }) }}
+                    {% if form_errors(form.quantity) %}
+                        <p class="text-sm text-red-600 mt-1">{{ form_errors(form.quantity) }}</p>
+                    {% endif %}
                 </div>
-            {% endif %}
-        </div>
 
-        <!-- Acquired Date Field -->
-        <div style="margin-bottom: 20px;">
-            {{ form_label(form.acquiredDate, 'Acquired Date', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
-            {{ form_widget(form.acquiredDate, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;'}}) }}
-            {% if form_errors(form.acquiredDate) %}
-                <div style="color: #dc3545; font-size: 12px; margin-top: 5px;">
-                    {% for error in form_errors(form.acquiredDate) %}
-                        {{ error.message }}
-                    {% endfor %}
+                <!-- Acquired Date Field -->
+                <div>
+                    {{ form_label(form.acquiredDate, 'Acquired Date', {
+                        'label_attr': {'class': 'block text-sm font-semibold text-[#4B164C] mb-2 tracking-wide'}
+                    }) }}
+                    {{ form_widget(form.acquiredDate, {
+                        'attr': {
+                            'class': 'w-full px-5 py-4 rounded-2xl bg-white border border-amber-200 shadow focus:ring-4 focus:ring-[#9E2B47]/40 focus:border-[#7F1734] text-gray-800 placeholder-gray-400 transition-all duration-300'
+                        }
+                    }) }}
+                    {% if form_errors(form.acquiredDate) %}
+                        <p class="text-sm text-red-600 mt-1">{{ form_errors(form.acquiredDate) }}</p>
+                    {% endif %}
                 </div>
-            {% endif %}
-        </div>
 
-        <!-- Action Buttons -->
-        <div style="display: flex; gap: 12px; margin-top: 30px;">
-            <button type="submit" style="flex: 1; padding: 12px; background: #7F1734; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#5E0B15'" onmouseout="this.style.background='#7F1734'">
-                ✓ Save Inventory Record
-            </button>
-            <a href="{{ path('staff_inventory_index') }}" style="flex: 1; padding: 12px; background: #EFCFB4; color: #7F1734; text-decoration: none; border-radius: 6px; font-weight: 600; text-align: center; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#D4AF9A'" onmouseout="this.style.background='#EFCFB4'">
-                ✕ Cancel
-            </a>
-        </div>
+                <!-- Buttons Section -->
+                <div class="mt-6 pt-6 border-t border-amber-100">
+                    <div class="flex justify-center gap-4">
+                        <button type="submit"
+                                class="px-8 py-3 rounded-xl shadow-lg font-semibold text-base border transition-all duration-300 transform hover:scale-105 bg-[#7F1734] text-[#F8EAD8] border-[#EFCFB4] hover:bg-[#9E2B47] focus:ring-4 focus:ring-[#9E2B47]/40">
+                            ✓ Save Record
+                        </button>
+                        <a href="{{ path('staff_inventory_index') }}"
+                           class="px-8 py-3 rounded-xl shadow-md font-semibold text-base border transition-all duration-300 transform hover:scale-105 bg-gray-200 text-gray-800 border-gray-300 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400/40">
+                            ✕ Cancel
+                        </a>
+                    </div>
+                </div>
 
-        {{ form_end(form) }}
+            {{ form_end(form) }}
+        </div>
     </div>
 </div>
 {% endblock %}
