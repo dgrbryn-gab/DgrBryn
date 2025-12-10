@@ -53,7 +53,7 @@
         <fieldset style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
             <legend style="padding: 0 10px; font-weight: 700; color: #7F1734; font-size: 14px; text-transform: uppercase;">🏠 Address Information</legend>
 
-            <div style="display: grid; gap: 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
                     {{ form_label(form.shippingAddress, 'Shipping Address', {'label_attr': {'style': 'display: block; font-weight: 600; margin-bottom: 8px; color: #333;'}}) }}
                     {{ form_widget(form.shippingAddress, {'attr': {'style': 'width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; min-height: 80px;'}}) }}

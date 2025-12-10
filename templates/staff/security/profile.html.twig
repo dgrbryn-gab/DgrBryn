@@ -5,13 +5,14 @@
 {% block page_title %}My Profile{% endblock %}
 
 {% block content %}
-<div style="max-width: 800px; margin: 0 auto;">
+<div style="position: fixed; top: 0; left: 256px; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(226, 232, 240, 0.5); z-index: 50;">
+    <div style="width: 90%; max-width: 1200px; max-height: 90vh; background: rgba(255, 255, 255, 0.98); padding: 32px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border: 1px solid #EFCFB4; overflow: hidden;">
     <!-- Profile Card -->
-    <div style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px;">
-        <div style="text-align: center; margin-bottom: 30px;">
+    <div style="background: transparent; padding: 0; border-radius: 0; box-shadow: none; margin-bottom: 0;">
+        <div style="text-align: center; margin-bottom: 20px;">
             <div style="
-                width: 100px;
-                height: 100px;
+                width: 80px;
+                height: 80px;
                 border-radius: 50%;
                 background: linear-gradient(135deg, #7F1734, #9E2B47);
                 display: flex;
@@ -19,105 +20,109 @@
                 justify-content: center;
                 color: white;
                 font-weight: bold;
-                font-size: 40px;
-                margin: 0 auto 20px;
+                font-size: 32px;
+                margin: 0 auto 16px;
             ">
                 {{ user.email|slice(0, 1)|upper }}
             </div>
-            <h2 style="font-size: 24px; font-weight: 700; color: #7F1734; margin-bottom: 8px;">
+            <h2 style="font-size: 20px; font-weight: 700; color: #7F1734; margin-bottom: 4px;">
                 {{ user.email }}
             </h2>
-            <p style="font-size: 14px; color: #666; margin-bottom: 4px;">@{{ user.username }}</p>
-            <p style="font-size: 14px; color: #888;">Staff Member</p>
+            <p style="font-size: 13px; color: #666; margin-bottom: 2px;">@{{ user.username }}</p>
+            <p style="font-size: 13px; color: #888;">Staff Member</p>
         </div>
 
         <!-- Profile Information -->
-        <div style="border-top: 1px solid #eee; padding-top: 24px;">
-            <h3 style="font-size: 18px; font-weight: 700; color: #7F1734; margin-bottom: 20px;">Profile Information</h3>
+        <div style="border-top: 1px solid #eee; padding-top: 16px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px;">Profile Information</h3>
             
-            <div style="display: grid; gap: 20px;">
-                <!-- Username -->
-                <div>
-                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
-                        Username
-                    </label>
-                    <div style="
-                        padding: 12px 16px;
-                        background: #f8f9fa;
-                        border: 1px solid #e9ecef;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        color: #333;
-                    ">
-                        @{{ user.username }}
+            <div style="display: grid; gap: 16px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <!-- Username -->
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                            Username
+                        </label>
+                        <div style="
+                            padding: 12px 16px;
+                            background: #f8f9fa;
+                            border: 1px solid #e9ecef;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            color: #333;
+                        ">
+                            @{{ user.username }}
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                            Email Address
+                        </label>
+                        <div style="
+                            padding: 12px 16px;
+                            background: #f8f9fa;
+                            border: 1px solid #e9ecef;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            color: #333;
+                        ">
+                            {{ user.email }}
+                        </div>
                     </div>
                 </div>
 
-                <!-- Email -->
-                <div>
-                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
-                        Email Address
-                    </label>
-                    <div style="
-                        padding: 12px 16px;
-                        background: #f8f9fa;
-                        border: 1px solid #e9ecef;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        color: #333;
-                    ">
-                        {{ user.email }}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                            Role
+                        </label>
+                        <div style="
+                            padding: 12px 16px;
+                            background: #f8f9fa;
+                            border: 1px solid #e9ecef;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            color: #333;
+                        ">
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                                Administrator
+                            {% elseif 'ROLE_STAFF' in user.roles %}
+                                Staff Member
+                            {% else %}
+                                User
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Account Status -->
+                    <div>
+                        <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                            Account Status
+                        </label>
+                        <div style="
+                            padding: 12px 16px;
+                            background: #f8f9fa;
+                            border: 1px solid #e9ecef;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            color: #333;
+                        ">
+                            {% if user.isActive %}
+                                <span style="color: #4CAF50; font-weight: 600;">✓ Active</span>
+                            {% else %}
+                                <span style="color: #FFA500; font-weight: 600;">⚠ Inactive</span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
-                <!-- Role -->
-                <div>
-                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
-                        Role
-                    </label>
-                    <div style="
-                        padding: 12px 16px;
-                        background: #f8f9fa;
-                        border: 1px solid #e9ecef;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        color: #333;
-                    ">
-                        {% if 'ROLE_ADMIN' in user.roles %}
-                            Administrator
-                        {% elseif 'ROLE_STAFF' in user.roles %}
-                            Staff Member
-                        {% else %}
-                            User
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Account Status -->
-                <div>
-                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
-                        Account Status
-                    </label>
-                    <div style="
-                        padding: 12px 16px;
-                        background: #f8f9fa;
-                        border: 1px solid #e9ecef;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        color: #333;
-                    ">
-                        {% if user.isActive %}
-                            <span style="color: #4CAF50; font-weight: 600;">✓ Active</span>
-                        {% else %}
-                            <span style="color: #FFA500; font-weight: 600;">⚠ Inactive</span>
-                        {% endif %}
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Action Buttons -->
-        <div style="border-top: 1px solid #eee; padding-top: 24px; margin-top: 24px; display: flex; gap: 12px;">
+        <div style="border-top: 1px solid #eee; padding-top: 16px; margin-top: 16px; display: flex; gap: 12px;">
             <a href="{{ path('staff_profile_edit') }}" style="
                 flex: 1;
                 padding: 12px 20px;
@@ -151,6 +156,7 @@
                 ← Back to Dashboard
             </a>
         </div>
+    </div>
     </div>
 </div>
 {% endblock %}
