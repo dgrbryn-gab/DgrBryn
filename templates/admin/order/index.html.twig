@@ -2,6 +2,205 @@
 
 {% block title %}Orders - CORK Admin{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <style>
+        /* DataTables Wrapper Styling */
+        #ordersTable_wrapper {
+            padding: 0 !important;
+        }
+
+        /* Remove default DataTables styling */
+        #ordersTable_wrapper .dataTables_length,
+        #ordersTable_wrapper .dataTables_filter {
+            margin: 0 !important;
+        }
+
+        #ordersTable_wrapper .dataTables_length label,
+        #ordersTable_wrapper .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+        }
+
+        #ordersTable_wrapper .dataTables_length select,
+        #ordersTable_wrapper .dataTables_filter input {
+            border: 1px solid #EFCFB4 !important;
+            border-radius: 0.5rem !important;
+            padding: 0.6rem 0.9rem !important;
+            color: #7F1734 !important;
+            background-color: #fff !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        }
+
+        #ordersTable_wrapper .dataTables_length select:focus,
+        #ordersTable_wrapper .dataTables_filter input:focus {
+            outline: none !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1) !important;
+        }
+
+        #ordersTable_wrapper .dataTables_length select:hover,
+        #ordersTable_wrapper .dataTables_filter input:hover {
+            border-color: #7F1734 !important;
+        }
+
+        /* Pagination Styling */
+        #ordersTable_wrapper .dataTables_paginate {
+            display: flex !important;
+            gap: 0.3rem !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            margin: 1.5rem 0 0 0 !important;
+        }
+
+        #ordersTable_wrapper .dataTables_paginate .paginate_button {
+            padding: 0.6rem 0.8rem !important;
+            border: 1px solid #EFCFB4 !important;
+            background-color: #fff !important;
+            color: #7F1734 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            border-radius: 0.5rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        }
+
+        #ordersTable_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled) {
+            background-color: #7F1734 !important;
+            color: #F8EAD8 !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 4px 6px rgba(127, 23, 52, 0.15) !important;
+        }
+
+        #ordersTable_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #7F1734 !important;
+            color: #F8EAD8 !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 4px 6px rgba(127, 23, 52, 0.15) !important;
+        }
+
+        #ordersTable_wrapper .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+        }
+
+        /* Info Text */
+        #ordersTable_wrapper .dataTables_info {
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            margin: 1.5rem 0 0 0 !important;
+        }
+
+        /* Table Head */
+        #ordersTable thead th {
+            background-color: #f3f4f6 !important;
+            color: #5E0B15 !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.5px !important;
+            border-bottom: 2px solid #7F1734 !important;
+            padding: 1rem 0.75rem !important;
+            text-align: center !important;
+        }
+
+        /* Sort Indicators */
+        #ordersTable thead th.sorting::after,
+        #ordersTable thead th.sorting_asc::after,
+        #ordersTable thead th.sorting_desc::after {
+            content: '' !important;
+        }
+
+        #ordersTable thead th.sorting {
+            cursor: pointer !important;
+            position: relative !important;
+            color: #7F1734 !important;
+        }
+
+        #ordersTable thead th.sorting:hover {
+            background-color: #e5e7eb !important;
+        }
+
+        #ordersTable thead th.sorting_asc,
+        #ordersTable thead th.sorting_desc {
+            color: #5E0B15 !important;
+            background-color: #e5e7eb !important;
+        }
+
+        /* Table Body */
+        #ordersTable tbody tr {
+            border-bottom: 1px solid #e5e7eb !important;
+            transition: all 0.2s ease !important;
+        }
+
+        #ordersTable tbody tr:hover {
+            background-color: #f8ead8 !important;
+            box-shadow: inset 0 0 0 1px #efcfb4 !important;
+        }
+
+        #ordersTable tbody td {
+            padding: 1rem 0.75rem !important;
+            color: #374151 !important;
+            font-size: 0.95rem !important;
+        }
+
+        /* Response Data */
+        .dtr-data {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+
+        /* Loading Indicator */
+        .dataTables_processing {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            padding: 2rem !important;
+            border-radius: 0.75rem !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            z-index: 1000 !important;
+        }
+
+        /* Small controls container styling */
+        .dataTables_length, .dataTables_filter {
+            display: flex !important;
+            align-items: center !important;
+            gap: 1rem !important;
+        }
+
+        @media (max-width: 768px) {
+            #ordersTable_wrapper .dataTables_length,
+            #ordersTable_wrapper .dataTables_filter {
+                display: block !important;
+                margin-bottom: 1rem !important;
+            }
+
+            #ordersTable_wrapper .dataTables_paginate {
+                justify-content: center !important;
+                margin-top: 1rem !important;
+            }
+
+            #ordersTable {
+                font-size: 0.9rem !important;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block admin_content %}
 
 <div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
@@ -78,32 +277,32 @@
         <!-- Orders Table -->
         {% if orders|length > 0 %}
             <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
+                <div class="overflow-x-auto p-4">
+                    <table id="ordersTable" class="w-full display compact">
                         <thead>
-                            <tr class="bg-gray-100 border-b-2 border-[#5E0B15]">
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-[#5E0B15]">Order #</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-[#5E0B15]">Customer</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-[#5E0B15]">Date</th>
-                                <th class="px-6 py-4 text-right text-sm font-semibold text-[#5E0B15]">Total</th>
-                                <th class="px-6 py-4 text-center text-sm font-semibold text-[#5E0B15]">Status</th>
-                                <th class="px-6 py-4 text-center text-sm font-semibold text-[#5E0B15]">Payment</th>
-                                <th class="px-6 py-4 text-center text-sm font-semibold text-[#5E0B15]">Actions</th>
+                            <tr class="bg-gradient-to-r from-[#5E0B15] to-[#7F1734]">
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-white">Order #</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-white">Customer</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-white">Date</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-white">Total</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-white">Status</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-white">Payment</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-white">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for order in orders %}
                                 <tr class="border-t border-[#EFCFB4]/30 hover:bg-[#F8EAD8]/50 transition-colors">
-                                    <td class="px-6 py-4 text-sm font-semibold text-[#5E0B15]">
+                                    <td class="px-6 py-4 text-center text-sm font-semibold text-[#5E0B15]">
                                         {{ order.orderNumber }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                    <td class="px-6 py-4 text-center text-sm text-gray-700">
                                         {{ order.customerName ?? 'N/A' }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">
+                                    <td class="px-6 py-4 text-center text-sm text-gray-600">
                                         {{ order.createdAt ? order.createdAt|date('M j, Y H:i') : 'N/A' }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm font-semibold text-right text-[#5E0B15]">
+                                    <td class="px-6 py-4 text-center text-sm font-semibold text-[#5E0B15]">
                                         ₱{{ order.totalAmount }}
                                     </td>
                                     <td class="px-6 py-4 text-center">
@@ -156,4 +355,63 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const table = $('#ordersTable').DataTable({
+                responsive: true,
+                paging: true,
+                pageLength: 10,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: false,
+                language: {
+                    search: "Search orders:",
+                    lengthMenu: "Show _MENU_ entries per page",
+                    info: "Showing _START_ to _END_ of _TOTAL_ orders",
+                    paginate: {
+                        first: "«",
+                        last: "»",
+                        next: "›",
+                        previous: "‹"
+                    },
+                    emptyTable: "No orders found",
+                    zeroRecords: "No matching orders found"
+                },
+                columnDefs: [
+                    {
+                        targets: -1,
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                dom: '<"grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-lg"lf>t<"grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mt-6"ip>',
+                drawCallback: function() {
+                    // Style pagination buttons after draw
+                    $('.paginate_button').each(function() {
+                        $(this).addClass('paginate_button');
+                    });
+                }
+            });
+
+            // Enhance styling on initialization
+            setTimeout(function() {
+                // Wrap controls properly
+                $('.dataTables_length').addClass('flex items-center gap-3');
+                $('.dataTables_filter').addClass('flex items-center gap-3 justify-start sm:justify-end');
+                
+                // Style inputs
+                $('.dataTables_length select').addClass('px-3 py-2 border border-[#EFCFB4] rounded-lg text-[#7F1734] font-medium');
+                $('.dataTables_filter input').addClass('px-3 py-2 border border-[#EFCFB4] rounded-lg text-[#7F1734] font-medium');
+            }, 100);
+        });
+    </script>
 {% endblock %}

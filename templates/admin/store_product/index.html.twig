@@ -5,6 +5,19 @@
 {% block admin_content %}
 <div class="max-w-7xl mx-auto pt-0 pb-10">
 
+    <!-- Flash Messages -->
+    {% for message in app.flashes('success') %}
+        <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg" role="alert">
+            ✓ {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg" role="alert">
+            ✕ {{ message }}
+        </div>
+    {% endfor %}
+
     <!-- Search Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start mb-8 gap-3">
         <form method="get" action="{{ path('app_store_product_index') }}" class="flex items-center space-x-3">

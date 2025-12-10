@@ -2,6 +2,199 @@
 
 {% block title %}User Management - CORK Admin{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <style>
+        /* DataTables Wrapper Styling */
+        #usersTable_wrapper {
+            padding: 0 !important;
+        }
+
+        /* Remove default DataTables styling */
+        #usersTable_wrapper .dataTables_length,
+        #usersTable_wrapper .dataTables_filter {
+            margin: 0 !important;
+        }
+
+        #usersTable_wrapper .dataTables_length label,
+        #usersTable_wrapper .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+        }
+
+        #usersTable_wrapper .dataTables_length select,
+        #usersTable_wrapper .dataTables_filter input {
+            border: 1px solid #EFCFB4 !important;
+            border-radius: 0.5rem !important;
+            padding: 0.6rem 0.9rem !important;
+            color: #7F1734 !important;
+            background-color: #fff !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        }
+
+        #usersTable_wrapper .dataTables_length select:focus,
+        #usersTable_wrapper .dataTables_filter input:focus {
+            outline: none !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1) !important;
+        }
+
+        #usersTable_wrapper .dataTables_length select:hover,
+        #usersTable_wrapper .dataTables_filter input:hover {
+            border-color: #7F1734 !important;
+        }
+
+        /* Pagination Styling */
+        #usersTable_wrapper .dataTables_paginate {
+            display: flex !important;
+            gap: 0.3rem !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            margin: 1.5rem 0 0 0 !important;
+        }
+
+        #usersTable_wrapper .dataTables_paginate .paginate_button {
+            padding: 0.6rem 0.8rem !important;
+            border: 1px solid #EFCFB4 !important;
+            background-color: #fff !important;
+            color: #7F1734 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            border-radius: 0.5rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        }
+
+        #usersTable_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled) {
+            background-color: #7F1734 !important;
+            color: #F8EAD8 !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 4px 6px rgba(127, 23, 52, 0.15) !important;
+        }
+
+        #usersTable_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #7F1734 !important;
+            color: #F8EAD8 !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 4px 6px rgba(127, 23, 52, 0.15) !important;
+        }
+
+        #usersTable_wrapper .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+        }
+
+        /* Info Text */
+        #usersTable_wrapper .dataTables_info {
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            margin: 1.5rem 0 0 0 !important;
+        }
+
+        /* Table Head */
+        #usersTable thead th {
+            background-color: #5E0B15 !important;
+            color: white !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.5px !important;
+            border-bottom: 2px solid #7F1734 !important;
+            padding: 1rem 0.75rem !important;
+            text-align: center !important;
+        }
+
+        /* Sort Indicators */
+        #usersTable thead th.sorting::after,
+        #usersTable thead th.sorting_asc::after,
+        #usersTable thead th.sorting_desc::after {
+            content: '' !important;
+        }
+
+        #usersTable thead th.sorting {
+            cursor: pointer !important;
+            position: relative !important;
+            color: white !important;
+        }
+
+        #usersTable thead th.sorting:hover {
+            background-color: #7F1734 !important;
+        }
+
+        #usersTable thead th.sorting_asc,
+        #usersTable thead th.sorting_desc {
+            color: white !important;
+            background-color: #7F1734 !important;
+        }
+
+        /* Table Body */
+        #usersTable tbody tr {
+            border-bottom: 1px solid #e5e7eb !important;
+            transition: all 0.2s ease !important;
+        }
+
+        #usersTable tbody tr:hover {
+            background-color: #f8ead8 !important;
+            box-shadow: inset 0 0 0 1px #efcfb4 !important;
+        }
+
+        #usersTable tbody td {
+            padding: 1rem 0.75rem !important;
+            color: #374151 !important;
+            font-size: 0.95rem !important;
+        }
+
+        /* Loading Indicator */
+        .dataTables_processing {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            padding: 2rem !important;
+            border-radius: 0.75rem !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            z-index: 1000 !important;
+        }
+
+        /* Small controls container styling */
+        .dataTables_length, .dataTables_filter {
+            display: flex !important;
+            align-items: center !important;
+            gap: 1rem !important;
+        }
+
+        @media (max-width: 768px) {
+            #usersTable_wrapper .dataTables_length,
+            #usersTable_wrapper .dataTables_filter {
+                display: block !important;
+                margin-bottom: 1rem !important;
+            }
+
+            #usersTable_wrapper .dataTables_paginate {
+                justify-content: center !important;
+                margin-top: 1rem !important;
+            }
+
+            #usersTable {
+                font-size: 0.9rem !important;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block admin_content %}
 
 <div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
@@ -55,27 +248,27 @@
 
         <!-- Users Table -->
         {% if users|length > 0 %}
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
-                <div class="overflow-x-auto">
-                    <table class="w-full table-fixed">
+            <div class="bg-white/90 backdrop-blur-sm border border-[#EFCFB4]/50 rounded-2xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto p-4">
+                    <table id="usersTable" class="w-full display compact">
                         <thead>
-                            <tr class="bg-gray-100 border-b-2 border-[#5E0B15]">
-                                <th class="px-4 py-4 text-left text-xs sm:text-sm font-bold text-[#5E0B15]">ID</th>
-                                <th class="px-4 py-4 text-left text-xs sm:text-sm font-bold text-[#5E0B15]">Username</th>
-                                <th class="px-4 py-4 text-left text-xs sm:text-sm font-bold text-[#5E0B15]">Email</th>
-                                <th class="px-4 py-4 text-left text-xs sm:text-sm font-bold text-[#5E0B15]">Role</th>
-                                <th class="px-4 py-4 text-left text-xs sm:text-sm font-bold text-[#5E0B15]">Status</th>
-                                <th class="px-4 py-4 text-left text-xs sm:text-sm font-bold text-[#5E0B15]">Created</th>
-                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-[#5E0B15]">Actions</th>
+                            <tr class="bg-gradient-to-r from-[#5E0B15] to-[#7F1734]">
+                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-white">ID</th>
+                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-white">Username</th>
+                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-white">Email</th>
+                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-white">Role</th>
+                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-white">Status</th>
+                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-white">Created</th>
+                                <th class="px-4 py-4 text-center text-xs sm:text-sm font-bold text-white">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             {% for user in users %}
-                                <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                    <td class="px-4 py-4 text-xs sm:text-sm text-gray-800 font-mono font-semibold">#{{ user.id }}</td>
-                                    <td class="px-4 py-4 text-xs sm:text-sm text-gray-700 break-all font-mono">@{{ user.username }}</td>
-                                    <td class="px-4 py-4 text-xs sm:text-sm text-gray-700 break-all">{{ user.email }}</td>
-                                    <td class="px-4 py-4 text-xs sm:text-sm">
+                                <tr class="hover:bg-[#F8EAD8]/50 transition-colors">
+                                    <td class="px-4 py-4 text-center text-xs sm:text-sm text-gray-800 font-mono font-semibold">#{{ user.id }}</td>
+                                    <td class="px-4 py-4 text-center text-xs sm:text-sm text-gray-700 break-all font-mono">@{{ user.username }}</td>
+                                    <td class="px-4 py-4 text-center text-xs sm:text-sm text-gray-700 break-all">{{ user.email }}</td>
+                                    <td class="px-4 py-4 text-center text-xs sm:text-sm">
                                         {% set role = user.roles[0] %}
                                         {% if role == 'ROLE_ADMIN' %}
                                             <span class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-red-100 text-red-800 rounded-full text-xs font-bold">🔐 Admin</span>
@@ -85,17 +278,17 @@
                                             <span class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-100 text-gray-800 rounded-full text-xs font-bold">{{ role }}</span>
                                         {% endif %}
                                     </td>
-                                    <td class="px-4 py-4 text-xs sm:text-sm">
+                                    <td class="px-4 py-4 text-center text-xs sm:text-sm">
                                         {% if user.isActive %}
                                             <span class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-green-100 text-green-800 rounded-full text-xs font-bold">✓ Active</span>
                                         {% else %}
                                             <span class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-red-100 text-red-800 rounded-full text-xs font-bold">✗ Inactive</span>
                                         {% endif %}
                                     </td>
-                                    <td class="px-4 py-4 text-xs sm:text-sm text-gray-700 font-medium">
+                                    <td class="px-4 py-4 text-center text-xs sm:text-sm text-gray-700 font-medium">
                                         {{ user.createdAt ? user.createdAt|date('M d, Y') : 'N/A' }}
                                     </td>
-                                    <td class="px-2 sm:px-4 py-4 text-xs sm:text-sm">
+                                    <td class="px-2 sm:px-4 py-4 text-center text-xs sm:text-sm">
                                         <div class="flex justify-center gap-1 sm:gap-2 flex-nowrap">
                                             <!-- Edit Button -->
                                             <a href="{{ path('admin_users_edit', {'id': user.id}) }}"
@@ -141,4 +334,64 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const table = $('#usersTable').DataTable({
+                responsive: true,
+                paging: true,
+                pageLength: 10,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: false,
+                order: [[0, 'asc']],
+                language: {
+                    search: "Search users:",
+                    lengthMenu: "Show _MENU_ entries per page",
+                    info: "Showing _START_ to _END_ of _TOTAL_ users",
+                    paginate: {
+                        first: "«",
+                        last: "»",
+                        next: "›",
+                        previous: "‹"
+                    },
+                    emptyTable: "No users found",
+                    zeroRecords: "No matching users found"
+                },
+                columnDefs: [
+                    {
+                        targets: -1,
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                dom: '<"grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-lg"lf>t<"grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mt-6"ip>',
+                drawCallback: function() {
+                    // Style pagination buttons after draw
+                    $('.paginate_button').each(function() {
+                        $(this).addClass('paginate_button');
+                    });
+                }
+            });
+
+            // Enhance styling on initialization
+            setTimeout(function() {
+                // Wrap controls properly
+                $('.dataTables_length').addClass('flex items-center gap-3');
+                $('.dataTables_filter').addClass('flex items-center gap-3 justify-start sm:justify-end');
+                
+                // Style inputs
+                $('.dataTables_length select').addClass('px-3 py-2 border border-[#EFCFB4] rounded-lg text-[#7F1734] font-medium');
+                $('.dataTables_filter input').addClass('px-3 py-2 border border-[#EFCFB4] rounded-lg text-[#7F1734] font-medium');
+            }, 100);
+        });
+    </script>
 {% endblock %}

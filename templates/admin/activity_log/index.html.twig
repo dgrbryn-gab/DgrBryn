@@ -5,6 +5,195 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEQxiZt+QV8DbFJKq7O8y2sSt7QH+nXs47GbSt+GUoftheJc4VUYvncd9M19b91t8bZJWfow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <style>
+        /* DataTables Wrapper Styling */
+        #activityTable_wrapper {
+            padding: 0 !important;
+        }
+
+        /* Remove default DataTables styling */
+        #activityTable_wrapper .dataTables_length,
+        #activityTable_wrapper .dataTables_filter {
+            margin: 0 !important;
+        }
+
+        #activityTable_wrapper .dataTables_length label,
+        #activityTable_wrapper .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+        }
+
+        #activityTable_wrapper .dataTables_length select,
+        #activityTable_wrapper .dataTables_filter input {
+            border: 1px solid #EFCFB4 !important;
+            border-radius: 0.5rem !important;
+            padding: 0.6rem 0.9rem !important;
+            color: #7F1734 !important;
+            background-color: #fff !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        }
+
+        #activityTable_wrapper .dataTables_length select:focus,
+        #activityTable_wrapper .dataTables_filter input:focus {
+            outline: none !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1) !important;
+        }
+
+        #activityTable_wrapper .dataTables_length select:hover,
+        #activityTable_wrapper .dataTables_filter input:hover {
+            border-color: #7F1734 !important;
+        }
+
+        /* Pagination Styling */
+        #activityTable_wrapper .dataTables_paginate {
+            display: flex !important;
+            gap: 0.3rem !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            margin: 1.5rem 0 0 0 !important;
+        }
+
+        #activityTable_wrapper .dataTables_paginate .paginate_button {
+            padding: 0.6rem 0.8rem !important;
+            border: 1px solid #EFCFB4 !important;
+            background-color: #fff !important;
+            color: #7F1734 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            border-radius: 0.5rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        }
+
+        #activityTable_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled) {
+            background-color: #7F1734 !important;
+            color: #F8EAD8 !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 4px 6px rgba(127, 23, 52, 0.15) !important;
+        }
+
+        #activityTable_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #7F1734 !important;
+            color: #F8EAD8 !important;
+            border-color: #7F1734 !important;
+            box-shadow: 0 4px 6px rgba(127, 23, 52, 0.15) !important;
+        }
+
+        #activityTable_wrapper .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+        }
+
+        /* Info Text */
+        #activityTable_wrapper .dataTables_info {
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            margin: 1.5rem 0 0 0 !important;
+        }
+
+        /* Table Head */
+        #activityTable thead th {
+            background-color: #5E0B15 !important;
+            color: white !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.5px !important;
+            border-bottom: 2px solid #7F1734 !important;
+            padding: 1rem 0.75rem !important;
+            text-align: center !important;
+        }
+
+        /* Sort Indicators */
+        #activityTable thead th.sorting::after,
+        #activityTable thead th.sorting_asc::after,
+        #activityTable thead th.sorting_desc::after {
+            content: '' !important;
+        }
+
+        #activityTable thead th.sorting {
+            cursor: pointer !important;
+            position: relative !important;
+            color: white !important;
+        }
+
+        #activityTable thead th.sorting:hover {
+            background-color: #7F1734 !important;
+        }
+
+        #activityTable thead th.sorting_asc,
+        #activityTable thead th.sorting_desc {
+            color: white !important;
+            background-color: #7F1734 !important;
+        }
+
+        /* Table Body */
+        #activityTable tbody tr {
+            border-bottom: 1px solid #e5e7eb !important;
+            transition: all 0.2s ease !important;
+        }
+
+        #activityTable tbody tr:hover {
+            background-color: #f8ead8 !important;
+            box-shadow: inset 0 0 0 1px #efcfb4 !important;
+        }
+
+        #activityTable tbody td {
+            padding: 1rem 0.75rem !important;
+            color: #374151 !important;
+            font-size: 0.95rem !important;
+        }
+
+        /* Loading Indicator */
+        .dataTables_processing {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            padding: 2rem !important;
+            border-radius: 0.75rem !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+            color: #7F1734 !important;
+            font-weight: 600 !important;
+            z-index: 1000 !important;
+        }
+
+        /* Small controls container styling */
+        .dataTables_length, .dataTables_filter {
+            display: flex !important;
+            align-items: center !important;
+            gap: 1rem !important;
+        }
+
+        @media (max-width: 768px) {
+            #activityTable_wrapper .dataTables_length,
+            #activityTable_wrapper .dataTables_filter {
+                display: block !important;
+                margin-bottom: 1rem !important;
+            }
+
+            #activityTable_wrapper .dataTables_paginate {
+                justify-content: center !important;
+                margin-top: 1rem !important;
+            }
+
+            #activityTable {
+                font-size: 0.9rem !important;
+            }
+        }
+    </style>
 {% endblock %}
 
 {% block admin_content %}
@@ -111,35 +300,35 @@
 
     <!-- Activity Logs Table -->
     <div class="admin-card rounded-lg overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead style="background: #7F1734; color: white;">
+        <div class="overflow-x-auto p-4">
+            <table id="activityTable" class="w-full text-sm display compact">
+                <thead style="background: #5E0B15;">
                     <tr>
-                        <th style="padding: 16px; text-align: left; font-weight: 600;">ID</th>
-                        <th style="padding: 16px; text-align: left; font-weight: 600;">Username</th>
-                        <th style="padding: 16px; text-align: left; font-weight: 600;">Role</th>
-                        <th style="padding: 16px; text-align: left; font-weight: 600;">Action</th>
-                        <th style="padding: 16px; text-align: left; font-weight: 600;">Target Data</th>
-                        <th style="padding: 16px; text-align: left; font-weight: 600;">IP Address</th>
-                        <th style="padding: 16px; text-align: left; font-weight: 600;">Date & Time</th>
+                        <th style="padding: 16px; text-align: center; font-weight: 600; color: white;">ID</th>
+                        <th style="padding: 16px; text-align: center; font-weight: 600; color: white;">Username</th>
+                        <th style="padding: 16px; text-align: center; font-weight: 600; color: white;">Role</th>
+                        <th style="padding: 16px; text-align: center; font-weight: 600; color: white;">Action</th>
+                        <th style="padding: 16px; text-align: center; font-weight: 600; color: white;">Target Data</th>
+                        <th style="padding: 16px; text-align: center; font-weight: 600; color: white;">IP Address</th>
+                        <th style="padding: 16px; text-align: center; font-weight: 600; color: white;">Date & Time</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if activity_logs | length > 0 %}
                         {% for log in activity_logs %}
                         <tr style="background: white; border-bottom: 1px solid #e0e0e0;">
-                            <td style="padding: 12px 16px; color: #333; font-weight: 500;">{{ log.id }}</td>
-                            <td style="padding: 12px 16px; color: #333;">
+                            <td style="padding: 12px 16px; color: #333; font-weight: 500; text-align: center;">{{ log.id }}</td>
+                            <td style="padding: 12px 16px; color: #333; text-align: center;">
                                 <a href="{{ path('admin_activity_logs_by_user', {userId: log.userId}) }}" style="color: #333; text-decoration: none; font-weight: 500;">
                                     {{ log.username }}
                                 </a>
                             </td>
-                            <td style="padding: 12px 16px;">
+                            <td style="padding: 12px 16px; text-align: center;">
                                 <span style="display: inline-block; width: 180px; text-align: center; padding: 8px 0; background-color: #7F1734; color: #ffffff; font-size: 12px; font-weight: 600; border-radius: 4px; white-space: nowrap;">
                                     {{ log.role is iterable ? log.role | join(', ') : log.role }}
                                 </span>
                             </td>
-                            <td style="padding: 12px 16px;">
+                            <td style="padding: 12px 16px; text-align: center;">
                                 <span style="display: inline-block; width: 140px; text-align: center; padding: 8px 0; font-size: 12px; font-weight: 600; border-radius: 4px; color: white; white-space: nowrap;
                                     {% if 'LOGIN' in log.action or 'LOGOUT' in log.action %}
                                         background-color: #0066cc;
@@ -156,7 +345,7 @@
                                     {{ log.actionLabel }}
                                 </span>
                             </td>
-                            <td style="padding: 12px 16px; font-size: 12px; font-family: monospace; color: #333;">
+                            <td style="padding: 12px 16px; font-size: 12px; font-family: monospace; color: #333; text-align: center;">
                                 {% if log.targetData %}
                                     {% if log.targetData is iterable %}
                                         {{ log.targetData | json_encode(constant('JSON_PRETTY_PRINT')) | nl2br }}
@@ -167,7 +356,7 @@
                                     <span style="color: #999;">—</span>
                                 {% endif %}
                             </td>
-                            <td style="padding: 12px 16px; font-family: monospace; font-size: 12px;">
+                            <td style="padding: 12px 16px; font-family: monospace; font-size: 12px; text-align: center;">
                                 {% if log.ipAddress %}
                                     <span style="display: inline-block; padding: 4px 8px; background: #f0f0f0; border-radius: 4px; color: #333;">
                                         {{ log.ipAddress }}
@@ -176,7 +365,7 @@
                                     <span style="color: #999;">—</span>
                                 {% endif %}
                             </td>
-                            <td style="padding: 12px 16px; color: #666; font-size: 13px;">{{ log.createdAtFormatted }}</td>
+                            <td style="padding: 12px 16px; color: #666; font-size: 13px; text-align: center;">{{ log.createdAtFormatted }}</td>
                         </tr>
                         {% endfor %}
                     {% else %}
@@ -192,49 +381,7 @@
         </div>
     </div>
 
-    <!-- Pagination -->
-    {% if pages > 1 %}
-    <div class="mt-8 flex items-center justify-between">
-        <div class="text-gray-600">
-            Showing page <strong>{{ page }}</strong> of <strong>{{ pages }}</strong> 
-            (<strong>{{ total }}</strong> total records)
-        </div>
-        
-        <div class="flex gap-2">
-            {% if page > 1 %}
-                <a href="{{ path('admin_activity_logs_index') }}?page=1" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
-                    <i class="fas fa-chevron-left mr-1"></i>First
-                </a>
-                <a href="{{ path('admin_activity_logs_index') }}?page={{ page - 1 }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
-                    <i class="fas fa-chevron-left mr-1"></i>Previous
-                </a>
-            {% endif %}
-
-            {% for p in 1..pages %}
-                {% if p == page %}
-                    <span class="px-4 py-2 bg-burgundy-light text-white rounded font-bold">{{ p }}</span>
-                {% elseif p <= page + 2 and p >= page - 2 %}
-                    <a href="{{ path('admin_activity_logs_index') }}?page={{ p }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
-                        {{ p }}
-                    </a>
-                {% elseif p == page - 3 or p == page + 3 %}
-                    <span class="px-4 py-2">...</span>
-                {% endif %}
-            {% endfor %}
-
-            {% if page < pages %}
-                <a href="{{ path('admin_activity_logs_index') }}?page={{ page + 1 }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
-                    Next<i class="fas fa-chevron-right ml-1"></i>
-                </a>
-                <a href="{{ path('admin_activity_logs_index') }}?page={{ pages }}" class="px-4 py-2 bg-burgundy-main text-white rounded hover:bg-burgundy-dark">
-                    Last<i class="fas fa-chevron-right ml-1"></i>
-                </a>
-            {% endif %}
-        </div>
     </div>
-    {% endif %}
-
-</div>
 
 <script>
 function showTargetData(button) {
@@ -242,4 +389,64 @@ function showTargetData(button) {
     dataDiv.classList.toggle('hidden');
 }
 </script>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const table = $('#activityTable').DataTable({
+                responsive: true,
+                paging: true,
+                pageLength: 25,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: false,
+                order: [[0, 'desc']],
+                language: {
+                    search: "Search logs:",
+                    lengthMenu: "Show _MENU_ entries per page",
+                    info: "Showing _START_ to _END_ of _TOTAL_ activity logs",
+                    paginate: {
+                        first: "«",
+                        last: "»",
+                        next: "›",
+                        previous: "‹"
+                    },
+                    emptyTable: "No activity logs found",
+                    zeroRecords: "No matching activity logs found"
+                },
+                columnDefs: [
+                    {
+                        targets: 4,
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                dom: '<"grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-lg"lf>t<"grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mt-6"ip>',
+                drawCallback: function() {
+                    // Style pagination buttons after draw
+                    $('.paginate_button').each(function() {
+                        $(this).addClass('paginate_button');
+                    });
+                }
+            });
+
+            // Enhance styling on initialization
+            setTimeout(function() {
+                // Wrap controls properly
+                $('.dataTables_length').addClass('flex items-center gap-3');
+                $('.dataTables_filter').addClass('flex items-center gap-3 justify-start sm:justify-end');
+                
+                // Style inputs
+                $('.dataTables_length select').addClass('px-3 py-2 border border-[#EFCFB4] rounded-lg text-[#7F1734] font-medium');
+                $('.dataTables_filter input').addClass('px-3 py-2 border border-[#EFCFB4] rounded-lg text-[#7F1734] font-medium');
+            }, 100);
+        });
+    </script>
 {% endblock %}
