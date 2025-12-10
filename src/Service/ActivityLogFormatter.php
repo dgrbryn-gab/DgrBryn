@@ -3,9 +3,16 @@
 namespace App\Service;
 
 use App\Entity\ActivityLog;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ActivityLogFormatter
 {
+    private ?RequestStack $requestStack;
+
+    public function __construct(?RequestStack $requestStack = null)
+    {
+        $this->requestStack = $requestStack;
+    }
     /**
      * Format activity log entries into a human-readable format
      */
@@ -22,14 +29,20 @@ class ActivityLogFormatter
             }
         }
         
-        // Get the created date and ensure it's in the correct timezone
+      
         $createdAt = $activityLog->getCreatedAt();
         $formattedDate = null;
         if ($createdAt) {
-            // Convert to Asia/Manila timezone for display
-            $tz = new \DateTimeZone('Asia/Manila');
-            $createdAt->setTimezone($tz);
-            $formattedDate = $createdAt->format('M d, Y - h:i A');
+            $createdAtDisplay = clone $createdAt;
+            $userTimezone = $this->getUserTimezone();
+            try {
+                $createdAtDisplay->setTimezone(new \DateTimeZone($userTimezone));
+            } catch (\Exception $e) {
+                // Fallback to UTC if timezone is invalid
+                error_log('Invalid timezone: ' . $userTimezone . ', error: ' . $e->getMessage());
+                $createdAtDisplay->setTimezone(new \DateTimeZone('UTC'));
+            }
+            $formattedDate = $createdAtDisplay->format('M d, Y - h:i A');
         }
         
         return [
@@ -88,5 +101,65 @@ class ActivityLogFormatter
             str_contains($action, 'DELETED') => 'badge-danger',
             default => 'badge-secondary',
         };
+    }
+
+    /**
+     * Get the user's timezone from browser or fallback to UTC
+     */
+    private function getUserTimezone(): string
+    {
+        $timezone = 'UTC'; // default
+        
+        try {
+            // Try to get from session first
+            if ($this->requestStack) {
+                $request = $this->requestStack->getCurrentRequest();
+                if ($request) {
+                    try {
+                        $session = $request->getSession();
+                        if ($session && $session->has('user_timezone')) {
+                            $tz = $session->get('user_timezone');
+                            if ($this->isValidTimezone($tz)) {
+                                $timezone = $tz;
+                                error_log('Using timezone from session: ' . $timezone);
+                                return $timezone;
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        // Session not available
+                    }
+
+                    // Try to get from cookie
+                    if ($request->cookies->has('user_timezone')) {
+                        $tz = $request->cookies->get('user_timezone');
+                        // Decode if URL encoded
+                        $tz = urldecode($tz);
+                        if ($this->isValidTimezone($tz)) {
+                            $timezone = $tz;
+                            error_log('Using timezone from cookie: ' . $timezone);
+                            return $timezone;
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            error_log('Error getting user timezone: ' . $e->getMessage());
+        }
+
+        error_log('Using default timezone: ' . $timezone);
+        return $timezone;
+    }
+
+    /**
+     * Validate if a timezone string is valid
+     */
+    private function isValidTimezone(string $timezone): bool
+    {
+        try {
+            new \DateTimeZone($timezone);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

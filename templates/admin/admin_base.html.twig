@@ -323,6 +323,37 @@
 
 {% block javascripts %}
     <script>
+        // Detect and store user's browser timezone
+        (function() {
+            try {
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                console.log('Detected timezone:', timezone);
+                
+                // Store in cookie
+                document.cookie = `user_timezone=${encodeURIComponent(timezone)}; path=/; max-age=2592000`;
+                
+                // Also send to server to store in session
+                fetch('/api/set-timezone', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ timezone: timezone })
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Timezone synced to server:', timezone);
+                    } else {
+                        console.log('Failed to sync timezone');
+                    }
+                }).catch(err => {
+                    console.log('Timezone sync error:', err.message);
+                });
+            } catch (e) {
+                console.log('Timezone detection failed:', e.message);
+            }
+        })();
+
         // GLOBAL MODAL SCROLL LOCK – Only runs on modal pages
         if (document.querySelector('.modal-overlay')) {
             document.documentElement.style.overflow = 'hidden';
