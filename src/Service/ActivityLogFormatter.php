@@ -27,8 +27,9 @@ class ActivityLogFormatter
         $formattedDate = null;
         if ($createdAt) {
             // Convert to Asia/Manila timezone for display
-            $createdAt->setTimezone(new \DateTimeZone('Asia/Manila'));
-            $formattedDate = $createdAt->format('Y-m-d H:i:s');
+            $tz = new \DateTimeZone('Asia/Manila');
+            $createdAt->setTimezone($tz);
+            $formattedDate = $createdAt->format('M d, Y - h:i A');
         }
         
         return [

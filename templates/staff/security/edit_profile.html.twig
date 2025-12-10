@@ -5,7 +5,8 @@
 {% block page_title %}Edit Profile{% endblock %}
 
 {% block content %}
-<div style="max-width: 600px; margin: 0 auto;">
+<div style="position: fixed; top: 0; left: 256px; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(226, 232, 240, 0.5); z-index: 50;">
+    <div style="width: 90%; max-width: 1200px; max-height: 90vh; background: rgba(255, 255, 255, 0.98); padding: 32px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border: 1px solid #EFCFB4; overflow: hidden;">
     <!-- Info Alert -->
     <div style="
         background: #d1ecf1;
@@ -50,61 +51,63 @@
                 Account Information
             </legend>
             
-            <!-- Username -->
-            <div style="margin-bottom: 16px;">
-                <label style="
-                    display: block;
-                    font-size: 13px;
-                    color: #888;
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    margin-bottom: 8px;
-                ">
-                    Username
-                </label>
-                <div style="
-                    width: 100%;
-                    padding: 12px 16px;
-                    border: 2px solid #e9ecef;
-                    border-radius: 8px;
-                    font-size: 16px;
-                    background: #f8f9fa;
-                    color: #666;
-                ">
-                    @{{ user.username }}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Username -->
+                <div>
+                    <label style="
+                        display: block;
+                        font-size: 13px;
+                        color: #888;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                    ">
+                        Username
+                    </label>
+                    <div style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        border: 2px solid #e9ecef;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        background: #f8f9fa;
+                        color: #666;
+                    ">
+                        @{{ user.username }}
+                    </div>
                 </div>
-            </div>
 
-            <!-- Email -->
-            <div>
-                <label style="
-                    display: block;
-                    font-size: 13px;
-                    color: #888;
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    margin-bottom: 8px;
-                ">
-                    Email Address
-                </label>
-                <div style="
-                    width: 100%;
-                    padding: 12px 16px;
-                    border: 2px solid #e9ecef;
-                    border-radius: 8px;
-                    font-size: 16px;
-                    background: #f8f9fa;
-                    color: #666;
-                ">
-                    {{ user.email }}
+                <!-- Email -->
+                <div>
+                    <label style="
+                        display: block;
+                        font-size: 13px;
+                        color: #888;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                    ">
+                        Email Address
+                    </label>
+                    <div style="
+                        width: 100%;
+                        padding: 12px 16px;
+                        border: 2px solid #e9ecef;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        background: #f8f9fa;
+                        color: #666;
+                    ">
+                        {{ user.email }}
+                    </div>
                 </div>
             </div>
         </fieldset>
 
         <!-- Password Change Form -->
         <form method="POST" action="{{ path('staff_profile_edit') }}">
-            <fieldset style="border: none; padding: 0; margin-bottom: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                <legend style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px; padding: 0; margin-top: 10px;">
+            <fieldset style="border: none; padding: 0; margin-bottom: 20px; padding-top: 16px; border-top: 1px solid #eee;">
+                <legend style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px; padding: 0; margin-top: 8px;">
                     Change Password
                 </legend>
                 
@@ -112,102 +115,104 @@
                     Leave these fields empty if you don't want to change your password.
                 </p>
 
-                <!-- Current Password -->
-                <div style="margin-bottom: 16px;">
-                    <label for="current_password" style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
-                        Current Password
-                    </label>
-                    <input 
-                        type="password"
-                        id="current_password"
-                        name="current_password"
-                        style="
-                            width: 100%;
-                            padding: 12px 16px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 16px;
-                            font-family: inherit;
-                            transition: border-color 0.3s ease;
-                        "
-                        onfocus="this.style.borderColor='#7F1734'"
-                        onblur="this.style.borderColor='#e9ecef'"
-                    />
-                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                    <!-- Current Password -->
+                    <div>
+                        <label for="current_password" style="
+                            display: block;
+                            font-size: 13px;
+                            color: #888;
+                            text-transform: uppercase;
+                            font-weight: 600;
+                            margin-bottom: 8px;
+                        ">
+                            Current Password
+                        </label>
+                        <input 
+                            type="password"
+                            id="current_password"
+                            name="current_password"
+                            style="
+                                width: 100%;
+                                padding: 12px 16px;
+                                border: 2px solid #e9ecef;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                font-family: inherit;
+                                transition: border-color 0.3s ease;
+                            "
+                            onfocus="this.style.borderColor='#7F1734'"
+                            onblur="this.style.borderColor='#e9ecef'"
+                        />
+                    </div>
 
-                <!-- New Password -->
-                <div style="margin-bottom: 16px;">
-                    <label for="new_password" style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
-                        New Password
-                    </label>
-                    <input 
-                        type="password"
-                        id="new_password"
-                        name="new_password"
-                        style="
-                            width: 100%;
-                            padding: 12px 16px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 16px;
-                            font-family: inherit;
-                            transition: border-color 0.3s ease;
-                        "
-                        onfocus="this.style.borderColor='#7F1734'"
-                        onblur="this.style.borderColor='#e9ecef'"
-                    />
-                    <p style="font-size: 12px; color: #999; margin-top: 6px;">
-                        Must be at least 6 characters long
-                    </p>
-                </div>
+                    <!-- New Password -->
+                    <div>
+                        <label for="new_password" style="
+                            display: block;
+                            font-size: 13px;
+                            color: #888;
+                            text-transform: uppercase;
+                            font-weight: 600;
+                            margin-bottom: 8px;
+                        ">
+                            New Password
+                        </label>
+                        <input 
+                            type="password"
+                            id="new_password"
+                            name="new_password"
+                            style="
+                                width: 100%;
+                                padding: 12px 16px;
+                                border: 2px solid #e9ecef;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                font-family: inherit;
+                                transition: border-color 0.3s ease;
+                            "
+                            onfocus="this.style.borderColor='#7F1734'"
+                            onblur="this.style.borderColor='#e9ecef'"
+                        />
+                        <p style="font-size: 12px; color: #999; margin-top: 6px;">
+                            Must be at least 6 characters long
+                        </p>
+                    </div>
 
-                <!-- Confirm Password -->
-                <div>
-                    <label for="confirm_password" style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
-                        Confirm New Password
-                    </label>
-                    <input 
-                        type="password"
-                        id="confirm_password"
-                        name="confirm_password"
-                        style="
-                            width: 100%;
-                            padding: 12px 16px;
-                            border: 2px solid #e9ecef;
-                            border-radius: 8px;
-                            font-size: 16px;
-                            font-family: inherit;
-                            transition: border-color 0.3s ease;
-                        "
-                        onfocus="this.style.borderColor='#7F1734'"
-                        onblur="this.style.borderColor='#e9ecef'"
-                    />
+                    <!-- Confirm Password -->
+                    <div>
+                        <label for="confirm_password" style="
+                            display: block;
+                            font-size: 13px;
+                            color: #888;
+                            text-transform: uppercase;
+                            font-weight: 600;
+                            margin-bottom: 8px;
+                        ">
+                            Confirm New Password
+                        </label>
+                        <input 
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            style="
+                                width: 100%;
+                                padding: 12px 16px;
+                                border: 2px solid #e9ecef;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                font-family: inherit;
+                                transition: border-color 0.3s ease;
+                            "
+                            onfocus="this.style.borderColor='#7F1734'"
+                            onblur="this.style.borderColor='#e9ecef'"
+                        />
+                    </div>
                 </div>
             </fieldset>
 
             <!-- Action Buttons -->
-            <div style="border-top: 1px solid #eee; padding-top: 24px; margin-top: 24px; display: flex; gap: 12px;">
+            <div style="border-top: 1px solid #eee; padding-top: 16px; margin-top: 20px; display: flex; gap: 12px;">
                 <button 
                     type="submit"
                     style="
@@ -249,6 +254,7 @@
                 </a>
             </div>
         </form>
+    </div>
     </div>
 </div>
 {% endblock %}
