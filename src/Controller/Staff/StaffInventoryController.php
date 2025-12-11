@@ -85,7 +85,23 @@ class StaffInventoryController extends AbstractController
 
         $user = $this->getUser();
         $wineInventory = new WineInventory();
-        $form = $this->createForm(WineInventoryType::class, $wineInventory);
+
+        // Get only products created by this staff member
+        $staffProducts = $productRepository->findBy(['createdBy' => $user]);
+
+        // Pre-select product if passed via query parameter
+        $productId = $request->query->get('product');
+        if ($productId) {
+            $product = $productRepository->find($productId);
+            if ($product && $product->getCreatedBy() === $user) {
+                $wineInventory->setProduct($product);
+                $wineInventory->setAcquiredDate(new \DateTime());
+            }
+        }
+
+        $form = $this->createForm(WineInventoryType::class, $wineInventory, [
+            'staff_products' => $staffProducts,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -96,8 +112,21 @@ class StaffInventoryController extends AbstractController
                 return $this->redirectToRoute('staff_inventory_index');
             }
 
-            $wineInventory->setLastUpdated(new \DateTime());
-            $entityManager->persist($wineInventory);
+            // Check if product already has an inventory record - add to first stock
+            $existingInventory = $product->getWineInventories()->first();
+            
+            if ($existingInventory) {
+                // Add to existing inventory's quantity
+                $newQuantity = $existingInventory->getQuantity() + $wineInventory->getQuantity();
+                $existingInventory->setQuantity($newQuantity);
+                $existingInventory->setLastUpdated(new \DateTime());
+                // Don't persist the new entity, just update existing
+            } else {
+                // No existing inventory, create new one
+                $wineInventory->setLastUpdated(new \DateTime());
+                $entityManager->persist($wineInventory);
+            }
+            
             $entityManager->flush();
 
             $this->addFlash('success', '✅ Inventory record added successfully!');
