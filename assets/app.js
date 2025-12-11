@@ -1,5 +1,6 @@
 import './bootstrap.js';
 import './styles/app.css';
+import './styles/staff.css';
 
 import $ from 'jquery';
 import 'datatables.net';

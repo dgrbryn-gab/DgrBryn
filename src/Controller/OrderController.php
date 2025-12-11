@@ -120,7 +120,8 @@ class OrderController extends AbstractController
     public function edit(
         Request $request,
         Order $order,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        StoreProductRepository $productRepository
     ): Response {
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
@@ -137,9 +138,13 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('app_order_show', ['id' => $order->getId()]);
         }
 
+        // Get available products for the add item dropdown
+        $products = $productRepository->findBy(['isAvailable' => true]);
+
         return $this->render('admin/order/edit.html.twig', [
             'form' => $form,
             'order' => $order,
+            'products' => $products,
         ]);
     }
 

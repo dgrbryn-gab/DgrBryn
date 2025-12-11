@@ -3,6 +3,7 @@ module.exports = {
   content: [
     './templates/**/*.twig',
     './assets/**/*.js',
+    './node_modules/bootstrap/js/**/*.js',
   ],
   theme: {
     extend: {
@@ -38,6 +39,17 @@ module.exports = {
       },
     },
   },
+  // Safelist Bootstrap classes to prevent purging during production build
+  safelist: [
+    // Bootstrap grid
+    { pattern: /^col-/ },
+    { pattern: /^row/ },
+    { pattern: /^container/ },
+    // Bootstrap utilities
+    { pattern: /^(d-|p-|m-|mt-|mb-|ml-|mr-|pt-|pb-|pl-|pr-|flex-|justify-|align-|text-|bg-|border-|shadow-|rounded-)/ },
+    // Bootstrap components
+    { pattern: /^(btn|btn-|card|alert|modal|dropdown|navbar)/ },
+  ],
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/line-clamp'),

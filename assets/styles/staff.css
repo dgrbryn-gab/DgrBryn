@@ -1,27 +1,4 @@
-/* Import Bootstrap first for base styles */
-@import "bootstrap/scss/bootstrap.scss";
-
-/* Import Tailwind CSS */
-@import "tailwindcss";
-@source not "../../public";
-
-/* Custom overrides and extensions */
-body {
-    background-color: lightgray;
-}
-
-/* Example: Combining Bootstrap components with Tailwind utilities */
-.btn {
-    @apply transition-all duration-200;
-}
-
-.btn:hover {
-    @apply shadow-lg;
-}
-
-/* ============================================ */
-/* STAFF DASHBOARD STYLING                     */
-/* ============================================ */
+/* Staff Dashboard Styling */
 
 /* Profile Modal/Container */
 .profile-backdrop {
@@ -38,16 +15,15 @@ body {
 }
 
 .profile-modal {
-    width: 95%;
-    max-width: 1400px;
-    max-height: 95vh;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
     background: rgba(255, 255, 255, 0.98);
     padding: 32px;
     border-radius: 24px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     border: 1px solid #EFCFB4;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 /* Card Styles */
@@ -153,12 +129,6 @@ body {
     color: #333;
     width: 100%;
     box-sizing: border-box;
-    transition: border-color 0.3s ease;
-}
-
-.form-field-input:focus {
-    border-color: #7F1734;
-    outline: none;
 }
 
 .status-active {
@@ -224,7 +194,7 @@ body {
 /* Edit Profile Form */
 .edit-form-container {
     background: white;
-    padding: 40px;
+    padding: 32px;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     margin-bottom: 24px;
@@ -275,14 +245,10 @@ body {
 
 .alert-info {
     padding: 12px 16px;
-    background: #d1ecf1;
-    border: 1px solid #bee5eb;
-    color: #0c5460;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    background: #e3f2fd;
+    border-left: 4px solid #2196F3;
+    border-radius: 4px;
+    margin-bottom: 16px;
 }
 
 .alert-info-icon {
@@ -303,14 +269,10 @@ body {
 
 .alert-error {
     padding: 12px 16px;
-    background: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    background: #ffebee;
+    border-left: 4px solid #f44336;
+    border-radius: 4px;
+    margin-bottom: 16px;
 }
 
 .alert-error-icon {
@@ -321,78 +283,88 @@ body {
 .product-container {
     max-width: 1000px;
     margin: 0 auto;
+    padding: 20px;
 }
 
 .product-breadcrumb {
     display: inline-block;
-    padding: 8px 12px;
-    background: #f0f0f0;
-    border-radius: 4px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #7F1734, #9E2B47);
+    border-radius: 8px;
     text-decoration: none;
-    color: #7F1734;
+    color: white;
     font-weight: 600;
     transition: all 0.3s ease;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .product-breadcrumb:hover {
-    background: #e0e0e0;
+    background: linear-gradient(135deg, #9E2B47, #7F1734);
     transform: translateX(-4px);
+    box-shadow: 0 4px 12px rgba(127, 23, 52, 0.3);
 }
 
 .product-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    gap: 32px;
+    margin-bottom: 32px;
 }
 
 .product-image-container {
     background: white;
     padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #EFCFB4;
     height: fit-content;
 }
 
 .product-image {
     width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 12px;
+    max-height: 450px;
+    object-fit: contain;
+    border-radius: 12px;
 }
 
 .product-image-placeholder {
     width: 100%;
-    aspect-ratio: 1;
-    background: linear-gradient(135deg, #7F1734, #9E2B47);
-    border-radius: 8px;
+    height: 350px;
+    background: linear-gradient(135deg, #FFF8F0, #F8EAD8);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 80px;
-    margin-bottom: 12px;
 }
 
 .product-details-card {
     background: white;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #EFCFB4;
     margin-bottom: 20px;
 }
 
 .product-title {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
     color: #7F1734;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    margin-top: 0;
+}
+
+.product-price-section {
+    border-bottom: 2px solid #EFCFB4;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .product-price {
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 700;
-    color: #9E2B47;
+    color: #5E0B15;
 }
 
 .product-section {
@@ -400,59 +372,69 @@ body {
 }
 
 .product-section-label {
-    font-size: 14px;
-    color: #888;
+    font-size: 13px;
+    color: #7F1734;
     text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
 }
 
 .product-section-text {
-    color: #666;
-    line-height: 1.6;
+    color: #555;
+    line-height: 1.7;
     margin: 0;
+    font-size: 15px;
 }
 
 .product-info-grid {
     display: grid;
-    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: linear-gradient(135deg, #FFF8F0, #F8EAD8);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #EFCFB4;
 }
 
 .product-info-item-label {
-    font-size: 12px;
-    color: #888;
+    font-size: 11px;
+    color: #7F1734;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
 }
 
 .product-info-item-value {
     font-size: 16px;
     color: #333;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .product-stock-alert {
-    padding: 12px;
+    padding: 14px;
     background: #e8f4f8;
     border-left: 4px solid #0099cc;
-    border-radius: 4px;
+    border-radius: 8px;
+    grid-column: span 2;
 }
 
 .product-stock-alert-label {
-    font-size: 12px;
+    font-size: 11px;
     color: #0099cc;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
 }
 
 .product-stock-alert-value {
     font-size: 14px;
     color: #0066aa;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .product-actions {
@@ -460,14 +442,24 @@ body {
     gap: 12px;
 }
 
+.product-view-only {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #FFF8F0, #F8EAD8);
+    border-radius: 12px;
+    text-align: center;
+    color: #7F1734;
+    font-weight: 600;
+    border: 1px solid #EFCFB4;
+}
+
 .btn-edit {
     flex: 1;
-    padding: 12px 20px;
+    padding: 14px 24px;
     text-align: center;
     background: linear-gradient(135deg, #7F1734, #9E2B47);
     color: white;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
     transition: all 0.3s ease;
     border: none;
@@ -477,15 +469,15 @@ body {
 
 .btn-edit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(127, 23, 52, 0.3);
+    box-shadow: 0 8px 20px rgba(127, 23, 52, 0.3);
 }
 
 .btn-delete {
     flex: 1;
-    padding: 12px 20px;
+    padding: 14px 24px;
     text-align: center;
-    background: #FFA500;
-    color: white;
+    background: #f8d7da;
+    color: #721c24;
     text-decoration: none;
     border-radius: 8px;
     font-weight: 600;
@@ -496,9 +488,7 @@ body {
 }
 
 .btn-delete:hover {
-    background: #FF8C00;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(255, 165, 0, 0.3);
+    background: #f5c6cb;
 }
 
 .product-inventory-section {
@@ -540,6 +530,10 @@ body {
 .inventory-table td {
     padding: 12px;
     border-bottom: 1px solid #e9ecef;
+    color: #333;
+}
+
+.inventory-table tbody tr td {
     color: #333;
 }
 

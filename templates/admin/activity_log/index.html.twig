@@ -355,7 +355,11 @@
                                         {% else %}
                                             {% set pairs = [] %}
                                             {% for key, value in log.targetData %}
-                                                {% set pairs = pairs | merge([key ~ ': ' ~ value]) %}
+                                                {% if value is iterable %}
+                                                    {% set pairs = pairs | merge([key ~ ': ' ~ value | join(', ')]) %}
+                                                {% else %}
+                                                    {% set pairs = pairs | merge([key ~ ': ' ~ value]) %}
+                                                {% endif %}
                                             {% endfor %}
                                             {{ pairs | join(', ') }}
                                         {% endif %}
