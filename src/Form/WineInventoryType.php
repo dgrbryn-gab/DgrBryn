@@ -13,14 +13,24 @@ class WineInventoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $staffProducts = $options['staff_products'];
+
+        $productOptions = [
+            'class' => StoreProduct::class,
+            'choice_label' => 'name',
+        ];
+
+        // If staff_products is provided, filter the choices to only show staff's own products
+        if ($staffProducts !== null) {
+            $productOptions['choices'] = $staffProducts;
+            $productOptions['placeholder'] = 'Select a product...';
+        }
+
         $builder
             ->add('quantity')
             ->add('acquiredDate')
             ->add('lastUpdated')
-            ->add('product', EntityType::class, [
-                'class' => StoreProduct::class,
-                'choice_label' => 'name',
-            ])
+            ->add('product', EntityType::class, $productOptions)
         ;
     }
 
@@ -28,6 +38,7 @@ class WineInventoryType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => WineInventory::class,
+            'staff_products' => null,
         ]);
     }
 }

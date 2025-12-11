@@ -348,7 +348,21 @@
                             <td style="padding: 12px 16px; font-size: 12px; font-family: monospace; color: #333; text-align: center;">
                                 {% if log.targetData %}
                                     {% if log.targetData is iterable %}
-                                        {{ log.targetData | json_encode(constant('JSON_PRETTY_PRINT')) | nl2br }}
+                                        {% if log.targetData.userId is defined and log.targetData.username is defined %}
+                                            userId: {{ log.targetData.userId }}, username: {{ log.targetData.username }}
+                                        {% elseif log.targetData.productId is defined and log.targetData.productName is defined %}
+                                            productId: {{ log.targetData.productId }}, productName: {{ log.targetData.productName }}
+                                        {% else %}
+                                            {% set pairs = [] %}
+                                            {% for key, value in log.targetData %}
+                                                {% if value is iterable %}
+                                                    {% set pairs = pairs | merge([key ~ ': ' ~ value | join(', ')]) %}
+                                                {% else %}
+                                                    {% set pairs = pairs | merge([key ~ ': ' ~ value]) %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {{ pairs | join(', ') }}
+                                        {% endif %}
                                     {% else %}
                                         {{ log.targetData }}
                                     {% endif %}

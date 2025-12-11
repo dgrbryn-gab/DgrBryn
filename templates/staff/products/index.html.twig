@@ -140,13 +140,13 @@
     }
 </style>
 
-<div style="margin-bottom: 30px;">
+<div class="products-filter-section">
     <!-- Search and Filter -->
     <div class="search-section">
-        <form method="GET" action="{{ path('staff_products_index') }}" style="margin: 0;">
+        <form method="GET" action="{{ path('staff_products_index') }}" class="products-filter-form">
             <div class="search-controls">
                 <div>
-                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                    <label class="filter-field-label">
                         Search Products
                     </label>
                     <input 
@@ -154,29 +154,17 @@
                         name="search"
                         placeholder="Product name or description..."
                         value="{{ search_term }}"
-                        style="
-                            width: 100%;
-                            padding: 10px 12px;
-                            border: 1px solid #e9ecef;
-                            border-radius: 6px;
-                            font-size: 14px;
-                        "
+                        class="filter-field-input"
                     />
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 13px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">
+                    <label class="filter-field-label">
                         Category
                     </label>
                     <select 
                         name="category"
-                        style="
-                            width: 100%;
-                            padding: 10px 12px;
-                            border: 1px solid #e9ecef;
-                            border-radius: 6px;
-                            font-size: 14px;
-                        "
+                        class="filter-field-input"
                     >
                         <option value="">All Categories</option>
                         {% for category in categories %}
@@ -189,15 +177,7 @@
 
                 <button 
                     type="submit"
-                    style="
-                        padding: 10px 20px;
-                        background: #7F1734;
-                        color: white;
-                        border: none;
-                        border-radius: 6px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
+                    style="padding: 10px 20px; background: #7F1734; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
                     "
                     onmouseover="this.style.background='#5E0B15'"
                     onmouseout="this.style.background='#7F1734'"

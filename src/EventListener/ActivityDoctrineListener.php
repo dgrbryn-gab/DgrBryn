@@ -121,7 +121,7 @@ class ActivityDoctrineListener
         } elseif ($entity instanceof StoreProduct) {
             $this->activityLogger->logActivity(
                 'PRODUCT_DELETED',
-                json_encode(['productId' => $entity->getId()])
+                json_encode(['productId' => $entity->getId(), 'productName' => $entity->getName()])
             );
         } elseif ($entity instanceof WineInventory) {
             $this->activityLogger->logActivity(

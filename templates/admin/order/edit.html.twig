@@ -5,7 +5,7 @@
 {% block admin_content %}
 
 <div class="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#F8EAD8] py-14 px-6">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start gap-6 mb-8">
             <div>
@@ -29,76 +29,121 @@
             {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
             <!-- Customer Information Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Customer Information</legend>
+            <fieldset class="fieldset-section">
+                <legend class="section-legend">Customer Information</legend>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        {{ form_row(form.customerName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.customerName, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.customerName, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div>
-                        {{ form_row(form.customerEmail, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.customerEmail, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.customerEmail, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div class="md:col-span-2">
-                        {{ form_row(form.customerPhone, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.customerPhone, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.customerPhone, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
             </fieldset>
 
             <!-- Shipping & Billing Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Addresses</legend>
+            <fieldset class="fieldset-section">
+                <legend class="section-legend">Addresses</legend>
                 
-                <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        {{ form_row(form.shippingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
+                        {{ form_label(form.shippingAddress, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.shippingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
                     </div>
                     <div>
-                        {{ form_row(form.billingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
+                        {{ form_label(form.billingAddress, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.billingAddress, {'attr': {'rows': 4, 'class': 'form-control'}}) }}
                     </div>
                 </div>
             </fieldset>
 
             <!-- Order Status Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Order Status</legend>
+            <fieldset class="fieldset-section">
+                <legend class="section-legend">Order Status</legend>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        {{ form_row(form.status, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.status, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div>
-                        {{ form_row(form.paymentStatus, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.paymentStatus, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.paymentStatus, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
             </fieldset>
 
             <!-- Payment Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Payment Information</legend>
+            <fieldset class="fieldset-section">
+                <legend class="section-legend">Payment Information</legend>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        {{ form_row(form.paymentMethod, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.paymentMethod, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.paymentMethod, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div>
-                        {{ form_row(form.shippingCost, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.shippingCost, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.shippingCost, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div>
-                        {{ form_row(form.taxAmount, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.taxAmount, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.taxAmount, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div>
-                        {{ form_row(form.discountAmount, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_label(form.discountAmount, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.discountAmount, {'attr': {'class': 'form-control'}}) }}
                     </div>
                 </div>
             </fieldset>
 
             <!-- Notes Section -->
-            <fieldset class="border-l-4 border-[#EFCFB4] pl-6 py-4">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Additional Notes</legend>
+            <fieldset class="fieldset-section">
+                <legend class="section-legend">Additional Notes</legend>
                 
-                {{ form_row(form.notes, {'attr': {'rows': 5, 'class': 'form-control'}}) }}
+                {{ form_label(form.notes, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.notes, {'attr': {'rows': 5, 'class': 'form-control'}}) }}
             </fieldset>
+
+            <!-- Order Items Section (from form) -->
+            {% if form.orderItems is defined and form.orderItems|length > 0 %}
+            <fieldset class="fieldset-section">
+                <legend class="section-legend">Order Items</legend>
+                
+                {% for item in form.orderItems %}
+                <div class="bg-gray-50 rounded-lg p-4 mb-4 border border-[#EFCFB4]/30">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-semibold text-[#5E0B15]">Item #{{ loop.index }}</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            {{ form_label(item.product, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(item.product, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div>
+                            {{ form_label(item.quantity, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(item.quantity, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div>
+                            {{ form_label(item.unitPrice, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(item.unitPrice, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div>
+                            {{ form_label(item.discount, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(item.discount, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </fieldset>
+            {% endif %}
 
             <!-- Form Actions -->
             <div class="flex gap-4 pt-4 border-t border-gray-200">
@@ -164,19 +209,23 @@
             {% endif %}
 
             <!-- Add Item Section -->
-            <fieldset class="border-t border-gray-200 pt-6">
-                <legend class="text-lg font-bold text-[#5E0B15] mb-4">Add Item to Order</legend>
+            <fieldset class="fieldset-section border-t border-gray-200 pt-6">
+                <legend class="section-legend">Add Item to Order</legend>
                 
                 <form method="post" action="{{ path('app_order_add_item', {'id': order.id}) }}" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                     <div>
-                        <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Product</label>
+                        <label class="form-label">Product</label>
                         <select name="product_id" class="form-control" required>
                             <option value="">-- Select a product --</option>
-                            <!-- Products will be populated via JavaScript or loaded from backend -->
+                            {% for product in products %}
+                                <option value="{{ product.id }}">{{ product.name }} (₱{{ product.price }})</option>
+                            {% else %}
+                                <option value="" disabled>No products available</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-[#5E0B15] mb-2">Quantity</label>
+                        <label class="form-label">Quantity</label>
                         <input type="number" name="quantity" value="1" min="1" class="form-control" required>
                     </div>
                     <div>
@@ -193,17 +242,41 @@
 <style>
     .form-control {
         width: 100%;
-        padding: 0.75rem;
+        padding: 0.5rem 0.75rem;
         border: 1px solid #EFCFB4;
         border-radius: 0.5rem;
         font-size: 1rem;
-        transition: border-color 0.3s, box-shadow 0.3s;
+        transition: all 0.3s;
     }
 
     .form-control:focus {
         outline: none;
         border-color: #7F1734;
-        box-shadow: 0 0 0 3px rgba(127, 23, 52, 0.1);
+        box-shadow: 0 0 0 4px rgba(127, 23, 52, 0.1);
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #5E0B15;
+        margin-bottom: 0.5rem;
+    }
+
+    .fieldset-section {
+        border-left: 4px solid #EFCFB4;
+        padding-left: 1.5rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-legend {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #5E0B15;
+        margin-bottom: 1rem;
+        display: block;
     }
 
     .form-group {
@@ -215,7 +288,7 @@
         margin-bottom: 0.5rem;
         font-weight: 600;
         color: #5E0B15;
-        font-size: 0.95rem;
+        font-size: 0.875rem;
     }
 </style>
 

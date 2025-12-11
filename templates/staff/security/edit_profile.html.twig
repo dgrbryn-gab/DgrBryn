@@ -5,21 +5,11 @@
 {% block page_title %}Edit Profile{% endblock %}
 
 {% block content %}
-<div style="position: fixed; top: 0; left: 256px; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(226, 232, 240, 0.5); z-index: 50;">
-    <div style="width: 90%; max-width: 1200px; max-height: 90vh; background: rgba(255, 255, 255, 0.98); padding: 32px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border: 1px solid #EFCFB4; overflow: hidden;">
+<div class="profile-backdrop">
+    <div class="profile-modal">
     <!-- Info Alert -->
-    <div style="
-        background: #d1ecf1;
-        border: 1px solid #bee5eb;
-        color: #0c5460;
-        padding: 16px 20px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    ">
-        <span style="font-size: 18px;">ℹ️</span>
+    <div class="alert-info">
+        <span class="alert-info-icon">ℹ️</span>
         <div>
             <strong>Note:</strong> Your username and email are set by the administrator and cannot be changed. You can only update your password below.
         </div>
@@ -27,77 +17,37 @@
 
     <!-- Error Alert -->
     {% if error %}
-        <div style="
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        ">
-            <span style="font-size: 18px;">✗</span>
+        <div class="alert-error">
+            <span class="alert-error-icon">✗</span>
             {{ error }}
         </div>
     {% endif %}
 
     <!-- Edit Form Card -->
-    <div style="background: white; padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px;">
+    <div class="edit-form-container">
         <!-- Account Information (Read-only) -->
-        <fieldset style="border: none; padding: 0; margin-bottom: 30px;">
-            <legend style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px; padding: 0;">
+        <fieldset class="form-fieldset">
+            <legend class="form-legend">
                 Account Information
             </legend>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <!-- Username -->
                 <div>
-                    <label style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
+                    <label class="form-field-label">
                         Username
                     </label>
-                    <div style="
-                        width: 100%;
-                        padding: 12px 16px;
-                        border: 2px solid #e9ecef;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        background: #f8f9fa;
-                        color: #666;
-                    ">
+                    <div class="form-field-display">
                         @{{ user.username }}
                     </div>
                 </div>
 
                 <!-- Email -->
                 <div>
-                    <label style="
-                        display: block;
-                        font-size: 13px;
-                        color: #888;
-                        text-transform: uppercase;
-                        font-weight: 600;
-                        margin-bottom: 8px;
-                    ">
+                    <label class="form-field-label">
                         Email Address
                     </label>
-                    <div style="
-                        width: 100%;
-                        padding: 12px 16px;
-                        border: 2px solid #e9ecef;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        background: #f8f9fa;
-                        color: #666;
-                    ">
+                    <div class="form-field-display">
                         {{ user.email }}
                     </div>
                 </div>
@@ -106,151 +56,70 @@
 
         <!-- Password Change Form -->
         <form method="POST" action="{{ path('staff_profile_edit') }}">
-            <fieldset style="border: none; padding: 0; margin-bottom: 20px; padding-top: 16px; border-top: 1px solid #eee;">
-                <legend style="font-size: 16px; font-weight: 700; color: #7F1734; margin-bottom: 16px; padding: 0; margin-top: 8px;">
+            <fieldset class="form-fieldset-border">
+                <legend class="form-legend-bordered">
                     Change Password
                 </legend>
                 
-                <p style="font-size: 13px; color: #888; margin-bottom: 20px;">
+                <p class="form-help-text">
                     Leave these fields empty if you don't want to change your password.
                 </p>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                <div class="profile-form-row-three">
                     <!-- Current Password -->
                     <div>
-                        <label for="current_password" style="
-                            display: block;
-                            font-size: 13px;
-                            color: #888;
-                            text-transform: uppercase;
-                            font-weight: 600;
-                            margin-bottom: 8px;
-                        ">
+                        <label for="current_password" class="form-field-label">
                             Current Password
                         </label>
                         <input 
                             type="password"
                             id="current_password"
                             name="current_password"
-                            style="
-                                width: 100%;
-                                padding: 12px 16px;
-                                border: 2px solid #e9ecef;
-                                border-radius: 8px;
-                                font-size: 16px;
-                                font-family: inherit;
-                                transition: border-color 0.3s ease;
-                            "
-                            onfocus="this.style.borderColor='#7F1734'"
-                            onblur="this.style.borderColor='#e9ecef'"
+                            class="form-field-input"
                         />
                     </div>
 
                     <!-- New Password -->
                     <div>
-                        <label for="new_password" style="
-                            display: block;
-                            font-size: 13px;
-                            color: #888;
-                            text-transform: uppercase;
-                            font-weight: 600;
-                            margin-bottom: 8px;
-                        ">
+                        <label for="new_password" class="form-field-label">
                             New Password
                         </label>
                         <input 
                             type="password"
                             id="new_password"
                             name="new_password"
-                            style="
-                                width: 100%;
-                                padding: 12px 16px;
-                                border: 2px solid #e9ecef;
-                                border-radius: 8px;
-                                font-size: 16px;
-                                font-family: inherit;
-                                transition: border-color 0.3s ease;
-                            "
-                            onfocus="this.style.borderColor='#7F1734'"
-                            onblur="this.style.borderColor='#e9ecef'"
+                            class="form-field-input"
                         />
-                        <p style="font-size: 12px; color: #999; margin-top: 6px;">
+                        <p class="form-small-text">
                             Must be at least 6 characters long
                         </p>
                     </div>
 
                     <!-- Confirm Password -->
                     <div>
-                        <label for="confirm_password" style="
-                            display: block;
-                            font-size: 13px;
-                            color: #888;
-                            text-transform: uppercase;
-                            font-weight: 600;
-                            margin-bottom: 8px;
-                        ">
+                        <label for="confirm_password" class="form-field-label">
                             Confirm New Password
                         </label>
                         <input 
                             type="password"
                             id="confirm_password"
                             name="confirm_password"
-                            style="
-                                width: 100%;
-                                padding: 12px 16px;
-                                border: 2px solid #e9ecef;
-                                border-radius: 8px;
-                                font-size: 16px;
-                                font-family: inherit;
-                                transition: border-color 0.3s ease;
-                            "
-                            onfocus="this.style.borderColor='#7F1734'"
-                            onblur="this.style.borderColor='#e9ecef'"
+                            class="form-field-input"
                         />
                     </div>
                 </div>
             </fieldset>
 
             <!-- Action Buttons -->
-            <div style="border-top: 1px solid #eee; padding-top: 16px; margin-top: 20px; display: flex; gap: 12px;">
+            <div class="profile-actions">
                 <button 
                     type="submit"
-                    style="
-                        flex: 1;
-                        padding: 12px 20px;
-                        background: linear-gradient(135deg, #7F1734, #9E2B47);
-                        color: white;
-                        text-decoration: none;
-                        border-radius: 8px;
-                        font-weight: 600;
-                        transition: all 0.3s ease;
-                        border: none;
-                        cursor: pointer;
-                        font-size: 14px;
-                    "
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(127, 23, 52, 0.3)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                    class="btn-burgundy"
                 >
                     💾 Update Password
                 </button>
-                <a href="{{ path('staff_profile_index') }}" style="
-                    flex: 1;
-                    padding: 12px 20px;
-                    text-align: center;
-                    background: #f0f0f0;
-                    color: #333;
-                    text-decoration: none;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    transition: all 0.3s ease;
-                    border: none;
-                    cursor: pointer;
-                    font-size: 14px;
-                "
-                onmouseover="this.style.background='#e0e0e0'"
-                onmouseout="this.style.background='#f0f0f0'"
-                >
-                    ← Cancel
+                <a href="{{ path('staff_profile_index') }}" class="btn-secondary">
+                    ← Back to Profile
                 </a>
             </div>
         </form>
